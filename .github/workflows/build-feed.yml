@@ -2,6 +2,7 @@ name: Rebuild Merchant Center feed
 on:
   schedule:
     - cron: "0 10 * * *"      # daily 10:00 UTC = 6 AM ET
+    - cron: "30 12 * * *"     # backup run 8:30 AM ET in case the first cron is skipped
   workflow_dispatch:
 permissions:
   contents: write
