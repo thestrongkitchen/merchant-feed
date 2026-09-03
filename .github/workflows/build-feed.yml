@@ -19,5 +19,5 @@ jobs:
         run: |
           git config user.name "tsk-feed-bot"
           git config user.email "feed-bot@users.noreply.github.com"
-          git add docs/products.tsv docs/feed_report.md
+          git add docs/products.tsv docs/products.xml docs/products.json docs/feed_report.md
           git diff --cached --quiet && echo "no change" || (git commit -m "feed: $(date -u +%F)" && git push)

@@ -295,6 +295,61 @@ def build(out_dir: Path) -> int:
         for r in rows:
             w.writerow({k: re.sub(r"[\t\r\n\\]+", " ", v) for k, v in r.items()})
 
+
+    # --- Klaviyo custom-catalog feed (flat XML, one node deep) ---------------
+    # Same rows as the TSV. Klaviyo wants: id, title, link, description, price
+    # (numeric, no currency), image_link, categories (comma list). We fold the
+    # portion plan + menu week into categories so an email can filter on them.
+    from xml.sax.saxutils import escape as _x
+    xml_lines = ['<?xml version="1.0" encoding="UTF-8"?>', "<Products>"]
+    for r in rows:
+        cats = [c for c in (r["custom_label_0"], r["product_type"], r["custom_label_1"],
+                            r["custom_label_2"]) if c]
+        xml_lines += [
+            "  <Product>",
+            f"    <id>{_x(r['id'])}</id>",
+            f"    <title>{_x(r['title'])}</title>",
+            f"    <link>{_x(r['link'])}</link>",
+            f"    <description>{_x(r['description'])}</description>",
+            f"    <price>{_x(r['price'].replace(' USD', ''))}</price>",
+            f"    <image_link>{_x(r['image_link'])}</image_link>",
+            f"    <categories>{_x(','.join(dict.fromkeys(cats)))}</categories>",
+            f"    <inventory_quantity>100</inventory_quantity>",
+            f"    <inventory_policy>1</inventory_policy>",
+            "  </Product>",
+        ]
+    xml_lines.append("</Products>")
+    (out_dir / "products.xml").write_text("\n".join(xml_lines) + "\n", encoding="utf-8")
+
+    # --- same rows as JSON: Klaviyo web feeds loop `feeds.NAME.items` --------
+    import json as _json
+    items = []
+    for r in rows:
+        cats = [c for c in (r["custom_label_0"], r["product_type"], r["custom_label_1"],
+                            r["custom_label_2"]) if c]
+        items.append({
+            "id": r["id"], "group": r["item_group_id"] or r["id"].split("-")[0],
+            "title": r["title"], "name": r["title"].split(" - ")[0],
+            "portion": r["custom_label_1"], "type": r["custom_label_0"],
+            "link": r["link"], "image_link": r["image_link"],
+            "price": r["price"].replace(" USD", ""),
+            "description": r["description"],
+            "categories": list(dict.fromkeys(cats)), "week": week or "",
+        })
+    # One entry per dish for the weekly email: the Performance row (baseline portion),
+    # meals only; everything else (snacks, sauces, breakfast) goes in `extras`.
+    seen, meals, extras = set(), [], []
+    for it in items:
+        if it["type"] == "Meals":
+            if it["portion"] == "Performance" and it["group"] not in seen:
+                seen.add(it["group"]); meals.append(it)
+        elif it["group"] not in seen:
+            seen.add(it["group"]); extras.append(it)
+    (out_dir / "products.json").write_text(
+        _json.dumps({"week": week or "", "items": items, "meals": meals, "extras": extras},
+                    ensure_ascii=False, indent=1) + "\n",
+        encoding="utf-8")
+
     stamp = t0.strftime("%Y-%m-%d %H:%M UTC")
     lines = [f"# TSK Merchant Center feed — build report", "",
              f"Built: {stamp}  ·  Menu week: {week or '?'}  ·  {fulfill}", "",
@@ -308,7 +363,7 @@ def build(out_dir: Path) -> int:
         for pid, title, why in skipped:
             lines.append(f"| [{title}]({BASE}/products/{pid}) | {why} |")
     (out_dir / "feed_report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
-    print(f"wrote {out_dir/'products.tsv'}: {len(rows)} rows, {len(report_items)} products, "
+    print(f"wrote {out_dir/'products.tsv'} + products.xml: {len(rows)} rows, {len(report_items)} products, "
           f"{len(skipped)} skipped (week {week})")
     for pid, title, why in skipped:
         print(f"  skipped {pid} {title}: {why}")
