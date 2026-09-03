@@ -99,6 +99,32 @@ def fulfillment_line(listing_html: str) -> str:
     return clean(m.group(1)) if m else ""
 
 
+
+def fulfillment_dates(fulfill: str, today=None):
+    """Turn the site's 'Order now for fulfillment on Sunday, September 13th, Monday, September 14th'
+    into {'delivery': 'Sunday, September 13th or Monday, September 14th',
+          'deadline': 'Wednesday, September 9th'} (deadline = the Wednesday before the first date).
+    Returns empty strings if the line can't be parsed, so the email falls back to generic copy."""
+    import datetime as _dt
+    today = today or _dt.date.today()
+    found = re.findall(r"(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday),\s+([A-Z][a-z]+)\s+(\d{1,2})(?:st|nd|rd|th)?", fulfill or "")
+    if not found:
+        return {"delivery": "", "deadline": ""}
+    def ordinal(n): return f"{n}{'th' if 11<=n%100<=13 else {1:'st',2:'nd',3:'rd'}.get(n%10,'th')}"
+    days = [f"{d}, {m} {ordinal(int(n))}" for d, m, n in found]
+    try:
+        m0, n0 = found[0][1], int(found[0][2])
+        year = today.year
+        first = _dt.datetime.strptime(f"{m0} {n0} {year}", "%B %d %Y").date()
+        if first < today - _dt.timedelta(days=60):   # Dec build, Jan fulfillment
+            first = first.replace(year=year + 1)
+        back = (first.weekday() - 2) % 7 or 7          # Wednesday=2; strictly before
+        wed = first - _dt.timedelta(days=back)
+        deadline = f"Wednesday, {wed.strftime('%B')} {ordinal(wed.day)}"
+    except Exception:  # noqa: BLE001
+        deadline = ""
+    return {"delivery": " or ".join(days), "deadline": deadline}
+
 def parse_product(pid: int, page: str) -> dict:
     """Return dict with title, description, badges, ingredients, image, options[]"""
     title = clean(re.search(r'<h1 class="sk-product-detail__title">(.*?)</h1>', page, re.S).group(1))
@@ -348,7 +374,8 @@ def build(out_dir: Path) -> int:
     meals  = [it for it in by_group.values() if it["type"] == "Meals"]
     extras = [it for it in by_group.values() if it["type"] != "Meals"]
     (out_dir / "products.json").write_text(
-        _json.dumps({"week": week or "", "items": items, "meals": meals, "extras": extras},
+        _json.dumps({"week": week or "", "fulfillment": fulfill, **fulfillment_dates(fulfill),
+                     "items": items, "meals": meals, "extras": extras},
                     ensure_ascii=False, indent=1) + "\n",
         encoding="utf-8")
 

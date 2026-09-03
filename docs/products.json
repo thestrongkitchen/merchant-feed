@@ -1,5 +1,8 @@
 {
  "week": "9",
+ "fulfillment": "Order now for fulfillment on Sunday, September 13th, Monday, September 14th",
+ "delivery": "Sunday, September 13th or Monday, September 14th",
+ "deadline": "Wednesday, September 9th",
  "items": [
   {
    "id": "590-945",
