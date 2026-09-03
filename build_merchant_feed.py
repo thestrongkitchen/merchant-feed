@@ -373,8 +373,13 @@ def build(out_dir: Path) -> int:
             by_group[it["group"]] = it
     meals  = [it for it in by_group.values() if it["type"] == "Meals"]
     extras = [it for it in by_group.values() if it["type"] != "Meals"]
+    fd = fulfillment_dates(fulfill)
+    post_url = ""
+    m = re.search(r"([A-Z][a-z]+) (\d{1,2})(?:st|nd|rd|th)?", fd.get("delivery", ""))
+    if m:
+        post_url = f"{BASE}/blog/post/whats-on-the-menu-new-haven-county-{m.group(1).lower()}-{int(m.group(2))}"
     (out_dir / "products.json").write_text(
-        _json.dumps({"week": week or "", "fulfillment": fulfill, **fulfillment_dates(fulfill),
+        _json.dumps({"week": week or "", "fulfillment": fulfill, **fd, "post_url": post_url,
                      "items": items, "meals": meals, "extras": extras},
                     ensure_ascii=False, indent=1) + "\n",
         encoding="utf-8")
