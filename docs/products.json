@@ -503,6 +503,25 @@
  ],
  "meals": [
   {
+   "id": "590-945",
+   "group": "590",
+   "title": "Ziti san Marzano - Fat Loss Meal (467 cal, 41g protein)",
+   "name": "Ziti san Marzano",
+   "portion": "Fat Loss",
+   "type": "Meals",
+   "link": "https://thestrongkitchen.com/products/590",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/590/featured-image/307/9-ziti-san-marzano.jpeg",
+   "price": "14.65",
+   "description": "Baked beef, pasta, fennel and san marzano tomatoes. Fat Loss portion (lighter carbs): 467 calories, 41g protein, 31g carbs, 20g fat. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Lean ground beef, plum tomato, onion, fennel, basil, white wine, lemon juice, mozzarella, chile flake, salt.",
+   "categories": [
+    "Meals",
+    "Meals > Complete Meals",
+    "Fat Loss",
+    "menu-week-9"
+   ],
+   "week": "9"
+  },
+  {
    "id": "594-952",
    "group": "594",
    "title": "Caribbean Jerk Salmon - Performance Meal (528 cal, 32g protein)",
@@ -560,6 +579,43 @@
    "week": "9"
   },
   {
+   "id": "589-944",
+   "group": "589",
+   "title": "Margherita Chicken Pizza - 4 Slices",
+   "name": "Margherita Chicken Pizza",
+   "portion": "",
+   "type": "Meals",
+   "link": "https://thestrongkitchen.com/products/589",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/589/featured-image/306/9-margherita-chicken-pizza.jpeg",
+   "price": "14.45",
+   "description": "Margherita Chicken Pizza with Gluten Free Crust & Plum Tomato Sauce. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Cauliflower Crust (cauliflower, cornstarch, rice flour, potato starch, psyllium, dextrose, oil, sugar, yeast), chicken, mozzarella, plum tomatoes, peppers, basil, oregano, oil, salt.",
+   "categories": [
+    "Meals",
+    "Meals > Complete Meals",
+    "menu-week-9"
+   ],
+   "week": "9"
+  },
+  {
+   "id": "572-915",
+   "group": "572",
+   "title": "3-Herb Chicken and Falafel - Fat Loss Meal (462 cal, 45g protein)",
+   "name": "3-Herb Chicken and Falafel",
+   "portion": "Fat Loss",
+   "type": "Meals",
+   "link": "https://thestrongkitchen.com/products/572",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/572/featured-image/296/3-herb-chicken-and-falafel.jpeg",
+   "price": "15.75",
+   "description": "over Quinoa, Veggies and Greek-Tomato Dressing. Fat Loss portion (lighter carbs): 462 calories, 45g protein, 34g carbs, 16g fat. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken breast, quinoa, garbanzo beans, edamame, kale, onion, tomato, yogurt, cucumber, parsley, oil, garlic, lemon, cornstarch, salt.",
+   "categories": [
+    "Meals",
+    "Meals > Complete Meals",
+    "Fat Loss",
+    "menu-week-9"
+   ],
+   "week": "9"
+  },
+  {
    "id": "591-947",
    "group": "591",
    "title": "Steak Stir-Fry - Performance Meal (662 cal, 41g protein)",
@@ -593,6 +649,25 @@
     "Meals",
     "Meals > Complete Meals",
     "Performance",
+    "menu-week-9"
+   ],
+   "week": "9"
+  },
+  {
+   "id": "536-871",
+   "group": "536",
+   "title": "Tikka Chicken - Fat Loss Meal (449 cal, 42g protein)",
+   "name": "Tikka Chicken",
+   "portion": "Fat Loss",
+   "type": "Meals",
+   "link": "https://thestrongkitchen.com/products/536",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/536/featured-image/280/9-tikka-chicken.jpeg",
+   "price": "14.65",
+   "description": "Honey Toasted Chickpeas and Curried Broccoli. Fat Loss portion (lighter carbs): 449 calories, 42g protein, 30g carbs, 18g fat. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken thighs, broccoli, chickpeas, yogurt, cucumber, mint, lemon, ginger, garlic, curry, oil, cayenne, turmeric, garam masala, cumin, coriander, salt.",
+   "categories": [
+    "Meals",
+    "Meals > Complete Meals",
+    "Fat Loss",
     "menu-week-9"
    ],
    "week": "9"

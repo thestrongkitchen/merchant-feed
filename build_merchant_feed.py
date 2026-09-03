@@ -338,13 +338,15 @@ def build(out_dir: Path) -> int:
         })
     # One entry per dish for the weekly email: the Performance row (baseline portion),
     # meals only; everything else (snacks, sauces, breakfast) goes in `extras`.
-    seen, meals, extras = set(), [], []
+    # Prefer the Performance row (baseline portion); fall back to the first row of
+    # the group so single-option or differently-named dishes still show up.
+    by_group: dict = {}
     for it in items:
-        if it["type"] == "Meals":
-            if it["portion"] == "Performance" and it["group"] not in seen:
-                seen.add(it["group"]); meals.append(it)
-        elif it["group"] not in seen:
-            seen.add(it["group"]); extras.append(it)
+        cur = by_group.get(it["group"])
+        if cur is None or (it["portion"] == "Performance" and cur["portion"] != "Performance"):
+            by_group[it["group"]] = it
+    meals  = [it for it in by_group.values() if it["type"] == "Meals"]
+    extras = [it for it in by_group.values() if it["type"] != "Meals"]
     (out_dir / "products.json").write_text(
         _json.dumps({"week": week or "", "items": items, "meals": meals, "extras": extras},
                     ensure_ascii=False, indent=1) + "\n",
