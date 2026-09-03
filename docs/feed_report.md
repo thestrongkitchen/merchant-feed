@@ -1,20 +1,20 @@
 # TSK Merchant Center feed — build report
 
-Built: 2026-09-02 16:48 UTC  ·  Menu week: 8  ·  Order now for fulfillment on Sunday, September 6th, Monday, September 7th
+Built: 2026-09-03 14:15 UTC  ·  Menu week: 9  ·  Order now for fulfillment on Sunday, September 13th, Monday, September 14th
 
-**29 feed rows** from **18 products**; 16 skipped.
+**27 feed rows** from **18 products**; 15 skipped.
 
 | Product | Type | Options |
 |---|---|---|
-| [Korean Beef Saute](https://thestrongkitchen.com/products/32) | Meals > Complete Meals | Fat Loss $14.85, Performance $15.05, Protein Plus $16.85 |
-| [Turkey Chili](https://thestrongkitchen.com/products/33) | Meals > Complete Meals | Fat Loss $14.65, Performance $14.85, Protein Plus $16.65 |
-| [Creamy Green Herb Chicken](https://thestrongkitchen.com/products/349) | Meals > Complete Meals | Fat Loss $15.75, Performance $15.95 |
-| [Chile-Rubbed Chicken and Rice](https://thestrongkitchen.com/products/419) | Meals > Complete Meals | Fat Loss $15.75, Performance $15.95 |
-| [Chile-Rubbed Steak and Rice](https://thestrongkitchen.com/products/420) | Meals > Complete Meals | Fat Loss $17.75, Performance $17.99 |
-| [Sweet Honey-Garlic Chicken](https://thestrongkitchen.com/products/163) | Meals > Complete Meals | Fat Loss $14.65, Performance $14.85, Protein Plus $16.65 |
-| [Nashville Hot Chicken](https://thestrongkitchen.com/products/498) | Meals > Complete Meals | Fat Loss $14.65, Protein Plus $16.65 |
-| [Stuffed Red Peppers](https://thestrongkitchen.com/products/173) | Meals > Complete Meals | Fat Loss $14.65 |
-| [Shrimp & Orzo Pastalaya](https://thestrongkitchen.com/products/532) | Meals > Complete Meals | Fat Loss $16.55, Protein Plus $18.55 |
+| [Ziti san Marzano](https://thestrongkitchen.com/products/590) | Meals > Complete Meals | Fat Loss $14.65 |
+| [Caribbean Jerk Salmon](https://thestrongkitchen.com/products/594) | Meals > Complete Meals | Fat Loss $17.95, Performance $18.25 |
+| [Caribbean Jerk Chicken](https://thestrongkitchen.com/products/600) | Meals > Complete Meals | Fat Loss $14.65, Performance $14.85, Protein Plus $16.65 |
+| [Yucatan Beef](https://thestrongkitchen.com/products/109) | Meals > Complete Meals | Fat Loss $14.85, Performance $15.05, Protein Plus $16.85 |
+| [Margherita Chicken Pizza](https://thestrongkitchen.com/products/589) | Meals > Complete Meals | 4 Slices $14.45 |
+| [3-Herb Chicken and Falafel](https://thestrongkitchen.com/products/572) | Meals > Complete Meals | Fat Loss $15.75 |
+| [Steak Stir-Fry](https://thestrongkitchen.com/products/591) | Meals > Complete Meals | Fat Loss $17.65, Performance $17.85, Protein Plus $19.35 |
+| [Orange Glazed Chicken](https://thestrongkitchen.com/products/379) | Meals > Complete Meals | Fat Loss $15.75, Performance $15.95 |
+| [Tikka Chicken](https://thestrongkitchen.com/products/536) | Meals > Complete Meals | Fat Loss $14.65, Protein Plus $16.65 |
 | [Firecracker Sauce](https://thestrongkitchen.com/products/558) | Sauces | 16oz $7.98 |
 | [Double Chocolate Protein Bites](https://thestrongkitchen.com/products/22) | Snacks & Breakfast | Six Pack $9.55 |
 | [Apples and Spice Protein Oatmeal](https://thestrongkitchen.com/products/257) | Snacks & Breakfast > Protein Oatmeal | Single Serving $3.95 |
@@ -29,19 +29,18 @@ Built: 2026-09-02 16:48 UTC  ·  Menu week: 8  ·  Order now for fulfillment on 
 
 | Product | Reason |
 |---|---|
-| [Brown Rice, Kale & Plantain Mix](https://thestrongkitchen.com/products/348) | no real product photo (site shows a generic banner) |
-| [Chile Green Beans](https://thestrongkitchen.com/products/542) | no real product photo (site shows a generic banner) |
-| [Roasted Squash](https://thestrongkitchen.com/products/55) | no real product photo (site shows a generic banner) |
-| [Sauteed Korean Beef](https://thestrongkitchen.com/products/61) | no real product photo (site shows a generic banner) |
-| [Crispy Broccoli](https://thestrongkitchen.com/products/62) | no real product photo (site shows a generic banner) |
-| [Chile-Rubbed Steak and BBQ Sauce](https://thestrongkitchen.com/products/421) | no real product photo (site shows a generic banner) |
-| [Jambalaya Shrimp](https://thestrongkitchen.com/products/534) | no real product photo (site shows a generic banner) |
-| [Garlic and Green Onion Rice](https://thestrongkitchen.com/products/70) | no real product photo (site shows a generic banner) |
-| [Tender Yellow Rice](https://thestrongkitchen.com/products/239) | no real product photo (site shows a generic banner) |
-| [Chile-Rubbed Chicken and BBQ Sauce](https://thestrongkitchen.com/products/361) | no real product photo (site shows a generic banner) |
-| [Summer Slam Rice](https://thestrongkitchen.com/products/422) | no real product photo (site shows a generic banner) |
-| [Roasted Creamy Green Herb Chicken](https://thestrongkitchen.com/products/347) | no real product photo (site shows a generic banner) |
-| [Mexican Oregano Potatoes](https://thestrongkitchen.com/products/230) | no real product photo (site shows a generic banner) |
-| [Nashville Hot Chicken](https://thestrongkitchen.com/products/358) | no real product photo (site shows a generic banner) |
-| [Sweet Honey-Garlic Chicken](https://thestrongkitchen.com/products/168) | no real product photo (site shows a generic banner) |
-| [Orzo Pastalaya](https://thestrongkitchen.com/products/535) | no real product photo (site shows a generic banner) |
+| [Curried Broccoli](https://thestrongkitchen.com/products/598) | no real product photo (site shows a generic banner) |
+| [Honey-Toasted Chickpeas](https://thestrongkitchen.com/products/599) | no real product photo (site shows a generic banner) |
+| [Sesame-Ginger Steak Stir-Fry](https://thestrongkitchen.com/products/592) | no real product photo (site shows a generic banner) |
+| [Coconut Rice, Wax Beans and Carrots](https://thestrongkitchen.com/products/380) | no real product photo (site shows a generic banner) |
+| [Roasted Green Beans](https://thestrongkitchen.com/products/80) | no real product photo (site shows a generic banner) |
+| [Plantain & Glazed Carrots](https://thestrongkitchen.com/products/596) | no real product photo (site shows a generic banner) |
+| [Butternut Squash Rice](https://thestrongkitchen.com/products/85) | no real product photo (site shows a generic banner) |
+| [Yucatan Beef](https://thestrongkitchen.com/products/87) | no real product photo (site shows a generic banner) |
+| [Jerk Salmon & Mango Salsa](https://thestrongkitchen.com/products/595) | no real product photo (site shows a generic banner) |
+| [Jerk Chicken & Mango Salsa](https://thestrongkitchen.com/products/601) | no real product photo (site shows a generic banner) |
+| [Quinoa Salad and Falafel](https://thestrongkitchen.com/products/574) | no real product photo (site shows a generic banner) |
+| [Orange Glazed Chicken](https://thestrongkitchen.com/products/381) | no real product photo (site shows a generic banner) |
+| [Tikka Chicken](https://thestrongkitchen.com/products/597) | no real product photo (site shows a generic banner) |
+| [Jasmine Rice](https://thestrongkitchen.com/products/593) | no real product photo (site shows a generic banner) |
+| [3-Herb Chicken & Greek Tomato Dressing](https://thestrongkitchen.com/products/573) | no real product photo (site shows a generic banner) |
