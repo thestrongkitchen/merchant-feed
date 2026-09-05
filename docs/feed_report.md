@@ -1,6 +1,6 @@
 # TSK Merchant Center feed — build report
 
-Built: 2026-09-04 16:33 UTC  ·  Menu week: 9  ·  Order now for fulfillment on Sunday, September 13th, Monday, September 14th
+Built: 2026-09-05 13:18 UTC  ·  Menu week: 9  ·  Order now for fulfillment on Sunday, September 13th, Monday, September 14th
 
 **27 feed rows** from **18 products**; 15 skipped.
 
@@ -17,9 +17,9 @@ Built: 2026-09-04 16:33 UTC  ·  Menu week: 9  ·  Order now for fulfillment on 
 | [Tikka Chicken](https://thestrongkitchen.com/products/536) | Meals > Complete Meals | Fat Loss $14.65, Protein Plus $16.65 |
 | [Firecracker Sauce](https://thestrongkitchen.com/products/558) | Sauces | 16oz $7.98 |
 | [Double Chocolate Protein Bites](https://thestrongkitchen.com/products/22) | Snacks & Breakfast | Six Pack $9.55 |
+| [Cranberry Almond Protein Oatmeal](https://thestrongkitchen.com/products/289) | Snacks & Breakfast > Protein Oatmeal | Single Serving $3.95 |
 | [Apples and Spice Protein Oatmeal](https://thestrongkitchen.com/products/257) | Snacks & Breakfast > Protein Oatmeal | Single Serving $3.95 |
 | [Cinnamon Raisin Protein Oatmeal](https://thestrongkitchen.com/products/271) | Snacks & Breakfast > Protein Oatmeal | Single Serving $3.95 |
-| [Cranberry Almond Protein Oatmeal](https://thestrongkitchen.com/products/289) | Snacks & Breakfast > Protein Oatmeal | Single Serving $3.95 |
 | [Breakfast Burrito](https://thestrongkitchen.com/products/149) | Snacks & Breakfast > Breakfast & Burritos | Four Pack $15.95 |
 | [Oatmeal Breakfast Cookie](https://thestrongkitchen.com/products/270) | Snacks & Breakfast | Three Pack $9.15 |
 | [Double Chocolate Breakfast Cookie](https://thestrongkitchen.com/products/296) | Snacks & Breakfast | Three Pack $9.15 |

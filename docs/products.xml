@@ -221,6 +221,17 @@
     <inventory_policy>1</inventory_policy>
   </Product>
   <Product>
+    <id>289-482</id>
+    <title>Cranberry Almond Protein Oatmeal - Single Serving</title>
+    <link>https://thestrongkitchen.com/products/289</link>
+    <description>Just add water+90 seconds in microwave. Gluten Free. Made fresh by The Strong Kitchen in Hamden, CT. Delivered Sunday/Monday across Connecticut with your order or pick up in Hamden. Ingredients: Organic quick oats, grass-fed casein, stevia, vanilla, ginger, cinnamon, craisins, almonds.</description>
+    <price>3.95</price>
+    <image_link>https://thestrongkitchen.com/uploads/media/products/289/featured-image/146/cranberry-almond-protein-oatmeal2.jpg</image_link>
+    <categories>Snacks &amp; Breakfast,Snacks &amp; Breakfast &gt; Protein Oatmeal,menu-week-9</categories>
+    <inventory_quantity>100</inventory_quantity>
+    <inventory_policy>1</inventory_policy>
+  </Product>
+  <Product>
     <id>257-432</id>
     <title>Apples and Spice Protein Oatmeal - Single Serving</title>
     <link>https://thestrongkitchen.com/products/257</link>
@@ -238,17 +249,6 @@
     <description>Just add water+90 seconds in microwave. Gluten Free. Made fresh by The Strong Kitchen in Hamden, CT. Delivered Sunday/Monday across Connecticut with your order or pick up in Hamden. Ingredients: Organic quick oats, grass-fed casein, stevia, vanilla, raisins, cinnamon.</description>
     <price>3.95</price>
     <image_link>https://thestrongkitchen.com/uploads/media/products/271/featured-image/128/cinnamon-raisin-protein-oatmeal3.jpg</image_link>
-    <categories>Snacks &amp; Breakfast,Snacks &amp; Breakfast &gt; Protein Oatmeal,menu-week-9</categories>
-    <inventory_quantity>100</inventory_quantity>
-    <inventory_policy>1</inventory_policy>
-  </Product>
-  <Product>
-    <id>289-482</id>
-    <title>Cranberry Almond Protein Oatmeal - Single Serving</title>
-    <link>https://thestrongkitchen.com/products/289</link>
-    <description>Just add water+90 seconds in microwave. Gluten Free. Made fresh by The Strong Kitchen in Hamden, CT. Delivered Sunday/Monday across Connecticut with your order or pick up in Hamden. Ingredients: Organic quick oats, grass-fed casein, stevia, vanilla, ginger, cinnamon, craisins, almonds.</description>
-    <price>3.95</price>
-    <image_link>https://thestrongkitchen.com/uploads/media/products/289/featured-image/146/cranberry-almond-protein-oatmeal2.jpg</image_link>
     <categories>Snacks &amp; Breakfast,Snacks &amp; Breakfast &gt; Protein Oatmeal,menu-week-9</categories>
     <inventory_quantity>100</inventory_quantity>
     <inventory_policy>1</inventory_policy>
