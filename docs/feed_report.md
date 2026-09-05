@@ -1,6 +1,6 @@
 # TSK Merchant Center feed — build report
 
-Built: 2026-09-05 13:18 UTC  ·  Menu week: 9  ·  Order now for fulfillment on Sunday, September 13th, Monday, September 14th
+Built: 2026-09-05 15:28 UTC  ·  Menu week: 9  ·  Order now for fulfillment on Sunday, September 13th, Monday, September 14th
 
 **27 feed rows** from **18 products**; 15 skipped.
 
@@ -12,7 +12,7 @@ Built: 2026-09-05 13:18 UTC  ·  Menu week: 9  ·  Order now for fulfillment on 
 | [Yucatan Beef](https://thestrongkitchen.com/products/109) | Meals > Complete Meals | Fat Loss $14.85, Performance $15.05, Protein Plus $16.85 |
 | [Margherita Chicken Pizza](https://thestrongkitchen.com/products/589) | Meals > Complete Meals | 4 Slices $14.45 |
 | [3-Herb Chicken and Falafel](https://thestrongkitchen.com/products/572) | Meals > Complete Meals | Fat Loss $15.75 |
-| [Steak Stir-Fry](https://thestrongkitchen.com/products/591) | Meals > Complete Meals | Fat Loss $17.65, Performance $17.85, Protein Plus $19.35 |
+| [Filet Mignon Stir-Fry](https://thestrongkitchen.com/products/591) | Meals > Complete Meals | Fat Loss $17.65, Performance $17.85, Protein Plus $19.35 |
 | [Orange Glazed Chicken](https://thestrongkitchen.com/products/379) | Meals > Complete Meals | Fat Loss $15.75, Performance $15.95 |
 | [Tikka Chicken](https://thestrongkitchen.com/products/536) | Meals > Complete Meals | Fat Loss $14.65, Protein Plus $16.65 |
 | [Firecracker Sauce](https://thestrongkitchen.com/products/558) | Sauces | 16oz $7.98 |
@@ -31,7 +31,7 @@ Built: 2026-09-05 13:18 UTC  ·  Menu week: 9  ·  Order now for fulfillment on 
 |---|---|
 | [Curried Broccoli](https://thestrongkitchen.com/products/598) | no real product photo (site shows a generic banner) |
 | [Honey-Toasted Chickpeas](https://thestrongkitchen.com/products/599) | no real product photo (site shows a generic banner) |
-| [Sesame-Ginger Steak Stir-Fry](https://thestrongkitchen.com/products/592) | no real product photo (site shows a generic banner) |
+| [Sesame-Ginger Filet Mignon Stir-Fry](https://thestrongkitchen.com/products/592) | no real product photo (site shows a generic banner) |
 | [Coconut Rice, Wax Beans and Carrots](https://thestrongkitchen.com/products/380) | no real product photo (site shows a generic banner) |
 | [Roasted Green Beans](https://thestrongkitchen.com/products/80) | no real product photo (site shows a generic banner) |
 | [Plantain & Glazed Carrots](https://thestrongkitchen.com/products/596) | no real product photo (site shows a generic banner) |
