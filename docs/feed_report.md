@@ -1,20 +1,20 @@
 # TSK Merchant Center feed — build report
 
-Built: 2026-09-30 18:04 UTC  ·  Menu week: 3  ·  Order now for fulfillment on Sunday, October 4th, Monday, October 5th
+Built: 2026-10-01 16:56 UTC  ·  Menu week: 4  ·  Order now for fulfillment on Sunday, October 11th, Monday, October 12th
 
-**24 feed rows** from **18 products**; 15 skipped.
+**26 feed rows** from **18 products**; 16 skipped.
 
 | Product | Type | Options |
 |---|---|---|
-| [Turkey & Eggplant Lasagna](https://thestrongkitchen.com/products/26) | Meals > Complete Meals | Fat Loss $14.65 |
-| [Egg Roll Bowl](https://thestrongkitchen.com/products/318) | Meals > Complete Meals | Fat Loss $14.65 |
-| [BBQ Shredded Beef](https://thestrongkitchen.com/products/334) | Meals > Complete Meals | Fat Loss $14.85, Protein Plus $16.85 |
-| [Chipotle Lime Cream Beef](https://thestrongkitchen.com/products/323) | Meals > Complete Meals | Fat Loss $14.85, Performance $15.05, Protein Plus $16.85 |
-| [Peruvian Chicken](https://thestrongkitchen.com/products/141) | Meals > Complete Meals | Fat Loss $15.75, Performance $15.95 |
-| [Zesty Herb Chicken](https://thestrongkitchen.com/products/623) | Meals > Complete Meals | Fat Loss $15.75, Performance $15.95 |
-| [Steakhouse Turkey Burger](https://thestrongkitchen.com/products/147) | Meals > Complete Meals | Fat Loss $16.25 |
-| [Blackened Salmon](https://thestrongkitchen.com/products/370) | Meals > Complete Meals | Fat Loss $17.95 |
-| [Lemon Garlic Chicken](https://thestrongkitchen.com/products/303) | Meals > Complete Meals | Fat Loss $14.65, Protein Plus $16.65 |
+| [Balsamic Chicken Thighs](https://thestrongkitchen.com/products/459) | Meals > Complete Meals | Fat Loss $14.65, Performance $14.85, Protein Plus $16.65 |
+| [Sloppy Joe](https://thestrongkitchen.com/products/440) | Meals > Complete Meals | Fat Loss $14.85, Protein Plus $16.85 |
+| [Roasted Salmon and Greens](https://thestrongkitchen.com/products/444) | Meals > Complete Meals | Fat Loss $17.95 |
+| [Mongolian BBQ Shredded Beef](https://thestrongkitchen.com/products/439) | Meals > Complete Meals | Fat Loss $14.85, Protein Plus $16.85 |
+| [Caesar Turkey Burger](https://thestrongkitchen.com/products/454) | Meals > Complete Meals | Fat Loss $16.25 |
+| [Breaded Chicken](https://thestrongkitchen.com/products/430) | Meals > Complete Meals | Fat Loss $14.65 |
+| [Teriyaki Chicken](https://thestrongkitchen.com/products/443) | Meals > Complete Meals | Fat Loss $15.75, Performance $15.95 |
+| [Teriyaki Shrimp](https://thestrongkitchen.com/products/441) | Meals > Complete Meals | Fat Loss $16.55, Performance $16.75, Protein Plus $18.55 |
+| [Lemon Chicken](https://thestrongkitchen.com/products/424) | Meals > Complete Meals | Fat Loss $15.75, Performance $15.95 |
 | [Firecracker Sauce](https://thestrongkitchen.com/products/558) | Sauces | 16oz $7.98 |
 | [Double Chocolate Protein Bites](https://thestrongkitchen.com/products/22) | Snacks & Breakfast | Six Pack $9.55 |
 | [Cinnamon Raisin Protein Oatmeal](https://thestrongkitchen.com/products/271) | Snacks & Breakfast > Protein Oatmeal | Single Serving $3.95 |
@@ -29,18 +29,19 @@ Built: 2026-09-30 18:04 UTC  ·  Menu week: 3  ·  Order now for fulfillment on 
 
 | Product | Reason |
 |---|---|
-| [Butternut, Pinto and Brown Rice](https://thestrongkitchen.com/products/43) | no real product photo (site shows a generic banner) |
-| [Peruvian Herb Potatoes](https://thestrongkitchen.com/products/47) | no real product photo (site shows a generic banner) |
-| [Guajillo Roasted Corn](https://thestrongkitchen.com/products/50) | no real product photo (site shows a generic banner) |
-| [Quinoa Salad & Balsamic Dressing](https://thestrongkitchen.com/products/625) | no real product photo (site shows a generic banner) |
-| [Broccoli and Sweet Pea Pesto](https://thestrongkitchen.com/products/305) | no real product photo (site shows a generic banner) |
-| [Chipotle Lime Cream Beef](https://thestrongkitchen.com/products/96) | no real product photo (site shows a generic banner) |
-| [Blackened Salmon](https://thestrongkitchen.com/products/376) | no real product photo (site shows a generic banner) |
-| [Steakhouse Turkey Burger](https://thestrongkitchen.com/products/110) | no real product photo (site shows a generic banner) |
-| [Fire Roasted Veggies, Red Beans and Rice](https://thestrongkitchen.com/products/146) | no real product photo (site shows a generic banner) |
-| [Peruvian Chicken & Green Dressing](https://thestrongkitchen.com/products/148) | no real product photo (site shows a generic banner) |
-| [Zesty Herb Chicken](https://thestrongkitchen.com/products/624) | no real product photo (site shows a generic banner) |
-| [Lemon Garlic Chicken](https://thestrongkitchen.com/products/304) | no real product photo (site shows a generic banner) |
-| [BBQ Shredded Beef](https://thestrongkitchen.com/products/337) | no real product photo (site shows a generic banner) |
-| [Parmesan Thyme Mashed Potato](https://thestrongkitchen.com/products/336) | no real product photo (site shows a generic banner) |
-| [Honey Roasted Carrots](https://thestrongkitchen.com/products/460) | no real product photo (site shows a generic banner) |
+| [Sweet Potato Fries](https://thestrongkitchen.com/products/445) | no real product photo (site shows a generic banner) |
+| [Roasted Green Beans](https://thestrongkitchen.com/products/446) | no real product photo (site shows a generic banner) |
+| [Mustardy Thyme Russet Potatoes](https://thestrongkitchen.com/products/455) | no real product photo (site shows a generic banner) |
+| [Gluten Free Jalapeno Cornbread](https://thestrongkitchen.com/products/309) | no real product photo (site shows a generic banner) |
+| [Teriyaki Shrimp](https://thestrongkitchen.com/products/448) | no real product photo (site shows a generic banner) |
+| [Turkey Burgers with Serrano Caesar](https://thestrongkitchen.com/products/456) | no real product photo (site shows a generic banner) |
+| [Salt and Pepper Salmon](https://thestrongkitchen.com/products/457) | no real product photo (site shows a generic banner) |
+| [Teriyaki Chicken](https://thestrongkitchen.com/products/447) | no real product photo (site shows a generic banner) |
+| [Lemon Chicken](https://thestrongkitchen.com/products/451) | no real product photo (site shows a generic banner) |
+| [Balsamic Chicken Thighs](https://thestrongkitchen.com/products/461) | no real product photo (site shows a generic banner) |
+| [Breaded Chicken](https://thestrongkitchen.com/products/452) | no real product photo (site shows a generic banner) |
+| [Mongolian BBQ Shredded Beef](https://thestrongkitchen.com/products/567) | no real product photo (site shows a generic banner) |
+| [Pineapple Stir-Fry Rice](https://thestrongkitchen.com/products/450) | no real product photo (site shows a generic banner) |
+| [Honey Roasted Carrots](https://thestrongkitchen.com/products/335) | no real product photo (site shows a generic banner) |
+| [Parmesan Broccoli Rice](https://thestrongkitchen.com/products/449) | no real product photo (site shows a generic banner) |
+| [Parsley-Thyme Brown Rice](https://thestrongkitchen.com/products/462) | no real product photo (site shows a generic banner) |
