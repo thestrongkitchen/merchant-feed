@@ -1,8 +1,8 @@
 # TSK Merchant Center feed — build report
 
-Built: 2026-10-05 19:08 UTC  ·  Menu week: 4  ·  Order now for fulfillment on Sunday, October 11th, Monday, October 12th
+Built: 2026-10-06 16:35 UTC  ·  Menu week: 4  ·  Order now for fulfillment on Sunday, October 11th, Monday, October 12th
 
-**26 feed rows** from **18 products**; 16 skipped.
+**26 feed rows** from **18 products**; 17 skipped.
 
 | Product | Type | Options |
 |---|---|---|
@@ -45,3 +45,4 @@ Built: 2026-10-05 19:08 UTC  ·  Menu week: 4  ·  Order now for fulfillment on 
 | [Honey Roasted Carrots](https://thestrongkitchen.com/products/335) | no real product photo (site shows a generic banner) |
 | [Parmesan Broccoli Rice](https://thestrongkitchen.com/products/449) | no real product photo (site shows a generic banner) |
 | [Parsley-Thyme Brown Rice](https://thestrongkitchen.com/products/462) | no real product photo (site shows a generic banner) |
+| [Vegetable Marinara and Spiral Pasta](https://thestrongkitchen.com/products/626) | no real product photo (site shows a generic banner) |
