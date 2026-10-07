@@ -1,0 +1,22 @@
+name: Schedule menu emails
+on:
+  schedule:
+    - cron: "0 10 * * 3,4"    # Wed + Thu 6 AM ET (5 AM in winter)
+    - cron: "30 11 * * 3,4"   # backup 7:30 AM ET; does nothing if the first run worked
+  workflow_dispatch:
+jobs:
+  schedule:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Schedule today's menu email (test mode unless MENU_EMAILS_LIVE is true)
+        env:
+          KLAVIYO_API_KEY: ${{ secrets.KLAVIYO_CAMPAIGN_KEY }}
+        run: |
+          if [ "${{ vars.MENU_EMAILS_LIVE }}" = "true" ]; then
+            python menu_send_scheduler.py --go
+          else
+            python menu_send_scheduler.py
+          fi
