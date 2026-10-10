@@ -1,6 +1,6 @@
 # TSK Merchant Center feed — build report
 
-Built: 2026-10-09 18:28 UTC  ·  Menu week: 5  ·  Order now for fulfillment on Sunday, October 18th, Monday, October 19th
+Built: 2026-10-10 15:46 UTC  ·  Menu week: 5  ·  Order now for fulfillment on Sunday, October 18th, Monday, October 19th
 
 **27 feed rows** from **18 products**; 18 skipped.
 
@@ -14,7 +14,7 @@ Built: 2026-10-09 18:28 UTC  ·  Menu week: 5  ·  Order now for fulfillment on 
 | [Honey-Dijon Chicken](https://thestrongkitchen.com/products/383) | Meals > Complete Meals | Fat Loss $15.75, Performance $15.95 |
 | [BBQ Chicken Pizza](https://thestrongkitchen.com/products/386) | Meals > Complete Meals | 4 Slices $15.15 |
 | [Maple-Tarragon Chicken](https://thestrongkitchen.com/products/389) | Meals > Complete Meals | Fat Loss $15.75, Performance $16.15 |
-| [Sirloin Tips and Cheesy Rice](https://thestrongkitchen.com/products/582) | Meals > Complete Meals | Fat Loss $16.65, Performance $16.85, Protein Plus $18.35 |
+| [Filet Mignon Tips and Cheesy Rice](https://thestrongkitchen.com/products/582) | Meals > Complete Meals | Fat Loss $16.65, Performance $16.85, Protein Plus $18.35 |
 | [Firecracker Sauce](https://thestrongkitchen.com/products/558) | Sauces | 16oz $7.98 |
 | [Double Chocolate Protein Bites](https://thestrongkitchen.com/products/22) | Snacks & Breakfast | Six Pack $9.55 |
 | [Cinnamon Raisin Protein Oatmeal](https://thestrongkitchen.com/products/271) | Snacks & Breakfast > Protein Oatmeal | Single Serving $3.95 |
@@ -30,7 +30,7 @@ Built: 2026-10-09 18:28 UTC  ·  Menu week: 5  ·  Order now for fulfillment on 
 | Product | Reason |
 |---|---|
 | [Roasted Green Beans](https://thestrongkitchen.com/products/46) | no real product photo (site shows a generic banner) |
-| [Sirloin Tips and SK-1 Sauce](https://thestrongkitchen.com/products/404) | no real product photo (site shows a generic banner) |
+| [Filet Mignon Tips and SK-1 Sauce](https://thestrongkitchen.com/products/404) | no real product photo (site shows a generic banner) |
 | [Balsamic Marinated Flat Iron Steak](https://thestrongkitchen.com/products/585) | no real product photo (site shows a generic banner) |
 | [Verde Pasta with Sweet Potato and Peas](https://thestrongkitchen.com/products/588) | no real product photo (site shows a generic banner) |
 | [Chile-Paprika Sweet Potatoes](https://thestrongkitchen.com/products/394) | no real product photo (site shows a generic banner) |
