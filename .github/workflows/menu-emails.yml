@@ -1,9 +1,16 @@
 name: Schedule menu emails
 on:
   schedule:
-    - cron: "0 10 * * 3,4"    # Wed + Thu 6 AM ET (5 AM in winter)
-    - cron: "30 11 * * 3,4"   # backup 7:30 AM ET; does nothing if the first run worked
+    # GitHub fires scheduled runs hours late on this repo, so try every half hour from just after
+    # midnight ET (the site switches to the new menu at 12:00 AM Thursday). The first run that lands
+    # does the work; the rest find it done and stop.
+    - cron: "15,45 4-16 * * 3,4"
   workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: menu-emails
+  cancel-in-progress: false
 jobs:
   schedule:
     runs-on: ubuntu-latest
@@ -11,12 +18,23 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
+      - name: Rebuild the menu feed from the live site
+        continue-on-error: true
+        run: |
+          python build_merchant_feed.py --out docs
+          git config user.name "tsk-feed-bot"
+          git config user.email "feed-bot@users.noreply.github.com"
+          git add docs/products.tsv docs/products.xml docs/products.json docs/feed_report.md
+          if git diff --cached --quiet; then echo "feed unchanged"; else
+            git commit -m "feed: $(date -u +%F) (menu email run)"
+            for i in 1 2 3; do git pull --rebase -q && git push && break; sleep 10; done
+          fi
       - name: Schedule today's menu email (test mode unless MENU_EMAILS_LIVE is true)
         env:
           KLAVIYO_API_KEY: ${{ secrets.KLAVIYO_CAMPAIGN_KEY }}
         run: |
           if [ "${{ vars.MENU_EMAILS_LIVE }}" = "true" ]; then
-            python menu_send_scheduler.py --go
+            python menu_send_scheduler.py --go --wait 10
           else
-            python menu_send_scheduler.py
+            python menu_send_scheduler.py --wait 10
           fi
