@@ -208,7 +208,14 @@ def schedule(cid, name, cfg, when, cutoff, now, go):
         return
     call("PATCH", "/campaigns/%s" % cid, {"data": {"type": "campaign", "id": cid, "attributes": attrs}})
     call("POST", "/campaign-send-jobs", {"data": {"type": "campaign-send-job", "id": cid}})
-    a = call("GET", "/campaigns/%s" % cid)["data"]["attributes"]
+    # Klaviyo schedules asynchronously; right after the send job the status can still be a
+    # transitional one (this false-alarmed on 10/14 although the campaign was scheduled fine).
+    for _ in range(12):
+        a = call("GET", "/campaigns/%s" % cid)["data"]["attributes"]
+        if a["status"] in ("Scheduled", "Sending", "Adding Recipients", "Preparing to send", "Sent"):
+            break
+        print("Status is '%s'; checking again in 10 s." % a["status"])
+        time.sleep(10)
     print("Scheduled '%s': status %s, send %s" % (a["name"], a["status"],
                                                    (a.get("send_strategy") or {}).get("options_static", {}).get("datetime")))
     if a["status"] not in ("Scheduled", "Sending", "Adding Recipients", "Preparing to send", "Sent"):
