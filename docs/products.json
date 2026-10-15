@@ -1,350 +1,370 @@
 {
- "week": "5",
- "fulfillment": "Order now for fulfillment on Sunday, October 18th, Monday, October 19th",
- "delivery": "Sunday, October 18th or Monday, October 19th",
- "deadline": "Wednesday, October 14th",
- "post_url": "https://thestrongkitchen.com/blog/post/whats-on-the-menu-new-haven-county-october-18",
+ "week": "6",
+ "fulfillment": "Order now for fulfillment on Sunday, October 25th, Monday, October 26th",
+ "delivery": "Sunday, October 25th or Monday, October 26th",
+ "deadline": "Wednesday, October 21st",
+ "post_url": "https://thestrongkitchen.com/blog/post/whats-on-the-menu-new-haven-county-october-25",
  "items": [
   {
-   "id": "390-638",
-   "group": "390",
-   "title": "Swiss Burger - Fat Loss Meal (451 cal, 48g protein)",
-   "name": "Swiss Burger",
+   "id": "458-732",
+   "group": "458",
+   "title": "Rotisserie Style Chicken - Fat Loss Meal (346 cal, 36g protein)",
+   "name": "Rotisserie Style Chicken",
    "portion": "Fat Loss",
    "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/390",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/390/featured-image/992/Swiss-Burger-Plated.jpg",
-   "price": "16.25",
-   "description": "Swiss Burger with Herb-Mustard Potatoes & Garlic Broccoli. Fat Loss portion (lighter carbs): 451 calories, 48g protein, 20g carbs, 20g fat. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Turkey, russet potatoes, broccoli. swiss cheese, dry mustard, thyme, garlic, onion, oil, salt, pepper.",
-   "categories": [
-    "Meals",
-    "Meals > Complete Meals",
-    "Fat Loss",
-    "menu-week-5"
-   ],
-   "week": "5"
-  },
-  {
-   "id": "390-639",
-   "group": "390",
-   "title": "Swiss Burger - Performance Meal (504 cal, 49g protein)",
-   "name": "Swiss Burger",
-   "portion": "Performance",
-   "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/390",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/390/featured-image/992/Swiss-Burger-Plated.jpg",
-   "price": "16.65",
-   "description": "Swiss Burger with Herb-Mustard Potatoes & Garlic Broccoli. Performance portion (balanced): 504 calories, 49g protein, 33g carbs, 20g fat. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Turkey, russet potatoes, broccoli. swiss cheese, dry mustard, thyme, garlic, onion, oil, salt, pepper.",
-   "categories": [
-    "Meals",
-    "Meals > Complete Meals",
-    "Performance",
-    "menu-week-5"
-   ],
-   "week": "5"
-  },
-  {
-   "id": "388-634",
-   "group": "388",
-   "title": "Bourbon BBQ Salmon - Fat Loss Meal (433 cal, 39g protein)",
-   "name": "Bourbon BBQ Salmon",
-   "portion": "Fat Loss",
-   "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/388",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/388/featured-image/991/Bourbon-BBQ-Salmon-Plated.jpg",
-   "price": "18.20",
-   "description": "Bourbon BBQ Salmon with Carrots, Rice and Pinto Beans. Fat Loss portion (lighter carbs): 433 calories, 39g protein, 39g carbs, 13g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Faroe Island salmon, long grain rice, carrots, pinto beans, ketchup, cider vinegar, honey, bourbon, oil, salt, spices.",
-   "categories": [
-    "Meals",
-    "Meals > Complete Meals",
-    "Fat Loss",
-    "menu-week-5"
-   ],
-   "week": "5"
-  },
-  {
-   "id": "388-635",
-   "group": "388",
-   "title": "Bourbon BBQ Salmon - Performance Meal (536 cal, 42g protein)",
-   "name": "Bourbon BBQ Salmon",
-   "portion": "Performance",
-   "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/388",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/388/featured-image/991/Bourbon-BBQ-Salmon-Plated.jpg",
-   "price": "18.50",
-   "description": "Bourbon BBQ Salmon with Carrots, Rice and Pinto Beans. Performance portion (balanced): 536 calories, 42g protein, 61g carbs, 13g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Faroe Island salmon, long grain rice, carrots, pinto beans, ketchup, cider vinegar, honey, bourbon, oil, salt, spices.",
-   "categories": [
-    "Meals",
-    "Meals > Complete Meals",
-    "Performance",
-    "menu-week-5"
-   ],
-   "week": "5"
-  },
-  {
-   "id": "387-631",
-   "group": "387",
-   "title": "Bourbon BBQ Shredded Chicken - Fat Loss Meal (369 cal, 36g protein)",
-   "name": "Bourbon BBQ Shredded Chicken",
-   "portion": "Fat Loss",
-   "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/387",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/387/featured-image/990/Bourbon-BBQ-Shredded-Chicken-Plated.jpg",
+   "link": "https://thestrongkitchen.com/products/458",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/458/featured-image/1008/Rotisserie-Style-Chicken-Plated.jpg",
    "price": "15.15",
-   "description": "Bourbon BBQ Shredded Chicken with Carrots, Rice and Pinto Beans. Fat Loss portion (lighter carbs): 369 calories, 36g protein, 37g carbs, 8g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken thigh, long grain rice, carrots, pinto beans, ketchup, cider vinegar, honey, bourbon, oil, salt, spices.",
+   "description": "Rotisserie Style Chicken with Rotisserie Green Beans & Three-Herb Potatoes. Fat Loss portion (lighter carbs): 346 calories, 36g protein, 22g carbs, 15g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken thighs, green beans, yukon gold potatoes, onion, garlic, thyme, parsley, basil, oil, chile, spices, salt.",
    "categories": [
     "Meals",
     "Meals > Complete Meals",
     "Fat Loss",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
-   "id": "387-632",
-   "group": "387",
-   "title": "Bourbon BBQ Shredded Chicken - Performance Meal (468 cal, 40g protein)",
-   "name": "Bourbon BBQ Shredded Chicken",
+   "id": "458-733",
+   "group": "458",
+   "title": "Rotisserie Style Chicken - Performance Meal (398 cal, 37g protein)",
+   "name": "Rotisserie Style Chicken",
    "portion": "Performance",
    "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/387",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/387/featured-image/990/Bourbon-BBQ-Shredded-Chicken-Plated.jpg",
+   "link": "https://thestrongkitchen.com/products/458",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/458/featured-image/1008/Rotisserie-Style-Chicken-Plated.jpg",
    "price": "15.35",
-   "description": "Bourbon BBQ Shredded Chicken with Carrots, Rice and Pinto Beans. Performance portion (balanced): 468 calories, 40g protein, 56g carbs, 9g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken thigh, long grain rice, carrots, pinto beans, ketchup, cider vinegar, honey, bourbon, oil, salt, spices.",
+   "description": "Rotisserie Style Chicken with Rotisserie Green Beans & Three-Herb Potatoes. Performance portion (balanced): 398 calories, 37g protein, 34g carbs, 15g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken thighs, green beans, yukon gold potatoes, onion, garlic, thyme, parsley, basil, oil, chile, spices, salt.",
    "categories": [
     "Meals",
     "Meals > Complete Meals",
     "Performance",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
-   "id": "387-938",
-   "group": "387",
-   "title": "Bourbon BBQ Shredded Chicken - Protein Plus Meal (455 cal, 52g protein)",
-   "name": "Bourbon BBQ Shredded Chicken",
+   "id": "458-943",
+   "group": "458",
+   "title": "Rotisserie Style Chicken - Protein Plus Meal (498 cal, 52g protein)",
+   "name": "Rotisserie Style Chicken",
    "portion": "Protein Plus",
    "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/387",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/387/featured-image/990/Bourbon-BBQ-Shredded-Chicken-Plated.jpg",
+   "link": "https://thestrongkitchen.com/products/458",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/458/featured-image/1008/Rotisserie-Style-Chicken-Plated.jpg",
    "price": "17.15",
-   "description": "Bourbon BBQ Shredded Chicken with Carrots, Rice and Pinto Beans. Protein Plus portion (extra protein): 455 calories, 52g protein, 37g carbs, 11g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken thigh, long grain rice, carrots, pinto beans, ketchup, cider vinegar, honey, bourbon, oil, salt, spices.",
+   "description": "Rotisserie Style Chicken with Rotisserie Green Beans & Three-Herb Potatoes. Protein Plus portion (extra protein): 498 calories, 52g protein, 22g carbs, 18g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken thighs, green beans, yukon gold potatoes, onion, garlic, thyme, parsley, basil, oil, chile, spices, salt.",
    "categories": [
     "Meals",
     "Meals > Complete Meals",
     "Protein Plus",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
-   "id": "382-619",
-   "group": "382",
-   "title": "Steak and Fries - Fat Loss Meal (412 cal, 39g protein)",
-   "name": "Steak and Fries",
+   "id": "616-1015",
+   "group": "616",
+   "title": "Thai Basil Beef Bowl - Fat Loss Meal (360 cal, 33g protein)",
+   "name": "Thai Basil Beef Bowl",
    "portion": "Fat Loss",
    "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/382",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/382/featured-image/986/Steak-and-Fries-Plated.jpg",
-   "price": "18.50",
-   "description": "Balsamic Marinated Flat Iron, Russet Fries, Spicy Ketchup. Fat Loss portion (lighter carbs): 412 calories, 39g protein, 37g carbs, 12g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Flat iron beef, russet potato, garlic, ketchup, chipotle, apple vinegar, balsamic vinegar, oil, tamari, mustard, thyme, garlic, salt, pepper.",
+   "link": "https://thestrongkitchen.com/products/616",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/616/featured-image/738/Thai-Basil-Beef-Bowl.jpg",
+   "price": "15.85",
+   "description": "Thai Basil Beef Bowl with Eggplant Rice, Veggies & Thai Basil Sauce. Fat Loss portion (lighter carbs): 360 calories, 33g protein, 31g carbs, 12g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Ground beef, broccoli, green beans, carrots, peppers, long grain brown rice, ginger, basil, chili pasta, tamari, coconut aminos, lime, spices, salt.",
    "categories": [
     "Meals",
     "Meals > Complete Meals",
     "Fat Loss",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
-   "id": "385-627",
-   "group": "385",
-   "title": "Firecracker Beef - Fat Loss Meal (420 cal, 39g protein)",
-   "name": "Firecracker Beef",
-   "portion": "Fat Loss",
-   "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/385",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/385/featured-image/988/Firecracker-Beef-Plated.jpg",
-   "price": "16.45",
-   "description": "Firecracker Beef with Cinnamon, Sweet Potatoes, Broccoli, Cubanelle Peppers. Fat Loss portion (lighter carbs): 420 calories, 39g protein, 38g carbs, 12g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Ground beef, sweet potatoes, cubanelle, broccoli, cayenne, vinegar, tamari, brown sugar, rice wine vinegar, coconut milk, salt.",
-   "categories": [
-    "Meals",
-    "Meals > Complete Meals",
-    "Fat Loss",
-    "menu-week-5"
-   ],
-   "week": "5"
-  },
-  {
-   "id": "385-939",
-   "group": "385",
-   "title": "Firecracker Beef - Protein Plus Meal (521 cal, 54g protein)",
-   "name": "Firecracker Beef",
-   "portion": "Protein Plus",
-   "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/385",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/385/featured-image/988/Firecracker-Beef-Plated.jpg",
-   "price": "18.45",
-   "description": "Firecracker Beef with Cinnamon, Sweet Potatoes, Broccoli, Cubanelle Peppers. Protein Plus portion (extra protein): 521 calories, 54g protein, 38g carbs, 17g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Ground beef, sweet potatoes, cubanelle, broccoli, cayenne, vinegar, tamari, brown sugar, rice wine vinegar, coconut milk, salt.",
-   "categories": [
-    "Meals",
-    "Meals > Complete Meals",
-    "Protein Plus",
-    "menu-week-5"
-   ],
-   "week": "5"
-  },
-  {
-   "id": "383-622",
-   "group": "383",
-   "title": "Honey-Dijon Chicken - Fat Loss Meal (525 cal, 53g protein)",
-   "name": "Honey-Dijon Chicken",
-   "portion": "Fat Loss",
-   "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/383",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/383/featured-image/987/Honey-Dijon-Chicken-Plated.jpg",
-   "price": "15.75",
-   "description": "Honey-Dijon Chicken with Tri-Colored Peppers, Brown Rice, Side of Sauce. Fat Loss portion (lighter carbs): 525 calories, 53g protein, 55g carbs, 8g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken breast, brown rice, red, yellow and orange peppers, dijon, honey, oil, thyme, salt, pepper.",
-   "categories": [
-    "Meals",
-    "Meals > Complete Meals",
-    "Fat Loss",
-    "menu-week-5"
-   ],
-   "week": "5"
-  },
-  {
-   "id": "383-623",
-   "group": "383",
-   "title": "Honey-Dijon Chicken - Performance Meal (648 cal, 58g protein)",
-   "name": "Honey-Dijon Chicken",
+   "id": "616-1016",
+   "group": "616",
+   "title": "Thai Basil Beef Bowl - Performance Meal (465 cal, 35g protein)",
+   "name": "Thai Basil Beef Bowl",
    "portion": "Performance",
    "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/383",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/383/featured-image/987/Honey-Dijon-Chicken-Plated.jpg",
-   "price": "15.95",
-   "description": "Honey-Dijon Chicken with Tri-Colored Peppers, Brown Rice, Side of Sauce. Performance portion (balanced): 648 calories, 58g protein, 81g carbs, 9g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken breast, brown rice, red, yellow and orange peppers, dijon, honey, oil, thyme, salt, pepper.",
+   "link": "https://thestrongkitchen.com/products/616",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/616/featured-image/738/Thai-Basil-Beef-Bowl.jpg",
+   "price": "16.05",
+   "description": "Thai Basil Beef Bowl with Eggplant Rice, Veggies & Thai Basil Sauce. Performance portion (balanced): 465 calories, 35g protein, 52g carbs, 13g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Ground beef, broccoli, green beans, carrots, peppers, long grain brown rice, ginger, basil, chili pasta, tamari, coconut aminos, lime, spices, salt.",
    "categories": [
     "Meals",
     "Meals > Complete Meals",
     "Performance",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
-   "id": "386-630",
-   "group": "386",
-   "title": "BBQ Chicken Pizza - 4 Slices",
-   "name": "BBQ Chicken Pizza",
-   "portion": "",
+   "id": "616-1017",
+   "group": "616",
+   "title": "Thai Basil Beef Bowl - Protein Plus Meal (465 cal, 48g protein)",
+   "name": "Thai Basil Beef Bowl",
+   "portion": "Protein Plus",
    "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/386",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/386/featured-image/989/BBQ-Chicken-Pizza-Plated.jpg",
+   "link": "https://thestrongkitchen.com/products/616",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/616/featured-image/738/Thai-Basil-Beef-Bowl.jpg",
+   "price": "17.85",
+   "description": "Thai Basil Beef Bowl with Eggplant Rice, Veggies & Thai Basil Sauce. Protein Plus portion (extra protein): 465 calories, 48g protein, 31g carbs, 17g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Ground beef, broccoli, green beans, carrots, peppers, long grain brown rice, ginger, basil, chili pasta, tamari, coconut aminos, lime, spices, salt.",
+   "categories": [
+    "Meals",
+    "Meals > Complete Meals",
+    "Protein Plus",
+    "menu-week-6"
+   ],
+   "week": "6"
+  },
+  {
+   "id": "434-699",
+   "group": "434",
+   "title": "Garlic Thyme Beef Burger - Fat Loss Meal (449 cal, 41g protein)",
+   "name": "Garlic Thyme Beef Burger",
+   "portion": "Fat Loss",
+   "type": "Meals",
+   "link": "https://thestrongkitchen.com/products/434",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/434/featured-image/1001/Garlic-Thyme-Beef-Burger---Plated.jpg",
    "price": "15.15",
-   "description": "BBQ Chicken Pizza with Gluten Free Crust, Mozzarella and Tangy BBQ Sauce. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Cauliflower Crust (cauliflower, cornstarch, rice flour, potato starch, psyllium, dextrose, oil, sugar, yeast), chicken, mozzarella, ketchup, chipotle, orange, honey, vinegar, salt.",
-   "categories": [
-    "Meals",
-    "Meals > Complete Meals",
-    "menu-week-5"
-   ],
-   "week": "5"
-  },
-  {
-   "id": "389-637",
-   "group": "389",
-   "title": "Maple-Tarragon Chicken - Fat Loss Meal (518 cal, 60g protein)",
-   "name": "Maple-Tarragon Chicken",
-   "portion": "Fat Loss",
-   "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/389",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/389/featured-image/727/Maple-Tarragon-Chicken.jpg",
-   "price": "15.75",
-   "description": "Maple-Tarragon Chicken with Verde Pasta, Sweet Potato and Peas. Fat Loss portion (lighter carbs): 518 calories, 60g protein, 42g carbs, 10g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken breast, gluten free rice pasta, sweet potatoes, peas, poblano peppers, coconut milk, parsley, chives, spinach,maple syrup, tarragon, dijon, lemon juice, oil, paprika, garlic, coriander white pepper, salt.",
+   "description": "Garlic Thyme Beef Burger with Roasted Red Pepper Pasta. Fat Loss portion (lighter carbs): 449 calories, 41g protein, 45g carbs, 14g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Ground beef, rice flour pasta, plum tomatoes, roasted red peppers, garlic, basil, chile flake, pepper, salt.",
    "categories": [
     "Meals",
     "Meals > Complete Meals",
     "Fat Loss",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
-   "id": "389-936",
-   "group": "389",
-   "title": "Maple-Tarragon Chicken - Performance Meal (568 cal, 62g protein)",
-   "name": "Maple-Tarragon Chicken",
-   "portion": "Performance",
-   "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/389",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/389/featured-image/727/Maple-Tarragon-Chicken.jpg",
-   "price": "16.15",
-   "description": "Maple-Tarragon Chicken with Verde Pasta, Sweet Potato and Peas. Performance portion (balanced): 568 calories, 62g protein, 51g carbs, 11g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken breast, gluten free rice pasta, sweet potatoes, peas, poblano peppers, coconut milk, parsley, chives, spinach,maple syrup, tarragon, dijon, lemon juice, oil, paprika, garlic, coriander white pepper, salt.",
-   "categories": [
-    "Meals",
-    "Meals > Complete Meals",
-    "Performance",
-    "menu-week-5"
-   ],
-   "week": "5"
-  },
-  {
-   "id": "582-927",
-   "group": "582",
-   "title": "Filet Mignon Tips and Cheesy Rice - Fat Loss Meal (424 cal, 39g protein)",
-   "name": "Filet Mignon Tips and Cheesy Rice",
+   "id": "319-526",
+   "group": "319",
+   "title": "Way South Lasagna - Fat Loss Meal (449 cal, 47g protein)",
+   "name": "Way South Lasagna",
    "portion": "Fat Loss",
    "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/582",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/582/featured-image/737/Sirloin-Tips-and-Cheesy-Rice.jpg",
-   "price": "16.65",
-   "description": "Filet Mignon Tips and Cheesy Rice with Green Beans and SK-1 Sauce. Fat Loss portion (lighter carbs): 424 calories, 39g protein, 43g carbs, 11g fat. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Beef tenderloin tips, medium grain rice, green beans, broccoli, feta, ketchup, dijon, worcestershire, tamari, balsamic vinegar, spices, salt.",
+   "link": "https://thestrongkitchen.com/products/319",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/319/featured-image/587/way-south-lasagna-corrected.jpg",
+   "price": "15.50",
+   "description": "Way South Lasagna with Zucchini, Cheddar and Ranchero Sauce. Fat Loss portion (lighter carbs): 449 calories, 47g protein, 25g carbs, 17g fat. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Ground turkey, zucchini, crushed tomatoes, onion, garlic, chipotle, cumin, paprika, oregano, fat free ricotta, low-fat mozzarella, pepper jack, gluten free pasta (rice only), salt.",
    "categories": [
     "Meals",
     "Meals > Complete Meals",
     "Fat Loss",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
-   "id": "582-928",
-   "group": "582",
-   "title": "Filet Mignon Tips and Cheesy Rice - Performance Meal (478 cal, 41g protein)",
-   "name": "Filet Mignon Tips and Cheesy Rice",
-   "portion": "Performance",
+   "id": "555-895",
+   "group": "555",
+   "title": "Slow Roasted Buffalo Chicken - Fat Loss Meal (444 cal, 38g protein)",
+   "name": "Slow Roasted Buffalo Chicken",
+   "portion": "Fat Loss",
    "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/582",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/582/featured-image/737/Sirloin-Tips-and-Cheesy-Rice.jpg",
-   "price": "16.85",
-   "description": "Filet Mignon Tips and Cheesy Rice with Green Beans and SK-1 Sauce. Performance portion (balanced): 478 calories, 41g protein, 55g carbs, 12g fat. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Beef tenderloin tips, medium grain rice, green beans, broccoli, feta, ketchup, dijon, worcestershire, tamari, balsamic vinegar, spices, salt.",
+   "link": "https://thestrongkitchen.com/products/555",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/555/featured-image/1016/Slow-Roasted-Buffalo-Chicken-Plated.jpg",
+   "price": "15.15",
+   "description": "Slow Roasted Buffalo Chicken with Mashed Yams, Corn & Bleu Cheese Dip. Fat Loss portion (lighter carbs): 444 calories, 38g protein, 58g carbs, 8g fat. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken thighs, yams (sweet potatoes), corn, scallions, cilantro, parsley, vinegar, brown sugar, bleu cheese, sour cream, lemon, dijon, spices, salt.",
    "categories": [
     "Meals",
     "Meals > Complete Meals",
-    "Performance",
-    "menu-week-5"
+    "Fat Loss",
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
-   "id": "582-937",
-   "group": "582",
-   "title": "Filet Mignon Tips and Cheesy Rice - Protein Plus Meal (515 cal, 56g protein)",
-   "name": "Filet Mignon Tips and Cheesy Rice",
+   "id": "555-941",
+   "group": "555",
+   "title": "Slow Roasted Buffalo Chicken - Protein Plus Meal (542 cal, 54g protein)",
+   "name": "Slow Roasted Buffalo Chicken",
    "portion": "Protein Plus",
    "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/582",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/582/featured-image/737/Sirloin-Tips-and-Cheesy-Rice.jpg",
-   "price": "18.35",
-   "description": "Filet Mignon Tips and Cheesy Rice with Green Beans and SK-1 Sauce. Protein Plus portion (extra protein): 515 calories, 56g protein, 43g carbs, 14g fat. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Beef tenderloin tips, medium grain rice, green beans, broccoli, feta, ketchup, dijon, worcestershire, tamari, balsamic vinegar, spices, salt.",
+   "link": "https://thestrongkitchen.com/products/555",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/555/featured-image/1016/Slow-Roasted-Buffalo-Chicken-Plated.jpg",
+   "price": "17.15",
+   "description": "Slow Roasted Buffalo Chicken with Mashed Yams, Corn & Bleu Cheese Dip. Protein Plus portion (extra protein): 542 calories, 54g protein, 58g carbs, 12g fat. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken thighs, yams (sweet potatoes), corn, scallions, cilantro, parsley, vinegar, brown sugar, bleu cheese, sour cream, lemon, dijon, spices, salt.",
    "categories": [
     "Meals",
     "Meals > Complete Meals",
     "Protein Plus",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
+  },
+  {
+   "id": "415-669",
+   "group": "415",
+   "title": "Roasted Salmon - Fat Loss Meal (491 cal, 41g protein)",
+   "name": "Roasted Salmon",
+   "portion": "Fat Loss",
+   "type": "Meals",
+   "link": "https://thestrongkitchen.com/products/415",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/415/featured-image/996/Roasted-Salmon-Plated.jpg",
+   "price": "18.80",
+   "description": "Sweet Root Veggie Rice and Ginger-Jalapeno Dream Sauce. Fat Loss portion (lighter carbs): 491 calories, 41g protein, 51g carbs, 12g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Faroe Island salmon, long grain rice, butternut, kale, parsnips, sweet potato, jalapeno, ginger, scallion, garlic, coconut milk, vinegar, salt.",
+   "categories": [
+    "Meals",
+    "Meals > Complete Meals",
+    "Fat Loss",
+    "menu-week-6"
+   ],
+   "week": "6"
+  },
+  {
+   "id": "415-670",
+   "group": "415",
+   "title": "Roasted Salmon - Performance Meal (556 cal, 42g protein)",
+   "name": "Roasted Salmon",
+   "portion": "Performance",
+   "type": "Meals",
+   "link": "https://thestrongkitchen.com/products/415",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/415/featured-image/996/Roasted-Salmon-Plated.jpg",
+   "price": "19.10",
+   "description": "Sweet Root Veggie Rice and Ginger-Jalapeno Dream Sauce. Performance portion (balanced): 556 calories, 42g protein, 66g carbs, 12g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Faroe Island salmon, long grain rice, butternut, kale, parsnips, sweet potato, jalapeno, ginger, scallion, garlic, coconut milk, vinegar, salt.",
+   "categories": [
+    "Meals",
+    "Meals > Complete Meals",
+    "Performance",
+    "menu-week-6"
+   ],
+   "week": "6"
+  },
+  {
+   "id": "373-606",
+   "group": "373",
+   "title": "Seared Dijon Chicken - Fat Loss Meal (420 cal, 54g protein)",
+   "name": "Seared Dijon Chicken",
+   "portion": "Fat Loss",
+   "type": "Meals",
+   "link": "https://thestrongkitchen.com/products/373",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/373/featured-image/985/Seared-Dijon-Chicken-Plated.jpg",
+   "price": "15.75",
+   "description": "Seared Dijon Chicken with Paprika Potatoes, Broccoli & \"Nonnie's\" Dressing. Fat Loss portion (lighter carbs): 420 calories, 54g protein, 24g carbs, 11g fat. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken breast, russet potatoes, broccoli, parmesan, dijon, lemon juice, oil, garlic, red wine vinegar, parsley, thyme, honey, salt, pepper, spices.",
+   "categories": [
+    "Meals",
+    "Meals > Complete Meals",
+    "Fat Loss",
+    "menu-week-6"
+   ],
+   "week": "6"
+  },
+  {
+   "id": "373-607",
+   "group": "373",
+   "title": "Seared Dijon Chicken - Performance Meal (469 cal, 56g protein)",
+   "name": "Seared Dijon Chicken",
+   "portion": "Performance",
+   "type": "Meals",
+   "link": "https://thestrongkitchen.com/products/373",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/373/featured-image/985/Seared-Dijon-Chicken-Plated.jpg",
+   "price": "15.95",
+   "description": "Seared Dijon Chicken with Paprika Potatoes, Broccoli & \"Nonnie's\" Dressing. Performance portion (balanced): 469 calories, 56g protein, 36g carbs, 11g fat. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken breast, russet potatoes, broccoli, parmesan, dijon, lemon juice, oil, garlic, red wine vinegar, parsley, thyme, honey, salt, pepper, spices.",
+   "categories": [
+    "Meals",
+    "Meals > Complete Meals",
+    "Performance",
+    "menu-week-6"
+   ],
+   "week": "6"
+  },
+  {
+   "id": "609-1005",
+   "group": "609",
+   "title": "Moroccan Chicken Breast - Fat Loss Meal (500 cal, 54g protein)",
+   "name": "Moroccan Chicken Breast",
+   "portion": "Fat Loss",
+   "type": "Meals",
+   "link": "https://thestrongkitchen.com/products/609",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/609/featured-image/735/Moroccan-Chicken-Breast.jpg",
+   "price": "15.75",
+   "description": "Moroccan Chicken Breast with Citrus Carrots & Warm Spiced Jasmine Rice. Fat Loss portion (lighter carbs): 500 calories, 54g protein, 38g carbs, 15g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken breast, carrots, jasmine rice, dill, cilantro, parsley, orange juice, lemon, lime, ginger, bay leaf, chipotle, spices, salt, pepper.",
+   "categories": [
+    "Meals",
+    "Meals > Complete Meals",
+    "Fat Loss",
+    "menu-week-6"
+   ],
+   "week": "6"
+  },
+  {
+   "id": "609-1006",
+   "group": "609",
+   "title": "Moroccan Chicken Breast - Performance Meal (615 cal, 56g protein)",
+   "name": "Moroccan Chicken Breast",
+   "portion": "Performance",
+   "type": "Meals",
+   "link": "https://thestrongkitchen.com/products/609",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/609/featured-image/735/Moroccan-Chicken-Breast.jpg",
+   "price": "15.95",
+   "description": "Moroccan Chicken Breast with Citrus Carrots & Warm Spiced Jasmine Rice. Performance portion (balanced): 615 calories, 56g protein, 60g carbs, 17g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken breast, carrots, jasmine rice, dill, cilantro, parsley, orange juice, lemon, lime, ginger, bay leaf, chipotle, spices, salt, pepper.",
+   "categories": [
+    "Meals",
+    "Meals > Complete Meals",
+    "Performance",
+    "menu-week-6"
+   ],
+   "week": "6"
+  },
+  {
+   "id": "610-1007",
+   "group": "610",
+   "title": "Moroccan Shrimp - Fat Loss Meal (355 cal, 36g protein)",
+   "name": "Moroccan Shrimp",
+   "portion": "Fat Loss",
+   "type": "Meals",
+   "link": "https://thestrongkitchen.com/products/610",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/610/featured-image/736/Moroccan-Shrimp.jpg",
+   "price": "16.55",
+   "description": "Moroccan Shrimp with Citrus Carrots & Warm Spiced Jasmine Rice. Fat Loss portion (lighter carbs): 355 calories, 36g protein, 37g carbs, 7g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Sustainably raised shrimp, carrots, jasmine rice, dill, cilantro, parsley, orange juice, lemon, lime, ginger, bay leaf, chipotle, spices, salt, pepper.",
+   "categories": [
+    "Meals",
+    "Meals > Complete Meals",
+    "Fat Loss",
+    "menu-week-6"
+   ],
+   "week": "6"
+  },
+  {
+   "id": "610-1008",
+   "group": "610",
+   "title": "Moroccan Shrimp - Performance Meal (470 cal, 38g protein)",
+   "name": "Moroccan Shrimp",
+   "portion": "Performance",
+   "type": "Meals",
+   "link": "https://thestrongkitchen.com/products/610",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/610/featured-image/736/Moroccan-Shrimp.jpg",
+   "price": "16.75",
+   "description": "Moroccan Shrimp with Citrus Carrots & Warm Spiced Jasmine Rice. Performance portion (balanced): 470 calories, 38g protein, 59g carbs, 9g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Sustainably raised shrimp, carrots, jasmine rice, dill, cilantro, parsley, orange juice, lemon, lime, ginger, bay leaf, chipotle, spices, salt, pepper.",
+   "categories": [
+    "Meals",
+    "Meals > Complete Meals",
+    "Performance",
+    "menu-week-6"
+   ],
+   "week": "6"
+  },
+  {
+   "id": "610-1009",
+   "group": "610",
+   "title": "Moroccan Shrimp - Protein Plus Meal (430 cal, 52g protein)",
+   "name": "Moroccan Shrimp",
+   "portion": "Protein Plus",
+   "type": "Meals",
+   "link": "https://thestrongkitchen.com/products/610",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/610/featured-image/736/Moroccan-Shrimp.jpg",
+   "price": "18.55",
+   "description": "Moroccan Shrimp with Citrus Carrots & Warm Spiced Jasmine Rice. Protein Plus portion (extra protein): 430 calories, 52g protein, 37g carbs, 8g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Sustainably raised shrimp, carrots, jasmine rice, dill, cilantro, parsley, orange juice, lemon, lime, ginger, bay leaf, chipotle, spices, salt, pepper.",
+   "categories": [
+    "Meals",
+    "Meals > Complete Meals",
+    "Protein Plus",
+    "menu-week-6"
+   ],
+   "week": "6"
   },
   {
    "id": "558-1021",
@@ -359,9 +379,9 @@
    "description": "Tangy, sweet with a touch of heat 12 servings per bottle 2 Tbsp per serving. Gluten Free • Dairy Free. Made in-house by The Strong Kitchen, Hamden, CT. Delivered with your meal prep order across Connecticut or pick up in Hamden. Ingredients: Vinegar blend (cayenne pepper puree, water, vinegar, salt, xanthan gum), dark brown sugar, apple cider vinegar, coconut aminos, coconut milk, rice vinegar, chile flake.",
    "categories": [
     "Sauces",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
    "id": "22-63",
@@ -376,9 +396,9 @@
    "description": "Our best selling snack!. Gluten Free • Dairy Free. Made fresh by The Strong Kitchen in Hamden, CT. Delivered Sunday/Monday across Connecticut with your order or pick up in Hamden. Ingredients: Oats, egg whites, pea protein, cocoa, chocolate chips, truvia, salt.",
    "categories": [
     "Snacks & Breakfast",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
    "id": "271-454",
@@ -394,9 +414,9 @@
    "categories": [
     "Snacks & Breakfast",
     "Snacks & Breakfast > Protein Oatmeal",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
    "id": "289-482",
@@ -412,9 +432,9 @@
    "categories": [
     "Snacks & Breakfast",
     "Snacks & Breakfast > Protein Oatmeal",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
    "id": "257-432",
@@ -430,9 +450,9 @@
    "categories": [
     "Snacks & Breakfast",
     "Snacks & Breakfast > Protein Oatmeal",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
    "id": "149-276",
@@ -448,9 +468,9 @@
    "categories": [
     "Snacks & Breakfast",
     "Snacks & Breakfast > Breakfast & Burritos",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
    "id": "270-453",
@@ -465,9 +485,9 @@
    "description": "Oatmeal Breakfast Cookie with craisins, walnuts and chocolate chips. Gluten Free. Made fresh by The Strong Kitchen in Hamden, CT. Delivered Sunday/Monday across Connecticut with your order or pick up in Hamden. Ingredients: Oats, rice flour, casein, egg whites, oil, cinnamon, baking soda, baking powder, stevia, craisins, chocolate, walnuts, salt.",
    "categories": [
     "Snacks & Breakfast",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
    "id": "296-491",
@@ -482,9 +502,9 @@
    "description": "Double Chocolate Breakfast Cookie with Dark chocolate base and chocolate chips. Gluten Free. Made fresh by The Strong Kitchen in Hamden, CT. Delivered Sunday/Monday across Connecticut with your order or pick up in Hamden. Ingredients: Oats, rice flour, sweet potato, casein, egg whites, oil, cinnamon, baking soda, baking powder, stevia, chocolate chips, cocoa.",
    "categories": [
     "Snacks & Breakfast",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
    "id": "368-595",
@@ -500,181 +520,182 @@
    "categories": [
     "Snacks & Breakfast",
     "Snacks & Breakfast > Breakfast & Burritos",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   }
  ],
  "meals": [
   {
-   "id": "390-639",
-   "group": "390",
-   "title": "Swiss Burger - Performance Meal (504 cal, 49g protein)",
-   "name": "Swiss Burger",
+   "id": "458-733",
+   "group": "458",
+   "title": "Rotisserie Style Chicken - Performance Meal (398 cal, 37g protein)",
+   "name": "Rotisserie Style Chicken",
    "portion": "Performance",
    "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/390",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/390/featured-image/992/Swiss-Burger-Plated.jpg",
-   "price": "16.65",
-   "description": "Swiss Burger with Herb-Mustard Potatoes & Garlic Broccoli. Performance portion (balanced): 504 calories, 49g protein, 33g carbs, 20g fat. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Turkey, russet potatoes, broccoli. swiss cheese, dry mustard, thyme, garlic, onion, oil, salt, pepper.",
-   "categories": [
-    "Meals",
-    "Meals > Complete Meals",
-    "Performance",
-    "menu-week-5"
-   ],
-   "week": "5"
-  },
-  {
-   "id": "388-635",
-   "group": "388",
-   "title": "Bourbon BBQ Salmon - Performance Meal (536 cal, 42g protein)",
-   "name": "Bourbon BBQ Salmon",
-   "portion": "Performance",
-   "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/388",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/388/featured-image/991/Bourbon-BBQ-Salmon-Plated.jpg",
-   "price": "18.50",
-   "description": "Bourbon BBQ Salmon with Carrots, Rice and Pinto Beans. Performance portion (balanced): 536 calories, 42g protein, 61g carbs, 13g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Faroe Island salmon, long grain rice, carrots, pinto beans, ketchup, cider vinegar, honey, bourbon, oil, salt, spices.",
-   "categories": [
-    "Meals",
-    "Meals > Complete Meals",
-    "Performance",
-    "menu-week-5"
-   ],
-   "week": "5"
-  },
-  {
-   "id": "387-632",
-   "group": "387",
-   "title": "Bourbon BBQ Shredded Chicken - Performance Meal (468 cal, 40g protein)",
-   "name": "Bourbon BBQ Shredded Chicken",
-   "portion": "Performance",
-   "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/387",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/387/featured-image/990/Bourbon-BBQ-Shredded-Chicken-Plated.jpg",
+   "link": "https://thestrongkitchen.com/products/458",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/458/featured-image/1008/Rotisserie-Style-Chicken-Plated.jpg",
    "price": "15.35",
-   "description": "Bourbon BBQ Shredded Chicken with Carrots, Rice and Pinto Beans. Performance portion (balanced): 468 calories, 40g protein, 56g carbs, 9g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken thigh, long grain rice, carrots, pinto beans, ketchup, cider vinegar, honey, bourbon, oil, salt, spices.",
+   "description": "Rotisserie Style Chicken with Rotisserie Green Beans & Three-Herb Potatoes. Performance portion (balanced): 398 calories, 37g protein, 34g carbs, 15g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken thighs, green beans, yukon gold potatoes, onion, garlic, thyme, parsley, basil, oil, chile, spices, salt.",
    "categories": [
     "Meals",
     "Meals > Complete Meals",
     "Performance",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
-   "id": "382-619",
-   "group": "382",
-   "title": "Steak and Fries - Fat Loss Meal (412 cal, 39g protein)",
-   "name": "Steak and Fries",
-   "portion": "Fat Loss",
-   "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/382",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/382/featured-image/986/Steak-and-Fries-Plated.jpg",
-   "price": "18.50",
-   "description": "Balsamic Marinated Flat Iron, Russet Fries, Spicy Ketchup. Fat Loss portion (lighter carbs): 412 calories, 39g protein, 37g carbs, 12g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Flat iron beef, russet potato, garlic, ketchup, chipotle, apple vinegar, balsamic vinegar, oil, tamari, mustard, thyme, garlic, salt, pepper.",
-   "categories": [
-    "Meals",
-    "Meals > Complete Meals",
-    "Fat Loss",
-    "menu-week-5"
-   ],
-   "week": "5"
-  },
-  {
-   "id": "385-627",
-   "group": "385",
-   "title": "Firecracker Beef - Fat Loss Meal (420 cal, 39g protein)",
-   "name": "Firecracker Beef",
-   "portion": "Fat Loss",
-   "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/385",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/385/featured-image/988/Firecracker-Beef-Plated.jpg",
-   "price": "16.45",
-   "description": "Firecracker Beef with Cinnamon, Sweet Potatoes, Broccoli, Cubanelle Peppers. Fat Loss portion (lighter carbs): 420 calories, 39g protein, 38g carbs, 12g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Ground beef, sweet potatoes, cubanelle, broccoli, cayenne, vinegar, tamari, brown sugar, rice wine vinegar, coconut milk, salt.",
-   "categories": [
-    "Meals",
-    "Meals > Complete Meals",
-    "Fat Loss",
-    "menu-week-5"
-   ],
-   "week": "5"
-  },
-  {
-   "id": "383-623",
-   "group": "383",
-   "title": "Honey-Dijon Chicken - Performance Meal (648 cal, 58g protein)",
-   "name": "Honey-Dijon Chicken",
+   "id": "616-1016",
+   "group": "616",
+   "title": "Thai Basil Beef Bowl - Performance Meal (465 cal, 35g protein)",
+   "name": "Thai Basil Beef Bowl",
    "portion": "Performance",
    "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/383",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/383/featured-image/987/Honey-Dijon-Chicken-Plated.jpg",
-   "price": "15.95",
-   "description": "Honey-Dijon Chicken with Tri-Colored Peppers, Brown Rice, Side of Sauce. Performance portion (balanced): 648 calories, 58g protein, 81g carbs, 9g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken breast, brown rice, red, yellow and orange peppers, dijon, honey, oil, thyme, salt, pepper.",
+   "link": "https://thestrongkitchen.com/products/616",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/616/featured-image/738/Thai-Basil-Beef-Bowl.jpg",
+   "price": "16.05",
+   "description": "Thai Basil Beef Bowl with Eggplant Rice, Veggies & Thai Basil Sauce. Performance portion (balanced): 465 calories, 35g protein, 52g carbs, 13g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Ground beef, broccoli, green beans, carrots, peppers, long grain brown rice, ginger, basil, chili pasta, tamari, coconut aminos, lime, spices, salt.",
    "categories": [
     "Meals",
     "Meals > Complete Meals",
     "Performance",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
-   "id": "386-630",
-   "group": "386",
-   "title": "BBQ Chicken Pizza - 4 Slices",
-   "name": "BBQ Chicken Pizza",
-   "portion": "",
+   "id": "434-699",
+   "group": "434",
+   "title": "Garlic Thyme Beef Burger - Fat Loss Meal (449 cal, 41g protein)",
+   "name": "Garlic Thyme Beef Burger",
+   "portion": "Fat Loss",
    "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/386",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/386/featured-image/989/BBQ-Chicken-Pizza-Plated.jpg",
+   "link": "https://thestrongkitchen.com/products/434",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/434/featured-image/1001/Garlic-Thyme-Beef-Burger---Plated.jpg",
    "price": "15.15",
-   "description": "BBQ Chicken Pizza with Gluten Free Crust, Mozzarella and Tangy BBQ Sauce. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Cauliflower Crust (cauliflower, cornstarch, rice flour, potato starch, psyllium, dextrose, oil, sugar, yeast), chicken, mozzarella, ketchup, chipotle, orange, honey, vinegar, salt.",
+   "description": "Garlic Thyme Beef Burger with Roasted Red Pepper Pasta. Fat Loss portion (lighter carbs): 449 calories, 41g protein, 45g carbs, 14g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Ground beef, rice flour pasta, plum tomatoes, roasted red peppers, garlic, basil, chile flake, pepper, salt.",
    "categories": [
     "Meals",
     "Meals > Complete Meals",
-    "menu-week-5"
+    "Fat Loss",
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
-   "id": "389-936",
-   "group": "389",
-   "title": "Maple-Tarragon Chicken - Performance Meal (568 cal, 62g protein)",
-   "name": "Maple-Tarragon Chicken",
+   "id": "319-526",
+   "group": "319",
+   "title": "Way South Lasagna - Fat Loss Meal (449 cal, 47g protein)",
+   "name": "Way South Lasagna",
+   "portion": "Fat Loss",
+   "type": "Meals",
+   "link": "https://thestrongkitchen.com/products/319",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/319/featured-image/587/way-south-lasagna-corrected.jpg",
+   "price": "15.50",
+   "description": "Way South Lasagna with Zucchini, Cheddar and Ranchero Sauce. Fat Loss portion (lighter carbs): 449 calories, 47g protein, 25g carbs, 17g fat. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Ground turkey, zucchini, crushed tomatoes, onion, garlic, chipotle, cumin, paprika, oregano, fat free ricotta, low-fat mozzarella, pepper jack, gluten free pasta (rice only), salt.",
+   "categories": [
+    "Meals",
+    "Meals > Complete Meals",
+    "Fat Loss",
+    "menu-week-6"
+   ],
+   "week": "6"
+  },
+  {
+   "id": "555-895",
+   "group": "555",
+   "title": "Slow Roasted Buffalo Chicken - Fat Loss Meal (444 cal, 38g protein)",
+   "name": "Slow Roasted Buffalo Chicken",
+   "portion": "Fat Loss",
+   "type": "Meals",
+   "link": "https://thestrongkitchen.com/products/555",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/555/featured-image/1016/Slow-Roasted-Buffalo-Chicken-Plated.jpg",
+   "price": "15.15",
+   "description": "Slow Roasted Buffalo Chicken with Mashed Yams, Corn & Bleu Cheese Dip. Fat Loss portion (lighter carbs): 444 calories, 38g protein, 58g carbs, 8g fat. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken thighs, yams (sweet potatoes), corn, scallions, cilantro, parsley, vinegar, brown sugar, bleu cheese, sour cream, lemon, dijon, spices, salt.",
+   "categories": [
+    "Meals",
+    "Meals > Complete Meals",
+    "Fat Loss",
+    "menu-week-6"
+   ],
+   "week": "6"
+  },
+  {
+   "id": "415-670",
+   "group": "415",
+   "title": "Roasted Salmon - Performance Meal (556 cal, 42g protein)",
+   "name": "Roasted Salmon",
    "portion": "Performance",
    "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/389",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/389/featured-image/727/Maple-Tarragon-Chicken.jpg",
-   "price": "16.15",
-   "description": "Maple-Tarragon Chicken with Verde Pasta, Sweet Potato and Peas. Performance portion (balanced): 568 calories, 62g protein, 51g carbs, 11g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken breast, gluten free rice pasta, sweet potatoes, peas, poblano peppers, coconut milk, parsley, chives, spinach,maple syrup, tarragon, dijon, lemon juice, oil, paprika, garlic, coriander white pepper, salt.",
+   "link": "https://thestrongkitchen.com/products/415",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/415/featured-image/996/Roasted-Salmon-Plated.jpg",
+   "price": "19.10",
+   "description": "Sweet Root Veggie Rice and Ginger-Jalapeno Dream Sauce. Performance portion (balanced): 556 calories, 42g protein, 66g carbs, 12g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Faroe Island salmon, long grain rice, butternut, kale, parsnips, sweet potato, jalapeno, ginger, scallion, garlic, coconut milk, vinegar, salt.",
    "categories": [
     "Meals",
     "Meals > Complete Meals",
     "Performance",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
-   "id": "582-928",
-   "group": "582",
-   "title": "Filet Mignon Tips and Cheesy Rice - Performance Meal (478 cal, 41g protein)",
-   "name": "Filet Mignon Tips and Cheesy Rice",
+   "id": "373-607",
+   "group": "373",
+   "title": "Seared Dijon Chicken - Performance Meal (469 cal, 56g protein)",
+   "name": "Seared Dijon Chicken",
    "portion": "Performance",
    "type": "Meals",
-   "link": "https://thestrongkitchen.com/products/582",
-   "image_link": "https://thestrongkitchen.com/uploads/media/products/582/featured-image/737/Sirloin-Tips-and-Cheesy-Rice.jpg",
-   "price": "16.85",
-   "description": "Filet Mignon Tips and Cheesy Rice with Green Beans and SK-1 Sauce. Performance portion (balanced): 478 calories, 41g protein, 55g carbs, 12g fat. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Beef tenderloin tips, medium grain rice, green beans, broccoli, feta, ketchup, dijon, worcestershire, tamari, balsamic vinegar, spices, salt.",
+   "link": "https://thestrongkitchen.com/products/373",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/373/featured-image/985/Seared-Dijon-Chicken-Plated.jpg",
+   "price": "15.95",
+   "description": "Seared Dijon Chicken with Paprika Potatoes, Broccoli & \"Nonnie's\" Dressing. Performance portion (balanced): 469 calories, 56g protein, 36g carbs, 11g fat. Gluten Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken breast, russet potatoes, broccoli, parmesan, dijon, lemon juice, oil, garlic, red wine vinegar, parsley, thyme, honey, salt, pepper, spices.",
    "categories": [
     "Meals",
     "Meals > Complete Meals",
     "Performance",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
+  },
+  {
+   "id": "609-1006",
+   "group": "609",
+   "title": "Moroccan Chicken Breast - Performance Meal (615 cal, 56g protein)",
+   "name": "Moroccan Chicken Breast",
+   "portion": "Performance",
+   "type": "Meals",
+   "link": "https://thestrongkitchen.com/products/609",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/609/featured-image/735/Moroccan-Chicken-Breast.jpg",
+   "price": "15.95",
+   "description": "Moroccan Chicken Breast with Citrus Carrots & Warm Spiced Jasmine Rice. Performance portion (balanced): 615 calories, 56g protein, 60g carbs, 17g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Chicken breast, carrots, jasmine rice, dill, cilantro, parsley, orange juice, lemon, lime, ginger, bay leaf, chipotle, spices, salt, pepper.",
+   "categories": [
+    "Meals",
+    "Meals > Complete Meals",
+    "Performance",
+    "menu-week-6"
+   ],
+   "week": "6"
+  },
+  {
+   "id": "610-1008",
+   "group": "610",
+   "title": "Moroccan Shrimp - Performance Meal (470 cal, 38g protein)",
+   "name": "Moroccan Shrimp",
+   "portion": "Performance",
+   "type": "Meals",
+   "link": "https://thestrongkitchen.com/products/610",
+   "image_link": "https://thestrongkitchen.com/uploads/media/products/610/featured-image/736/Moroccan-Shrimp.jpg",
+   "price": "16.75",
+   "description": "Moroccan Shrimp with Citrus Carrots & Warm Spiced Jasmine Rice. Performance portion (balanced): 470 calories, 38g protein, 59g carbs, 9g fat. Gluten Free • Dairy Free. Fresh, chef-made meal prep from The Strong Kitchen in Hamden, CT — fully cooked, just heat and eat. Delivered Sunday/Monday across Connecticut or pick up in Hamden. Ingredients: Sustainably raised shrimp, carrots, jasmine rice, dill, cilantro, parsley, orange juice, lemon, lime, ginger, bay leaf, chipotle, spices, salt, pepper.",
+   "categories": [
+    "Meals",
+    "Meals > Complete Meals",
+    "Performance",
+    "menu-week-6"
+   ],
+   "week": "6"
   }
  ],
  "extras": [
@@ -691,9 +712,9 @@
    "description": "Tangy, sweet with a touch of heat 12 servings per bottle 2 Tbsp per serving. Gluten Free • Dairy Free. Made in-house by The Strong Kitchen, Hamden, CT. Delivered with your meal prep order across Connecticut or pick up in Hamden. Ingredients: Vinegar blend (cayenne pepper puree, water, vinegar, salt, xanthan gum), dark brown sugar, apple cider vinegar, coconut aminos, coconut milk, rice vinegar, chile flake.",
    "categories": [
     "Sauces",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
    "id": "22-63",
@@ -708,9 +729,9 @@
    "description": "Our best selling snack!. Gluten Free • Dairy Free. Made fresh by The Strong Kitchen in Hamden, CT. Delivered Sunday/Monday across Connecticut with your order or pick up in Hamden. Ingredients: Oats, egg whites, pea protein, cocoa, chocolate chips, truvia, salt.",
    "categories": [
     "Snacks & Breakfast",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
    "id": "271-454",
@@ -726,9 +747,9 @@
    "categories": [
     "Snacks & Breakfast",
     "Snacks & Breakfast > Protein Oatmeal",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
    "id": "289-482",
@@ -744,9 +765,9 @@
    "categories": [
     "Snacks & Breakfast",
     "Snacks & Breakfast > Protein Oatmeal",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
    "id": "257-432",
@@ -762,9 +783,9 @@
    "categories": [
     "Snacks & Breakfast",
     "Snacks & Breakfast > Protein Oatmeal",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
    "id": "149-276",
@@ -780,9 +801,9 @@
    "categories": [
     "Snacks & Breakfast",
     "Snacks & Breakfast > Breakfast & Burritos",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
    "id": "270-453",
@@ -797,9 +818,9 @@
    "description": "Oatmeal Breakfast Cookie with craisins, walnuts and chocolate chips. Gluten Free. Made fresh by The Strong Kitchen in Hamden, CT. Delivered Sunday/Monday across Connecticut with your order or pick up in Hamden. Ingredients: Oats, rice flour, casein, egg whites, oil, cinnamon, baking soda, baking powder, stevia, craisins, chocolate, walnuts, salt.",
    "categories": [
     "Snacks & Breakfast",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
    "id": "296-491",
@@ -814,9 +835,9 @@
    "description": "Double Chocolate Breakfast Cookie with Dark chocolate base and chocolate chips. Gluten Free. Made fresh by The Strong Kitchen in Hamden, CT. Delivered Sunday/Monday across Connecticut with your order or pick up in Hamden. Ingredients: Oats, rice flour, sweet potato, casein, egg whites, oil, cinnamon, baking soda, baking powder, stevia, chocolate chips, cocoa.",
    "categories": [
     "Snacks & Breakfast",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   },
   {
    "id": "368-595",
@@ -832,9 +853,9 @@
    "categories": [
     "Snacks & Breakfast",
     "Snacks & Breakfast > Breakfast & Burritos",
-    "menu-week-5"
+    "menu-week-6"
    ],
-   "week": "5"
+   "week": "6"
   }
  ]
 }
