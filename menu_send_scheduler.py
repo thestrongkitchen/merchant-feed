@@ -33,7 +33,9 @@ from zoneinfo import ZoneInfo
 
 ET = ZoneInfo("America/New_York")
 API = "https://a.klaviyo.com/api"
-REVISION = "2024-10-15"
+# 2026-10-15: Klaviyo started rejecting the 2024-10-15 send_strategy shape (options_static) on PATCH, so 4 of
+# 5 Thursday runs failed. From 2025-10-15 on, the send time sits directly on send_strategy.datetime.
+REVISION = "2026-07-15"
 FEED = "https://thestrongkitchen.github.io/merchant-feed/products.json"   # Klaviyo web feed TSK_MENU reads this
 
 LISTS = ["TnEuwQ", "Upt57m"]                  # Account Created, Newsletter
@@ -117,9 +119,15 @@ def campaigns_named(prefix):
     return out
 
 
+def strategy_datetime(a):
+    """Send time from a campaign's attributes. Reads the current shape (send_strategy.datetime) and the
+    pre-2025 one (send_strategy.options_static.datetime) in case Klaviyo ever answers in the old format."""
+    s = a.get("send_strategy") or {}
+    return s.get("datetime") or (s.get("options_static") or {}).get("datetime")
+
+
 def send_dt(c):
-    s = (c["attributes"].get("send_strategy") or {}).get("options_static") or {}
-    t = s.get("datetime") or c["attributes"].get("send_time")
+    t = strategy_datetime(c["attributes"]) or c["attributes"].get("send_time")
     return datetime.fromisoformat(t.replace("Z", "+00:00")).astimezone(ET) if t else None
 
 
@@ -172,6 +180,12 @@ def main():
     src = sent[0]
     new_name = "%s (Merchant Feed) %s auto" % (cfg["name"], f"{today.month}/{today.day}")
     print("Copying last week's '%s' (sent %s) as '%s'" % (src["attributes"]["name"], send_dt(src).strftime("%m/%d"), new_name))
+    # A run that failed after cloning leaves a draft with today's name (4 of them on 10/15). Reuse it
+    # instead of cloning again, so a retry never piles up orphan drafts.
+    leftover = [c for c in found if c["attributes"]["name"] == new_name and c["attributes"]["status"] == "Draft"]
+    if leftover:
+        print("Reusing today's draft %s left by an earlier run (no new copy)." % leftover[0]["id"])
+        return schedule(leftover[0]["id"], new_name, cfg, when, cutoff, now, go)
     if not go:
         return schedule(None, new_name, cfg, when, cutoff, now, go)
     d = call("POST", "/campaign-clone", {"data": {"type": "campaign", "id": src["id"], "attributes": {"new_name": new_name}}})
@@ -197,8 +211,8 @@ def schedule(cid, name, cfg, when, cutoff, now, go):
         print("Running late; sending at %s ET instead." % when.strftime("%H:%M"))
     attrs = {
         "audiences": {"included": LISTS, "excluded": cfg["excluded"]},
-        "send_strategy": {"method": "static", "options_static": {"datetime": when.astimezone(ZoneInfo("UTC")).isoformat(),
-                                                                 "is_local": False}},
+        "send_strategy": {"method": "static", "datetime": when.astimezone(ZoneInfo("UTC")).isoformat(),
+                          "options": {"is_local": False}},
         "send_options": {"use_smart_sending": False},
     }
     print("Audience: lists %s, excluding %s" % (LISTS, cfg["excluded"]))
@@ -216,8 +230,7 @@ def schedule(cid, name, cfg, when, cutoff, now, go):
             break
         print("Status is '%s'; checking again in 10 s." % a["status"])
         time.sleep(10)
-    print("Scheduled '%s': status %s, send %s" % (a["name"], a["status"],
-                                                   (a.get("send_strategy") or {}).get("options_static", {}).get("datetime")))
+    print("Scheduled '%s': status %s, send %s" % (a["name"], a["status"], strategy_datetime(a)))
     if a["status"] not in ("Scheduled", "Sending", "Adding Recipients", "Preparing to send", "Sent"):
         sys.exit("Campaign did not end up scheduled. Needs a human.")
 
