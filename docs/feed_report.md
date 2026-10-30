@@ -1,6 +1,6 @@
 # TSK Merchant Center feed — build report
 
-Built: 2026-10-29 19:45 UTC  ·  Menu week: 8  ·  Order now for fulfillment on Sunday, November 8th, Monday, November 9th
+Built: 2026-10-30 16:35 UTC  ·  Menu week: 8  ·  Order now for fulfillment on Sunday, November 8th, Monday, November 9th
 
 **29 feed rows** from **18 products**; 16 skipped.
 
