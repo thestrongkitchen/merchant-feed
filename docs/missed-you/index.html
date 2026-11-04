@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Thanks - The Strong Kitchen</title>
+<!-- "We missed you" answer page (Luke 2026-11-04). Each reason button in the email lands here with ?r=<reason>.
+     Klaviyo's own tracking identifies who answered (from the email link), so no personal data is in the URL or this
+     page. The answer is saved as a "Missed You Answer" event on their profile. -->
+<style>
+  :root { --green:#3a7d44; --dark:#242E1F; --bg:#f5f5f0; --line:#e0e0da; --gold:#C8A951; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); font-family:Inter,"Helvetica Neue",Helvetica,Arial,sans-serif; color:#222; }
+  .wrap { max-width:520px; margin:0 auto; padding:16px; }
+  .top { background:var(--dark); border-radius:12px 12px 0 0; padding:16px 20px; }
+  .top img { display:block; width:150px; max-width:60%; height:auto; }
+  .card { background:#fff; border:1px solid var(--line); border-top:0; border-radius:0 0 12px 12px; padding:24px 20px 26px; }
+  h1 { font-size:26px; margin:0 0 8px; color:var(--dark); }
+  p { font-size:16px; line-height:1.55; margin:0 0 14px; }
+  textarea { width:100%; min-height:110px; border:2px solid #c9d3c3; border-radius:8px; padding:12px; font:inherit; font-size:16px; }
+  button { margin-top:12px; background:var(--dark); color:#fff; border:0; border-radius:8px; padding:12px 22px; font:inherit; font-size:16px; font-weight:600; cursor:pointer; }
+  button:disabled { opacity:.6; cursor:default; }
+  .menu { display:inline-block; margin-top:18px; font-size:14px; color:var(--green); font-weight:600; }
+  .sig { font-size:14px; color:#666; margin-top:16px; }
+  .hide { display:none; }
+</style>
+<script>
+  !function(){if(!window.klaviyo){window._klOnsite=window._klOnsite||[];try{window.klaviyo=new Proxy({},{get:function(n,i){return"push"===i?function(){var n;(n=window._klOnsite).push.apply(n,arguments)}:function(){for(var n=arguments.length,o=new Array(n),w=0;w<n;w++)o[w]=arguments[w];var t="function"==typeof o[o.length-1]?o.pop():void 0,e=new Promise((function(n){window._klOnsite.push([i].concat(o,[function(i){t&&t(i),n(i)}]))}));return e}}})}catch(n){window.klaviyo=window.klaviyo||[],window.klaviyo.push=function(){var n;(n=window._klOnsite).push.apply(n,arguments)}}}}();
+</script>
+<script async src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=RHx7TH"></script>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><img src="https://thestrongkitchen.github.io/merchant-feed/img/tsk-logo-bar.png" alt="The Strong Kitchen"></div>
+  <div class="card">
+    <h1>Thanks, that helps.</h1>
+    <p id="thanks">We read every answer.</p>
+
+    <div id="other" class="hide">
+      <p><b>What kept you away?</b> A few words is plenty.</p>
+      <textarea id="text" maxlength="1000" placeholder="Type here"></textarea>
+      <button id="send" type="button">Send</button>
+      <p id="sent" class="hide" style="margin-top:14px;"><b>Got it, thank you.</b></p>
+    </div>
+
+    <a class="menu" href="https://thestrongkitchen.com/menus?utm_source=klaviyo&amp;utm_medium=email&amp;utm_campaign=missed-you&amp;utm_content=thanks-menu">See this week&rsquo;s menu &rarr;</a>
+    <div class="sig">&mdash; The Strong Kitchen</div>
+  </div>
+</div>
+<script>
+  var labels = {price:"Too expensive", menu:"Didn't like this week's menu", leftovers:"Still had meals left",
+                away:"Busy or away", other:"Something else"};
+  var r = (new URLSearchParams(location.search).get("r") || "").toLowerCase();
+  if (!labels[r]) r = "";
+  if (r) klaviyo.track("Missed You Answer", {reason: r, reason_label: labels[r]});
+  if (r === "other") {
+    document.getElementById("other").classList.remove("hide");
+    document.getElementById("thanks").textContent = "Mind telling us a little more?";
+    document.getElementById("send").addEventListener("click", function () {
+      var t = document.getElementById("text").value.trim();
+      if (!t) return;
+      this.disabled = true;
+      klaviyo.track("Missed You Answer", {reason: "other", reason_label: labels.other, text: t});
+      document.getElementById("sent").classList.remove("hide");
+    });
+  }
+</script>
+</body>
+</html>
