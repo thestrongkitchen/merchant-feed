@@ -62,6 +62,8 @@
       if (!t) return;
       this.disabled = true;
       klaviyo.track("Missed You Answer", {reason: "other", reason_label: labels.other, text: t});
+      // also on the profile, where the cloud job (which can read profiles) picks it up for Luke's ping + report
+      klaviyo.identify({recap_missed_text: t, recap_missed_text_at: new Date().toISOString()});
       document.getElementById("sent").classList.remove("hide");
     });
   }
