@@ -55,8 +55,8 @@
   if (!labels[r]) r = "";
   if (r) klaviyo.track("Missed You Answer", {reason: r, reason_label: labels[r]});
   // Luke 11/4: a text box for "Something else", and a menu suggestion box for "Didn't like the menu"
-  var asks = {other: ["Mind telling us a little more?", "<b>What kept you away?</b> A few words is plenty.", "Type here"],
-              menu:  ["What would you like to see?", "<b>Is there a dish you&rsquo;d like us to make?</b> A meal, a protein, a flavor, anything.", "For example: more fish, a Thai curry, bigger portions of rice"]};
+  var asks = {other: ["Mind telling us a little more?", "<b>What kept you away?</b> A few words is plenty.", "Type here"]};
+  // PARKED (Luke 11/4 "hold to work on later"): a menu suggestion box for r=menu, see RUNBOOK
   if (asks[r]) {
     document.getElementById("other").classList.remove("hide");
     document.getElementById("thanks").textContent = asks[r][0];
