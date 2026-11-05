@@ -38,7 +38,7 @@
     <p id="thanks">We read every answer.</p>
 
     <div id="other" class="hide">
-      <p><b>What kept you away?</b> A few words is plenty.</p>
+      <p id="ask"><b>What kept you away?</b> A few words is plenty.</p>
       <textarea id="text" maxlength="1000" placeholder="Type here"></textarea>
       <button id="send" type="button">Send</button>
       <p id="sent" class="hide" style="margin-top:14px;"><b>Got it, thank you.</b></p>
@@ -49,21 +49,26 @@
   </div>
 </div>
 <script>
-  var labels = {price:"Too expensive", menu:"Didn't like this week's menu", leftovers:"Still had meals left",
+  var labels = {price:"Too expensive", menu:"Didn't like the menu", leftovers:"Still had meals left",
                 away:"Busy or away", other:"Something else"};
   var r = (new URLSearchParams(location.search).get("r") || "").toLowerCase();
   if (!labels[r]) r = "";
   if (r) klaviyo.track("Missed You Answer", {reason: r, reason_label: labels[r]});
-  if (r === "other") {
+  // Luke 11/4: a text box for "Something else", and a menu suggestion box for "Didn't like the menu"
+  var asks = {other: ["Mind telling us a little more?", "<b>What kept you away?</b> A few words is plenty.", "Type here"],
+              menu:  ["What would you like to see?", "<b>Is there a dish you&rsquo;d like us to make?</b> A meal, a protein, a flavor, anything.", "For example: more fish, a Thai curry, bigger portions of rice"]};
+  if (asks[r]) {
     document.getElementById("other").classList.remove("hide");
-    document.getElementById("thanks").textContent = "Mind telling us a little more?";
+    document.getElementById("thanks").textContent = asks[r][0];
+    document.getElementById("ask").innerHTML = asks[r][1];
+    document.getElementById("text").placeholder = asks[r][2];
     document.getElementById("send").addEventListener("click", function () {
       var t = document.getElementById("text").value.trim();
       if (!t) return;
       this.disabled = true;
-      klaviyo.track("Missed You Answer", {reason: "other", reason_label: labels.other, text: t});
+      klaviyo.track("Missed You Answer", {reason: r, reason_label: labels[r], text: t});
       // also on the profile, where the cloud job (which can read profiles) picks it up for Luke's ping + report
-      klaviyo.identify({recap_missed_text: t, recap_missed_text_at: new Date().toISOString()});
+      klaviyo.identify({recap_missed_text: t, recap_missed_text_reason: r, recap_missed_text_at: new Date().toISOString()});
       document.getElementById("sent").classList.remove("hide");
     });
   }
