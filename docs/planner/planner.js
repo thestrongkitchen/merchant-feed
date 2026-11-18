@@ -44,6 +44,19 @@
   var previewer = false;
   try { previewer = localStorage.getItem("tskPlannerPreview") === "1"; } catch (e) { /* closed */ }
   if (PREVIEW_ONLY && !previewer && !window.TSKP_PAGE) return;
+  // While in preview, say what the planner is doing on screen (customers never see this)
+  function note(text, ms) {
+    if (!PREVIEW_ONLY || window.TSKP_PAGE || !document.body) return;
+    var n = document.getElementById("tskp-note");
+    if (!n) {
+      n = document.createElement("div"); n.id = "tskp-note";
+      n.style.cssText = "position:fixed;left:12px;right:12px;top:calc(12px + env(safe-area-inset-top,0px));z-index:2147483646;background:#2e3a18;color:#fff;border:2px solid #d9b46f;border-radius:10px;padding:10px 12px;font:600 13px Arial,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.3)";
+      document.body.appendChild(n);
+    }
+    n.textContent = text; n.style.display = "block";
+    clearTimeout(n._t); if (ms) n._t = setTimeout(function () { n.style.display = "none"; }, ms);
+  }
+  if (onMenu) note("Build Your Week preview: on. Loading this week's menu…");
 
   // ------------------------------------------------------------------ helpers
   function $(root, sel) { return root.querySelector(sel); }
@@ -76,10 +89,15 @@
       DATA = d;
       // Never plan against a stale menu: the site reports its current menu week
       return fetch("/cart/status", { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); }).then(function (s) {
-        if (String(s.current_week) !== String(d.week)) { console.info("[TSK planner] menu week", s.current_week, "≠ data week", d.week, "— planner hidden until the data catches up"); return; }
-        start();
+        if (String(s.current_week) !== String(d.week)) {
+          console.info("[TSK planner] menu week", s.current_week, "≠ data week", d.week, "— planner hidden until the data catches up");
+          note("Build Your Week preview: the menu just changed and the planner's data hasn't caught up yet (site week " + s.current_week + ", data week " + d.week + "). Try again in 30 minutes.");
+          return;
+        }
+        try { start(); } catch (e) { note("Build Your Week preview hit an error: " + (e && e.message ? e.message : e)); throw e; }
+        note(btn && btn.parentNode ? "Build Your Week preview: ready. The gold button is in the All / Meals / Sides / Snacks row." : "Build Your Week preview: loaded, but couldn't find the menu's filter row to put the button in.", btn && btn.parentNode ? 5000 : 0);
       });
-    }).catch(function (e) { console.warn("[TSK planner] not started:", e); });
+    }).catch(function (e) { console.warn("[TSK planner] not started:", e); note("Build Your Week preview couldn't load: " + (e && e.message ? e.message : e)); });
   }
 
   function start() {
