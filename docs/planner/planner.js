@@ -272,6 +272,7 @@
     var d = 0;
     st.pieces.forEach(function (p) { p.day = d % 5; d++; });
     save(); open(); render();
+    if (!wantsOffer) skipOffer = true;   // re-order links (Monday recap) never stop for the first-order email prompt
     checkout();
     return true;
   }
