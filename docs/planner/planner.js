@@ -40,7 +40,9 @@
       { min: 175, pct: 15, code: "MYWEEK15", label: "Free delivery + 15% off" }
     ],
     CODES_READY: false,
-    KLAVIYO_LOCKIN: false,
+    KLAVIYO_LOCKIN: true,      // Luke 11/18 "go ahead with step 3" (only preview browsers see the planner until launch)
+    LIST: "WAWZxw",            // "Build Your Week - signups": triggers draft flow UaFzkB; NOT the old code list Tg6vZf
+    COMPANY: "RHx7TH",
     DAYS_VALID: 21
   };
   var OFFER_KEY = "tskPlannerOffer";
@@ -255,6 +257,7 @@
     var m = /[?&]tskcart=(\d+)\.([0-9_\-]+)/.exec(location.search);
     if (!m) return false;
     var wantsOffer = /[?&]tsko=1/.test(location.search);
+    track(wantsOffer ? "link_prospect" : "link_reorder");
     dropParams(["tskcart", "tsko"]);
     if (wantsOffer && !getOffer() && !knownVisitor) setOffer({ email: "", via: "link", at: Date.now() });
     var list = m[2].split("_").map(function (x) { return x.split("-").map(Number); }).filter(function (x) { return x.length === 3 && x[2] > 0 && x[2] < 50; });
@@ -289,7 +292,7 @@
     });
     return {
       planner_code: goalsCode(), planner_summary: goalsSummary(), planner_saved: new Date().toISOString().slice(0, 10),
-      planner_cart_link: cartLink(true),
+      planner_cart_link: cartLink(offerShown()),
       planner_heard: heardYou().replace(/<[^>]+>/g, ""),
       planner_week_line: w.nM + " meals" + (w.snackPacks ? " + " + w.snackPacks + " snacks" : "") + " · about " + w.hours + " hours of cooking back",
       planner_total: total.toFixed(2),
@@ -361,7 +364,12 @@
     drawQuiz();
   }
   function endQuiz() { $(R, ".in").classList.remove("quizzing"); $(R, "#quiz").hidden = true; }
+  // ------------------------------------------------------------------ funnel events for GA4 (Luke 11/18: who uses it, where they drop)
+  // GTM already forwards every dataLayer event that starts with skf_ to GA4 with its skf_form value (popup chat 11/18).
+  var STEP_NAMES = ["goal", "obstacle", "good_week", "avoid", "weight", "plan", "per_day", "days", "email"], lastStep = -1;
+  function track(name) { try { (window.dataLayer = window.dataLayer || []).push({ event: "skf_planner_" + name, skf_form: "planner" }); } catch (e) { /* fine */ } }
   function drawQuiz() {
+    if (qstep !== lastStep) { lastStep = qstep; track("step_" + (STEP_NAMES[qstep] || qstep)); }
     var q = $(R, "#quiz"), n = qstep === 8 ? 6 : qstep > 5 ? 8 : 6;
     var head = '<div class="qdots">' + Array.apply(null, Array(n)).map(function (_, i) { return '<i class="' + (i <= qstep ? "on" : "") + '"></i>'; }).join("") + "</div>";
     var back = qstep ? '<button class="qback" data-q="back">← Back</button>' : "";
@@ -407,12 +415,13 @@
     } else if (qstep === 8) {
       var e8 = previewPlan(qa.perDay), r8 = rungFor(e8.total);
       body = '<span class="qkick">Your week is ready</span><h3>Where should we save it?</h3>' +
-        "<p>" + (OFFER.KLAVIYO_LOCKIN ? "We'll email you your week, and build a fresh one from the new menu every Thursday" : "We'll hold your week so you can finish anytime") +
+        "<p>" + (OFFER.KLAVIYO_LOCKIN ? "We'll email you your week so you can finish anytime" : "We'll hold your week so you can finish anytime") +
         (r8 ? ", and lock in <b>" + esc(r8.label.toLowerCase()) + "</b> on your first order." : ".") + "</p>" +
         '<div class="qrow"><input id="qEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" style="width:100%"></div>' +
         '<p class="qerr" id="qErr" hidden>That email doesn\'t look right.</p>' +
         '<button class="qnext" data-q="email">Show my week</button>' +
-        '<button class="qlink" data-q="noemail">Skip for now</button>';
+        '<button class="qlink" data-q="noemail">Skip for now</button>' +
+        (OFFER.KLAVIYO_LOCKIN ? '<p class="qnote">You&#39;ll get emails from The Strong Kitchen. Unsubscribe anytime.</p>' : "");
     } else if (qstep === 6) body = "<h3>How many of our meals a day?</h3>" +
       opts("perDay", [[1, "One a day", "Usually lunch"], [2, "Two a day", "Lunch and dinner"], [3, "Three a day", "We cover most of your eating"]]);
     else {
@@ -426,13 +435,13 @@
   function quizClick(b) {
     var a = b.dataset.q;
     if (a === "back") { qstep = qstep === 8 ? (PLAN_INFO[qa.perDay] ? 5 : 7) : qstep - 1; return drawQuiz(); }
-    if (a === "plan") { qa.perDay = b.dataset.v; qa.days = PLAN_INFO[b.dataset.v].days; return askEmailOrBuild(); }
+    if (a === "plan") { track("plan_" + b.dataset.v); qa.perDay = b.dataset.v; qa.days = PLAN_INFO[b.dataset.v].days; return askEmailOrBuild(); }
     if (a === "email") {
       var ev = $(R, "#qEmail").value.trim();
       if (!validEmail(ev)) { $(R, "#qErr").hidden = false; $(R, "#qEmail").focus(); return; }
-      buildWeek(); lockIn(ev); return;
+      track("email"); buildWeek(); lockIn(ev); return;
     }
-    if (a === "noemail") return buildWeek();
+    if (a === "noemail") { track("email_skip"); return buildWeek(); }
     if (a === "custom") { qstep = 6; return drawQuiz(); }
     if (a === "pick") {
       var k = b.dataset.k, v = b.dataset.v;
@@ -549,6 +558,7 @@
     return meals;
   }
   function buildWeek() {
+    track("week_built");
     var meals = planCore(), days = quizDays();
     st.view = days[0] || 0;
     fullView = false; dayOpen = false; swapFor = null; justBuilt = true; addOpen = false;
@@ -1079,7 +1089,9 @@
     });
   }
 
+  var opened = false;
   function open() {
+    if (!opened) { opened = true; track("open"); }
     checkKnown().then(function () { if (R && st.packs) render(); });
     lastFocus = document.activeElement; sheet.hidden = false; $(R, ".scrim").hidden = false; document.documentElement.style.overflow = "hidden";
     if (!st.quiz && !st.packs.length) showQuiz();   // first visit starts with the quiz
@@ -1112,9 +1124,10 @@
   // email goes to Klaviyo only once KLAVIYO_LOCKIN is switched on.
   function saveWeekly() {
     if (!st.quiz || !window.klaviyo || !window.klaviyo.identify) return Promise.resolve();
-    var props = { planner_code: goalsCode(), planner_summary: goalsSummary(), planner_saved: new Date().toISOString().slice(0, 10) };
+    var props;
+    try { props = emailProps(); } catch (e) { props = { planner_code: goalsCode(), planner_summary: goalsSummary(), planner_saved: new Date().toISOString().slice(0, 10) }; }
     if (!knownVisitor && !signedIn()) {   // signed-in new customers are known to Klaviyo already, no email needed
-      if (!OFFER.KLAVIYO_LOCKIN || !getOffer()) return Promise.resolve();
+      if (!OFFER.KLAVIYO_LOCKIN || !getOffer() || !getOffer().email) return Promise.resolve();
       props.email = getOffer().email;
     }
     var sent;
@@ -1123,13 +1136,26 @@
     return Promise.race([sent.catch(function () {}), new Promise(function (ok) { setTimeout(ok, 1500); })]);
   }
   var skipOffer = false;
+  // Lock-in: subscribe the email to the Build Your Week list with the whole week on the profile (same public subscribe
+  // call the popup uses), then tell the onsite Klaviyo script who this browser is. The lock-in holds on this device either way.
   function lockIn(email) {
     setOffer({ email: email, at: Date.now() });
-    if (OFFER.KLAVIYO_LOCKIN && window.klaviyo && window.klaviyo.identify) {
-      try { var props = emailProps(); props.email = email; window.klaviyo.identify(props); } catch (e) { /* the lock-in still holds on this device */ }
-    }
+    if (!OFFER.KLAVIYO_LOCKIN) return;
+    var props;
+    try { props = emailProps(); } catch (e) { props = { planner_code: goalsCode() }; }
+    props.lead_source = "build-your-week"; props.signup_page = location.pathname;
+    var body = { data: { type: "subscription", attributes: { custom_source: "Build Your Week planner",
+      profile: { data: { type: "profile", attributes: { email: email, properties: props } } } },
+      relationships: { list: { data: { type: "list", id: OFFER.LIST } } } } };
+    try {
+      fetch("https://a.klaviyo.com/client/subscriptions/?company_id=" + OFFER.COMPANY, {
+        method: "POST", headers: { "Content-Type": "application/vnd.api+json", revision: "2024-10-15" }, body: JSON.stringify(body)
+      }).then(function (r) { note("Build Your Week preview: saved to Klaviyo (" + r.status + ")", 6000); }, function () { /* offline: still locked in here */ });
+    } catch (e) { /* fine */ }
+    try { if (window.klaviyo && window.klaviyo.identify) window.klaviyo.identify({ email: email }); } catch (e) { /* fine */ }
   }
   function checkout() {
+    if (!busy) track("checkout_click");
     if (busy || !st.packs.length) return;
     var total = st.packs.reduce(function (t, k) { return t + info(k).sz.price; }, 0), r = rungFor(total);
     if (offerShown() && r && !getOffer() && !skipOffer) {
@@ -1169,7 +1195,7 @@
       chain = chain.then(function () { return cartPost("/cart/add", { product_id: +parts[0], productoption_id: +parts[1], quantity: (have[key] || 0) + q[key], mode: "set" }); });
     });
     chain.then(saveWeekly).then(function () {
-      st.pushed = true; st.pushedAt = Date.now(); save();
+      st.pushed = true; st.pushedAt = Date.now(); save(); track("cart_filled");
       if (window.TSKP_ON_CHECKOUT) { busy = false; msg(""); render(); window.TSKP_ON_CHECKOUT(); return; }
       // the cart, not /checkout: guests can see the cart, while /checkout sends them to Log In first (Luke 11/18)
       msg("Done. Taking you to your cart…");
@@ -1184,6 +1210,7 @@
   function successPage() {
     if (!st.pushed || !st.pieces || !st.pieces.some(function (p) { return p.day >= 0; })) return;
     if (st.pushedAt && Date.now() - st.pushedAt > 3 * 864e5) return;   // only right after the planned checkout
+    if (!st.orderTracked) { st.orderTracked = true; save(); track("order"); }
     loadData().then(function (d) {
       DATA = d;
       d.items.forEach(function (m) { m.short = m.kind === "side" && m.sizes[0].protein >= 15 ? m.name + " (side)" : m.name; ITEMS[m.id] = m; });
