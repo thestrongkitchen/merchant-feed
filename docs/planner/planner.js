@@ -334,7 +334,7 @@
     } else if (qstep === 8) {
       var e8 = previewPlan(qa.perDay), r8 = rungFor(e8.total);
       body = '<span class="qkick">Your week is ready</span><h3>Where should we save it?</h3>' +
-        "<p>" + (OFFER.KLAVIYO_LOCKIN ? "We'll email you your week so you can finish anytime" : "We'll hold your week so you can finish anytime") +
+        "<p>" + (OFFER.KLAVIYO_LOCKIN ? "We'll email you your week, and build a fresh one from the new menu every Thursday" : "We'll hold your week so you can finish anytime") +
         (r8 ? ", and lock in <b>" + esc(r8.label.toLowerCase()) + "</b> on your first order." : ".") + "</p>" +
         '<div class="qrow"><input id="qEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" style="width:100%"></div>' +
         '<p class="qerr" id="qErr" hidden>That email doesn\'t look right.</p>' +
@@ -534,8 +534,7 @@
       '<p class="foot">Nutrition comes from each item\'s page. Sides and snacks split into the servings or pieces listed there. Your plan stays saved on this device. <button class="reset" data-a="reset">Start over</button></p>' +
       '<div class="cartbar"><div class="sum" id="sum"></div><div class="lock"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>Week plan PDF unlocks after checkout</div>' +
       '<div class="lockin" id="lockin" hidden><input id="liEmail" type="email" inputmode="email" autocomplete="email" placeholder="Your email locks in these savings"></div>' +
-      '<div class="weekly" id="weekly" hidden><label><input type="checkbox" id="wkOpt"><span>Email me a freshly built week every Thursday, from these goals</span></label>' +
-      '<input id="wkEmail" type="email" inputmode="email" autocomplete="email" placeholder="Your email" hidden></div>' +
+
       '<button class="tocart" data-a="checkout">Check out</button><div class="msg" id="msg" hidden></div><div class="choice" id="choice" hidden></div></div>' +
       "</div></section></div>";
     sheet = $(R, ".sheet");
@@ -554,7 +553,6 @@
     }).join("") + '</div><div class="youleft" id="youLeft"><span>Left for you</span><b id="leftNum"></b></div>';
     renderPicker();
     wire();
-    wireWeekly();
   }
 
   function renderPicker() {
@@ -886,7 +884,6 @@
       : "Nothing picked yet";
     $(R, "#lockin").hidden = !(newbie && r && !locked && st.packs.length);
     $(R, ".tocart").disabled = !st.packs.length || busy;
-    $(R, "#weekly").hidden = !st.quiz;
     pill.style.display = st.pieces.length ? "block" : "none";
     pill.innerHTML = '<span style="display:block;font-size:11px;font-weight:800;letter-spacing:.1em;color:#d9b46f">MY WEEK</span>' + planned + " day" + (planned === 1 ? "" : "s") + " planned" + (left.length ? " · " + left.length + " to place" : "");
     save();
@@ -1031,32 +1028,22 @@
     if (PLAN_INFO[q.perDay]) return [GOALS[q.goal].label, PLAN_INFO[q.perDay].name + ": " + PLAN_INFO[q.perDay].what].concat(q.avoid.map(function (a) { return a + " free"; })).join(" · ");
     return [GOALS[q.goal].label, q.perDay + " meal" + (q.perDay > 1 ? "s" : "") + " a day", d].concat(q.avoid.map(function (a) { return a + " free"; })).join(" · ");
   }
-  function weeklyWanted() { return st.quiz && $(R, "#wkOpt").checked; }
   function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+  // Luke 11/18: no checkbox. Checking out from the planner saves their goals, so the Thursday menu email can show
+  // "your week is built". A browser Klaviyo already knows (current customers) saves to its own profile; a new visitor's
+  // email goes to Klaviyo only once KLAVIYO_LOCKIN is switched on.
   function saveWeekly() {
-    if (!weeklyWanted() || !window.klaviyo || !window.klaviyo.identify) return Promise.resolve();
+    if (!st.quiz || !window.klaviyo || !window.klaviyo.identify) return Promise.resolve();
     var props = { planner_code: goalsCode(), planner_summary: goalsSummary(), planner_saved: new Date().toISOString().slice(0, 10) };
-    var em = $(R, "#wkEmail");
-    if (!em.hidden && em.value) props.email = em.value.trim();
-    else if (getOffer()) props.email = getOffer().email;
-    else if (validEmail($(R, "#liEmail").value.trim())) props.email = $(R, "#liEmail").value.trim();
+    if (!knownVisitor && !signedIn()) {
+      if (!OFFER.KLAVIYO_LOCKIN || !getOffer()) return Promise.resolve();
+      props.email = getOffer().email;
+    }
     var sent;
     try { sent = Promise.resolve(window.klaviyo.identify(props)); } catch (e) { return Promise.resolve(); }
     // never hold up checkout for more than a moment if Klaviyo is slow
     return Promise.race([sent.catch(function () {}), new Promise(function (ok) { setTimeout(ok, 1500); })]);
   }
-  function wireWeekly() {
-    var box = $(R, "#wkOpt"), em = $(R, "#wkEmail");
-    box.addEventListener("change", function () {
-      if (!box.checked) { em.hidden = true; return; }
-      // Luke 11/18: never ask twice. The lock-in box (or a lock-in already done) supplies the email.
-      if (getOffer() || !$(R, "#lockin").hidden) { em.hidden = true; if (!getOffer()) $(R, "#liEmail").focus(); return; }
-      // ask for an email only when Klaviyo doesn't already know who this is
-      var known = window.klaviyo && window.klaviyo.isIdentified ? Promise.resolve(window.klaviyo.isIdentified()) : Promise.resolve(false);
-      known.then(function (yes) { em.hidden = !!yes; if (!yes) em.focus(); }, function () { em.hidden = false; });
-    });
-  }
-
   var skipOffer = false;
   function lockIn(email) {
     setOffer({ email: email, at: Date.now() });
@@ -1079,11 +1066,6 @@
         return;
       }
     }
-    var em = $(R, "#wkEmail");
-    if (weeklyWanted() && em.hidden && !getOffer() && !knownVisitor && !validEmail($(R, "#liEmail").value.trim())) {
-      em.hidden = false; msg("Add your email so we can send your week on Thursdays, or untick the box.", true); em.focus(); return;
-    }
-    if (weeklyWanted() && !em.hidden && !validEmail(em.value.trim())) { msg("Add your email so we can send your week on Thursdays, or untick the box.", true); em.focus(); return; }
     fetch("/cart/count", { credentials: "same-origin", headers: { Accept: "application/json" } }).then(function (r) { return r.json(); }).then(function (c) {
       var existing = (c && c.items) || [];
       if (!existing.length) return push(existing, "add");
