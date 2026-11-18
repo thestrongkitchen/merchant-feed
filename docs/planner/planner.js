@@ -135,7 +135,8 @@
       // when this card is showing, hide that pair so there is one big button, not two
       // the old form also took over the page's first "Get your code" button; likewise hide any Build-my-week button in the
       // first few blocks so the card is the only one near the top (the one in the closing "New here?" section stays)
-      var kids = [].slice.call(content.children).filter(function (el) { return el !== card; });
+      var blocksBox = content.querySelector(".content-blocks") || content;
+      var kids = [].slice.call(blocksBox.children).filter(function (el) { return el !== card; });
       kids.slice(0, 6).forEach(function (el) { if (el.querySelector && el.querySelector('a[href*="tskopen=1"]') && /block-button/.test(el.className)) el.style.display = "none"; });
       var own = content.querySelector('a[href*="utm_medium=top-button"]');
       if (own) {
