@@ -84,7 +84,7 @@
 
   // Soft launch: only a browser that has opened a page with ?planner=preview sees the planner (remembered on that
   // device; ?planner=off forgets it). Set PREVIEW_ONLY to false to show it to everyone.
-  var PREVIEW_ONLY = true;
+  var PREVIEW_ONLY = false;   // LAUNCHED 11/18 (Luke: "lets do it all"); GTM v25 paused the popup / inline forms / code bar
   try {
     var pv = /[?&]planner=(preview|off)/.exec(location.search);
     if (pv) localStorage.setItem("tskPlannerPreview", pv[1] === "preview" ? "1" : "0");
