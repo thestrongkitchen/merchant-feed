@@ -176,6 +176,46 @@ def parse_product(pid: int, page: str) -> dict:
     }
 
 
+# --------------------------------------------------------------------------- planner data
+NUM_WORDS = {"one": 1, "single": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6,
+             "seven": 7, "eight": 8, "nine": 9, "ten": 10, "twelve": 12}
+
+
+def word_num(w: str) -> int | None:
+    w = w.lower()
+    return int(w) if w.isdigit() else NUM_WORDS.get(w)
+
+
+def planner_item(p: dict, ptype: str) -> dict | None:
+    """One row for the "Plan your week" planner: every purchasable size with calories, protein
+    and the productoption_id the cart needs. Sides split into the servings the page lists
+    ("Three 4 oz Servings per Container"); snack packs into pieces ("Six Pack"). The site's
+    nutrition is per serving / per piece. Sauces are left out."""
+    if "per bottle" in p["description"].lower():   # Firecracker Sauce sits in the meals listing
+        return None
+    if ptype.startswith("Meals"):
+        kind, serv = "meal", 1
+    elif ptype == "Sides":
+        kind = "side"
+        # "Three 3.5oz Servings per Container", "Two Servings (8 shrimp each) per Container"
+        m = re.search(r"\b(%s)\b(?=.{0,40}?servings?\s+(?:\([^)]*\)\s+)?per container)" % "|".join(NUM_WORDS),
+                      p["description"], re.I)
+        serv = (word_num(m.group(1)) if m else None) or 1
+    elif ptype == "Snacks & Breakfast":
+        kind = "snack"
+        m = re.match(r"(\w+)\s+(?:pack|serving)", p["options"][0]["name"], re.I) if p["options"] else None
+        serv = (word_num(m.group(1)) if m else None) or 1
+    else:
+        return None
+    sizes = [{"option_id": int(o["option_id"]), "name": o["name"], "price": o["price"],
+              "cal": int(o["cal"]), "protein": int(o["protein"])}
+             for o in p["options"] if o["option_id"] and o["cal"] and o["protein"]]
+    if not sizes:
+        return None
+    return {"id": p["id"], "name": p["title"], "kind": kind, "serv": serv,
+            "with": p["description"], "badges": p["badges"], "sizes": sizes}
+
+
 # --------------------------------------------------------------------------- feed rows
 PLAN_NAMES = {"Fat Loss", "Performance", "Protein Plus"}
 
@@ -269,13 +309,17 @@ def build(out_dir: Path) -> int:
     for pid in find_product_ids(listings["_all"]):
         pid_type.setdefault(pid, "Other")   # sauces etc.
 
-    rows, skipped, report_items = [], [], []
+    rows, skipped, report_items, planner = [], [], [], []
     for pid, ptype in pid_type.items():
         try:
             p = parse_product(pid, fetch(f"{BASE}/products/{pid}"))
         except Exception as e:  # noqa: BLE001
             skipped.append((pid, "?", f"parse error: {e}"))
             continue
+        # the planner needs no photo, so it takes every item before the photo check
+        pi = planner_item(p, ptype)
+        if pi:
+            planner.append(pi)
         gpc, ptype2 = classify(ptype, p["title"], p["description"])
         if not p["image"] or any(h in p["image"] for h in PLACEHOLDER_IMAGE_HINTS):
             skipped.append((pid, p["title"], "no real product photo (site shows a generic banner)"))
@@ -382,6 +426,12 @@ def build(out_dir: Path) -> int:
         _json.dumps({"week": week or "", "fulfillment": fulfill, **fd, "post_url": post_url,
                      "items": items, "meals": meals, "extras": extras},
                     ensure_ascii=False, indent=1) + "\n",
+        encoding="utf-8")
+
+    # --- "Plan your week" planner data (read by the menu-page planner) -------
+    (out_dir / "planner.json").write_text(
+        _json.dumps({"week": week or "", "fulfillment": fulfill, **fd, "built": t0.isoformat(timespec="seconds"),
+                     "items": planner}, ensure_ascii=False, indent=1) + "\n",
         encoding="utf-8")
 
     stamp = t0.strftime("%Y-%m-%d %H:%M UTC")
