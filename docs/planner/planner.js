@@ -80,7 +80,9 @@
   var onMenu = window.TSKP_PAGE === "menu" || /^\/menus(\/|$)/.test(path);
   var onSuccess = path === "/checkout/success";
   var onCart = path === "/cart", onCheckout = path === "/checkout";
-  if (!onMenu && !onSuccess && !onCart && !onCheckout) return;
+  // landing pages: a big "Build my week" card at the top of the content, where the old code form sat (Luke 11/18)
+  var onLanding = path === "/where-we-deliver" || /^\/lp\/meal-prep-delivery-[a-z0-9-]+$/.test(path);
+  if (!onMenu && !onSuccess && !onCart && !onCheckout && !onLanding) return;
 
   // Soft launch: only a browser that has opened a page with ?planner=preview sees the planner (remembered on that
   // device; ?planner=off forgets it). Set PREVIEW_ONLY to false to show it to everyone.
@@ -106,6 +108,36 @@
   }
   if (onMenu) note("Build Your Week preview: on. Loading this week's menu…");
 
+  // ------------------------------------------------------------------ landing pages: the top card
+  if (onLanding) {
+    var runCard = function () {
+      var content = document.querySelector(".landing-content") || document.querySelector(".content-blocks");
+      if (!content || document.getElementById("tskp-topcard")) return;
+      var slug = path.split("/").pop();
+      var url = "https://thestrongkitchen.com/menus?tskopen=1&utm_source=site-lp&utm_medium=top-card&utm_campaign=build-your-week&utm_content=" + slug;
+      var card = document.createElement("div");
+      card.id = "tskp-topcard";
+      card.style.cssText = "margin:0 0 1.5rem;padding:22px 20px;border:2px solid #d9b46f;border-radius:12px;background:#f6f8f0;font-family:'Plus Jakarta Sans','Helvetica Neue',Arial,sans-serif;color:#1d2314";
+      var draw = function (known) {
+        card.innerHTML =
+          '<div style="font-size:1.4rem;line-height:1.25;font-weight:800;color:#2e3a18;margin:0 0 6px">' +
+            (known ? "Plan your week in 30 seconds" : "New here? Let us build your first week") + "</div>" +
+          '<div style="font-size:1rem;line-height:1.5;margin:0 0 14px">' +
+            (known ? "Tell us your goal and we'll build a week of this menu around it. Change anything, then check out."
+                   : "Answer a few quick taps and we'll build a week of our meals around your goal, priced, with your first-order savings counted: <b>free delivery from $75, 10% off from $125, 15% off from $175</b>.") + "</div>" +
+          '<a href="' + url + '" style="display:block;text-align:center;padding:16px 20px;font-size:1.15rem;font-weight:800;color:#fff;background:#73933c;border-radius:10px;text-decoration:none">Build my week \u2192</a>' +
+          '<div style="font-size:.85rem;line-height:1.4;color:#646b58;margin:8px 0 0;text-align:center">' +
+            (known ? "Keeps 7 days · Hot in 3 minutes · No subscription" : "Plus your first month of membership free · No subscription") + "</div>";
+      };
+      draw(knownVisitor);
+      content.insertBefore(card, content.firstChild);
+      checkKnown().then(function (k) { draw(k); }, function () {});
+      track("topcard_view");
+      card.addEventListener("click", function (e) { if (e.target.tagName === "A") track("topcard_click"); });
+    };
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", runCard); else runCard();
+    return;
+  }
   // ------------------------------------------------------------------ /cart and /checkout: only the offer, never the builder
   if (onCart || onCheckout) {
     var runOffer = function () {
