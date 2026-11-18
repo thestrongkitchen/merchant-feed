@@ -286,18 +286,33 @@
     var oats = DATA.items.filter(function (m) { return m.kind === "snack" && fits(m) && /protein oatmeal/i.test(m.name); });
     var bites = DATA.items.filter(function (m) { return m.kind === "snack" && fits(m) && /protein bite/i.test(m.name); })[0];
     var oi = 0;
+    // Luke 11/18: first move a meal up to Protein Plus (protein is the point; calories are the goal's job), then oatmeal, then at most 2 bites a day
+    var upgrade = function (d) {
+      var p = st.pieces.filter(function (x) { var m = ITEMS[x.id]; return x.day === d && m.kind === "meal" && x.opt !== pp(m) && pp(m); })
+        .sort(function (a, b) { return (ITEMS[b.id].sizes.filter(function (z) { return z.option_id === pp(ITEMS[b.id]); })[0].protein - info(b).sz.protein) - (ITEMS[a.id].sizes.filter(function (z) { return z.option_id === pp(ITEMS[a.id]); })[0].protein - info(a).sz.protein); })[0];
+      if (!p) return false;
+      var o = pp(ITEMS[p.id]); p.opt = o; st.packs.forEach(function (k) { if (k.pid === p.pid) k.opt = o; });
+      return true;
+    };
+    var pp = function (m) { var z = m.sizes.filter(function (s) { return s.name === "Protein Plus"; })[0]; return z ? z.option_id : null; };
     if (meals.length) days.forEach(function (d) {
-      var hadOats = false;
+      var hadOats = false, nBites = 0;
+      while (st.pro * share(d) - dayTotals(d).pro >= 6 && upgrade(d)) {}
       for (var t = 0; t < 3; t++) {
         var T = dayTotals(d), gap = st.pro * share(d) - T.pro, room = st.cal * share(d) + 150 - T.cal;
         if (gap >= 12 && oats.length && !hadOats && oats[oi % oats.length].sizes[0].cal <= room) { var o = oats[oi++ % oats.length]; takePiece(o.id, o.sizes[0].option_id, d); hadOats = true; added.push("oats"); }
-        else if (gap >= 6 && bites && bites.sizes[0].cal <= room) { takePiece(bites.id, bites.sizes[0].option_id, d); added.push("bite"); }
+        else if (gap >= 6 && bites && nBites < 2 && bites.sizes[0].cal <= room) { takePiece(bites.id, bites.sizes[0].option_id, d); nBites++; added.push("bite"); }
         else break;
       }
     });
     st.pieces.filter(function (p) { return p.day < 0; }).forEach(function (p) {
       var best = null, bestGap = -1e9;
-      days.forEach(function (d) { var gap = st.pro * share(d) - dayTotals(d).pro; if (gap > bestGap) { bestGap = gap; best = d; } });
+      // never a third of the same snack on one day: fewest of this item first, then the biggest protein gap
+      days.forEach(function (d) {
+        var same = st.pieces.filter(function (x) { return x.day === d && x.id === p.id; }).length;
+        var gap = st.pro * share(d) - dayTotals(d).pro - same * 1000;
+        if (gap > bestGap) { bestGap = gap; best = d; }
+      });
       if (best !== null) p.day = best;
     });
     st.view = days[0] || 0;
