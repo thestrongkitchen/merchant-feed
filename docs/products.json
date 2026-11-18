@@ -760,5 +760,736 @@
    ],
    "week": "1"
   }
- ]
+ ],
+ "planner": {
+  "week": "1",
+  "fulfillment": "Order now for fulfillment on Sunday, November 22nd, Monday, November 23rd",
+  "delivery": "Sunday, November 22nd or Monday, November 23rd",
+  "deadline": "Wednesday, November 18th",
+  "built": "2026-11-18T18:43:29+00:00",
+  "items": [
+   {
+    "id": 17,
+    "name": "Herb Crusted Turkey Burger",
+    "kind": "meal",
+    "serv": 1,
+    "with": "with Broccoli, Tomatoes, Mini Shells & Poblano Cream Sauce",
+    "badges": [
+     "Gluten Free",
+     "Dairy Free"
+    ],
+    "img": "https://thestrongkitchen.com/uploads/media/products/17/featured-image/576/herb-crusted-turkey-burger-corrected.jpg",
+    "sizes": [
+     {
+      "option_id": 45,
+      "name": "Fat Loss",
+      "price": 16.25,
+      "cal": 480,
+      "protein": 47
+     }
+    ]
+   },
+   {
+    "id": 569,
+    "name": "BBQ Turkey",
+    "kind": "meal",
+    "serv": 1,
+    "with": "with Cowboy Crunch & Chipotle-Lime Dressing",
+    "badges": [
+     "Gluten Free"
+    ],
+    "img": "https://thestrongkitchen.com/uploads/media/products/569/featured-image/1018/BBQ-Turkey-with-Cowboy-Crunch-Plated.jpg",
+    "sizes": [
+     {
+      "option_id": 912,
+      "name": "Fat Loss",
+      "price": 16.95,
+      "cal": 405,
+      "protein": 31
+     },
+     {
+      "option_id": 973,
+      "name": "Protein Plus",
+      "price": 18.95,
+      "cal": 485,
+      "protein": 41
+     }
+    ]
+   },
+   {
+    "id": 409,
+    "name": "Ranch Chicken",
+    "kind": "meal",
+    "serv": 1,
+    "with": "with Buttermilk Mashed Potatoes & Broccoli",
+    "badges": [
+     "Gluten Free"
+    ],
+    "img": "https://thestrongkitchen.com/uploads/media/products/409/featured-image/994/Ranch-Chicken-Plated.jpg",
+    "sizes": [
+     {
+      "option_id": 661,
+      "name": "Fat Loss",
+      "price": 15.15,
+      "cal": 431,
+      "protein": 38
+     },
+     {
+      "option_id": 975,
+      "name": "Protein Plus",
+      "price": 17.15,
+      "cal": 529,
+      "protein": 54
+     }
+    ]
+   },
+   {
+    "id": 41,
+    "name": "Hot Honey Salmon",
+    "kind": "meal",
+    "serv": 1,
+    "with": "with Red Cabbage Slaw and Lemon Rice",
+    "badges": [
+     "Gluten Free"
+    ],
+    "img": "https://thestrongkitchen.com/uploads/media/products/41/featured-image/967/Hot-Honey-Salmon-Plated.jpg",
+    "sizes": [
+     {
+      "option_id": 110,
+      "name": "Fat Loss",
+      "price": 18.4,
+      "cal": 413,
+      "protein": 37
+     },
+     {
+      "option_id": 111,
+      "name": "Performance",
+      "price": 18.6,
+      "cal": 522,
+      "protein": 39
+     }
+    ]
+   },
+   {
+    "id": 360,
+    "name": "Greek Feta Chicken",
+    "kind": "meal",
+    "serv": 1,
+    "with": "with Cumin Rice, Chickpeas and Butternut",
+    "badges": [
+     "Gluten Free"
+    ],
+    "img": "https://thestrongkitchen.com/uploads/media/products/360/featured-image/980/Greek-Feta-Chicken-Plated.jpg",
+    "sizes": [
+     {
+      "option_id": 583,
+      "name": "Fat Loss",
+      "price": 15.75,
+      "cal": 490,
+      "protein": 58
+     },
+     {
+      "option_id": 584,
+      "name": "Performance",
+      "price": 16.25,
+      "cal": 583,
+      "protein": 60
+     }
+    ]
+   },
+   {
+    "id": 372,
+    "name": "Greek Flat Iron Steak",
+    "kind": "meal",
+    "serv": 1,
+    "with": "with Cumin Rice, Chickpeas and Butternut",
+    "badges": [
+     "Gluten Free"
+    ],
+    "img": "https://thestrongkitchen.com/uploads/media/products/372/featured-image/984/Greek-Flat-Iron-Steak---Plated.jpg",
+    "sizes": [
+     {
+      "option_id": 603,
+      "name": "Fat Loss",
+      "price": 18.75,
+      "cal": 536,
+      "protein": 40
+     },
+     {
+      "option_id": 604,
+      "name": "Performance",
+      "price": 18.99,
+      "cal": 640,
+      "protein": 44
+     }
+    ]
+   },
+   {
+    "id": 510,
+    "name": "Chimichurri Seared Chicken",
+    "kind": "meal",
+    "serv": 1,
+    "with": "Zucchini, Potato and Charred Scallion-Feta Sauce",
+    "badges": [
+     "Gluten Free"
+    ],
+    "img": "https://thestrongkitchen.com/uploads/media/products/510/featured-image/1012/Chimichurri-Seared-Chicken-Plated.jpg",
+    "sizes": [
+     {
+      "option_id": 839,
+      "name": "Fat Loss",
+      "price": 15.75,
+      "cal": 444,
+      "protein": 46
+     },
+     {
+      "option_id": 840,
+      "name": "Performance",
+      "price": 16.05,
+      "cal": 498,
+      "protein": 48
+     }
+    ]
+   },
+   {
+    "id": 606,
+    "name": "Tunisian Beef",
+    "kind": "meal",
+    "serv": 1,
+    "with": "Orange Sweet Potatoes & Honey-Garlic Chickpeas",
+    "badges": [
+     "Gluten Free",
+     "Dairy Free"
+    ],
+    "img": "https://thestrongkitchen.com/uploads/media/products/606/featured-image/741/Tunisian-Beef.jpg",
+    "sizes": [
+     {
+      "option_id": 1000,
+      "name": "Fat Loss",
+      "price": 16.05,
+      "cal": 505,
+      "protein": 38
+     },
+     {
+      "option_id": 1002,
+      "name": "Protein Plus",
+      "price": 18.05,
+      "cal": 630,
+      "protein": 53
+     }
+    ]
+   },
+   {
+    "id": 463,
+    "name": "Big Beef Burrito + Cholula Sauce",
+    "kind": "meal",
+    "serv": 1,
+    "with": "with cheddar, refried pinto beans and pico de gallo",
+    "badges": [],
+    "img": "https://thestrongkitchen.com/uploads/media/products/463/featured-image/1010/Big-Beef-Burrito---Cholula-Sauce-Plated.jpg",
+    "sizes": [
+     {
+      "option_id": 741,
+      "name": "Single Serving",
+      "price": 15.15,
+      "cal": 663,
+      "protein": 37
+     }
+    ]
+   },
+   {
+    "id": 571,
+    "name": "Cowboy Crunch Salad",
+    "kind": "side",
+    "serv": 3,
+    "with": "Three one cup Servings per Container",
+    "badges": [
+     "Gluten Free",
+     "Dairy Free"
+    ],
+    "img": "",
+    "sizes": [
+     {
+      "option_id": 914,
+      "name": "Side",
+      "price": 9.5,
+      "cal": 245,
+      "protein": 11
+     }
+    ]
+   },
+   {
+    "id": 411,
+    "name": "Garlic Broccoli",
+    "kind": "side",
+    "serv": 3,
+    "with": "Three 4 oz Servings per Container",
+    "badges": [
+     "Gluten Free",
+     "Dairy Free"
+    ],
+    "img": "",
+    "sizes": [
+     {
+      "option_id": 663,
+      "name": "Side",
+      "price": 9.5,
+      "cal": 40,
+      "protein": 3
+     }
+    ]
+   },
+   {
+    "id": 391,
+    "name": "Greek Flat Iron Steak",
+    "kind": "side",
+    "serv": 1,
+    "with": "Two 6 oz Steaks per Container",
+    "badges": [
+     "Gluten Free",
+     "Dairy Free"
+    ],
+    "img": "",
+    "sizes": [
+     {
+      "option_id": 641,
+      "name": "Side",
+      "price": 18.65,
+      "cal": 303,
+      "protein": 32
+     }
+    ]
+   },
+   {
+    "id": 78,
+    "name": "Turkey Burgers with Poblano Cream Sauce",
+    "kind": "side",
+    "serv": 1,
+    "with": "Two Burgers per Container",
+    "badges": [
+     "Gluten Free",
+     "Dairy Free"
+    ],
+    "img": "",
+    "sizes": [
+     {
+      "option_id": 149,
+      "name": "Side",
+      "price": 14.6,
+      "cal": 325,
+      "protein": 43
+     }
+    ]
+   },
+   {
+    "id": 570,
+    "name": "BBQ Turkey",
+    "kind": "side",
+    "serv": 2,
+    "with": "Two Servings per Container",
+    "badges": [
+     "Gluten Free",
+     "Dairy Free"
+    ],
+    "img": "",
+    "sizes": [
+     {
+      "option_id": 913,
+      "name": "Side",
+      "price": 13.49,
+      "cal": 158,
+      "protein": 20
+     }
+    ]
+   },
+   {
+    "id": 514,
+    "name": "Chimichurri Seared Chicken",
+    "kind": "side",
+    "serv": 2,
+    "with": "Two 6 oz Servings per Container",
+    "badges": [
+     "Gluten Free"
+    ],
+    "img": "",
+    "sizes": [
+     {
+      "option_id": 846,
+      "name": "Side",
+      "price": 13.79,
+      "cal": 275,
+      "protein": 47
+     }
+    ]
+   },
+   {
+    "id": 362,
+    "name": "Greek Chickpea Spiced Rice",
+    "kind": "side",
+    "serv": 3,
+    "with": "Three 1 Cup Servings per Container",
+    "badges": [
+     "Gluten Free",
+     "Dairy Free"
+    ],
+    "img": "",
+    "sizes": [
+     {
+      "option_id": 586,
+      "name": "Side",
+      "price": 9.5,
+      "cal": 185,
+      "protein": 6
+     }
+    ]
+   },
+   {
+    "id": 412,
+    "name": "Crispy Ranch-Spiced Chicken",
+    "kind": "side",
+    "serv": 2,
+    "with": "Two 4 oz Servings per Container",
+    "badges": [
+     "Gluten Free",
+     "Dairy Free"
+    ],
+    "img": "",
+    "sizes": [
+     {
+      "option_id": 664,
+      "name": "Side",
+      "price": 11.99,
+      "cal": 235,
+      "protein": 32
+     }
+    ]
+   },
+   {
+    "id": 410,
+    "name": "Buttermilk Mashed Potatoes",
+    "kind": "side",
+    "serv": 3,
+    "with": "Three one cup Servings per Container",
+    "badges": [
+     "Gluten Free"
+    ],
+    "img": "",
+    "sizes": [
+     {
+      "option_id": 662,
+      "name": "Side",
+      "price": 9.5,
+      "cal": 112,
+      "protein": 4
+     }
+    ]
+   },
+   {
+    "id": 365,
+    "name": "Hot Honey Glazed Salmon",
+    "kind": "side",
+    "serv": 2,
+    "with": "Two Servings per Container",
+    "badges": [
+     "Gluten Free",
+     "Dairy Free"
+    ],
+    "img": "",
+    "sizes": [
+     {
+      "option_id": 592,
+      "name": "Side",
+      "price": 18.3,
+      "cal": 260,
+      "protein": 37
+     }
+    ]
+   },
+   {
+    "id": 366,
+    "name": "Red Cabbage Slaw",
+    "kind": "side",
+    "serv": 3,
+    "with": "with Carrots and Garlicky Yogurt Dressing Three one cup Servings per Container",
+    "badges": [
+     "Gluten Free"
+    ],
+    "img": "",
+    "sizes": [
+     {
+      "option_id": 593,
+      "name": "Side",
+      "price": 9.5,
+      "cal": 55,
+      "protein": 4
+     }
+    ]
+   },
+   {
+    "id": 367,
+    "name": "Creamy Lemon Rice",
+    "kind": "side",
+    "serv": 3,
+    "with": "Three one cup Servings per Container",
+    "badges": [
+     "Gluten Free",
+     "Dairy Free"
+    ],
+    "img": "",
+    "sizes": [
+     {
+      "option_id": 594,
+      "name": "Side",
+      "price": 9.5,
+      "cal": 205,
+      "protein": 4
+     }
+    ]
+   },
+   {
+    "id": 188,
+    "name": "Tunisian Beef",
+    "kind": "side",
+    "serv": 2,
+    "with": "Two 1-Cup Servings per Container",
+    "badges": [
+     "Gluten Free",
+     "Dairy Free"
+    ],
+    "img": "",
+    "sizes": [
+     {
+      "option_id": 350,
+      "name": "Side",
+      "price": 12.69,
+      "cal": 249,
+      "protein": 30
+     }
+    ]
+   },
+   {
+    "id": 607,
+    "name": "Orange Sweet Potatoes",
+    "kind": "side",
+    "serv": 3,
+    "with": "Three Servings per Container",
+    "badges": [
+     "Gluten Free",
+     "Dairy Free"
+    ],
+    "img": "",
+    "sizes": [
+     {
+      "option_id": 1003,
+      "name": "Side",
+      "price": 9.5,
+      "cal": 130,
+      "protein": 3
+     }
+    ]
+   },
+   {
+    "id": 608,
+    "name": "Honey-Garlic Chickpeas",
+    "kind": "side",
+    "serv": 3,
+    "with": "Three one cup Servings per Container",
+    "badges": [
+     "Gluten Free",
+     "Dairy Free"
+    ],
+    "img": "",
+    "sizes": [
+     {
+      "option_id": 1004,
+      "name": "Side",
+      "price": 9.5,
+      "cal": 240,
+      "protein": 11
+     }
+    ]
+   },
+   {
+    "id": 515,
+    "name": "Herb Trio Potatoes",
+    "kind": "side",
+    "serv": 3,
+    "with": "Three 4 oz Servings per Container",
+    "badges": [
+     "Gluten Free",
+     "Dairy Free"
+    ],
+    "img": "",
+    "sizes": [
+     {
+      "option_id": 847,
+      "name": "Side",
+      "price": 9.5,
+      "cal": 145,
+      "protein": 3
+     }
+    ]
+   },
+   {
+    "id": 551,
+    "name": "Poblano Cream Pasta",
+    "kind": "side",
+    "serv": 3,
+    "with": "with Broccoli and Roasted Tomatoes Three one cup Servings per Container",
+    "badges": [
+     "Gluten Free",
+     "Dairy Free"
+    ],
+    "img": "",
+    "sizes": [
+     {
+      "option_id": 890,
+      "name": "Side",
+      "price": 10.5,
+      "cal": 141,
+      "protein": 4
+     }
+    ]
+   },
+   {
+    "id": 22,
+    "name": "Double Chocolate Protein Bites",
+    "kind": "snack",
+    "serv": 6,
+    "with": "Our best selling snack!",
+    "badges": [
+     "Gluten Free",
+     "Dairy Free"
+    ],
+    "img": "https://thestrongkitchen.com/uploads/media/products/22/featured-image/811/22---Double-Chocolate-Protein-Bites---corrected.jpg",
+    "sizes": [
+     {
+      "option_id": 63,
+      "name": "Six Pack",
+      "price": 9.55,
+      "cal": 103,
+      "protein": 13
+     }
+    ]
+   },
+   {
+    "id": 271,
+    "name": "Cinnamon Raisin Protein Oatmeal",
+    "kind": "snack",
+    "serv": 1,
+    "with": "Just add water+90 seconds in microwave",
+    "badges": [
+     "Gluten Free"
+    ],
+    "img": "https://thestrongkitchen.com/uploads/media/products/271/featured-image/807/271---Cinnamon-Raisin-Protein-Oatmeal---corrected.jpg",
+    "sizes": [
+     {
+      "option_id": 454,
+      "name": "Single Serving",
+      "price": 3.95,
+      "cal": 246,
+      "protein": 17
+     }
+    ]
+   },
+   {
+    "id": 289,
+    "name": "Cranberry Almond Protein Oatmeal",
+    "kind": "snack",
+    "serv": 1,
+    "with": "Just add water+90 seconds in microwave",
+    "badges": [
+     "Gluten Free"
+    ],
+    "img": "https://thestrongkitchen.com/uploads/media/products/289/featured-image/808/289---Cranberry-Almond-Protein-Oatmeal---corrected.jpg",
+    "sizes": [
+     {
+      "option_id": 482,
+      "name": "Single Serving",
+      "price": 3.95,
+      "cal": 246,
+      "protein": 17
+     }
+    ]
+   },
+   {
+    "id": 257,
+    "name": "Apples and Spice Protein Oatmeal",
+    "kind": "snack",
+    "serv": 1,
+    "with": "Just add water+90 seconds in microwave",
+    "badges": [
+     "Gluten Free"
+    ],
+    "img": "https://thestrongkitchen.com/uploads/media/products/257/featured-image/806/257---Apples-and-Spice-Protein-Oatmeal---corrected.jpg",
+    "sizes": [
+     {
+      "option_id": 432,
+      "name": "Single Serving",
+      "price": 3.95,
+      "cal": 246,
+      "protein": 17
+     }
+    ]
+   },
+   {
+    "id": 149,
+    "name": "Breakfast Burrito",
+    "kind": "snack",
+    "serv": 4,
+    "with": "with rice, eggs, refried beans and scallions",
+    "badges": [],
+    "img": "https://thestrongkitchen.com/uploads/media/products/149/featured-image/76/savory-breakfast-burrito.jpg",
+    "sizes": [
+     {
+      "option_id": 276,
+      "name": "Four Pack",
+      "price": 15.95,
+      "cal": 284,
+      "protein": 13
+     }
+    ]
+   },
+   {
+    "id": 270,
+    "name": "Oatmeal Breakfast Cookie",
+    "kind": "snack",
+    "serv": 3,
+    "with": "with craisins, walnuts and chocolate chips",
+    "badges": [
+     "Gluten Free"
+    ],
+    "img": "https://thestrongkitchen.com/uploads/media/products/270/featured-image/810/270---Oatmeal-Breakfast-Cookie---corrected.jpg",
+    "sizes": [
+     {
+      "option_id": 453,
+      "name": "Three Pack",
+      "price": 9.15,
+      "cal": 187,
+      "protein": 7
+     }
+    ]
+   },
+   {
+    "id": 296,
+    "name": "Double Chocolate Breakfast Cookie",
+    "kind": "snack",
+    "serv": 3,
+    "with": "with Dark chocolate base and chocolate chips",
+    "badges": [
+     "Gluten Free"
+    ],
+    "img": "https://thestrongkitchen.com/uploads/media/products/296/featured-image/809/296---Double-Chocolate-Breakfast-Cookie---corrected.jpg",
+    "sizes": [
+     {
+      "option_id": 491,
+      "name": "Three Pack",
+      "price": 9.15,
+      "cal": 169,
+      "protein": 7
+     }
+    ]
+   }
+  ]
+ }
 }
