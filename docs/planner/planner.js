@@ -36,10 +36,10 @@
   var OFFER = {
     rungs: [
       { min: 75, pct: 0, code: "MYWEEK", label: "Free delivery" },
-      { min: 125, pct: 10, code: "MYWEEK10", label: "Free delivery + 10% off" },
-      { min: 175, pct: 15, code: "MYWEEK15", label: "Free delivery + 15% off" }
+      { min: 125, pct: 10, code: "BESTPLAN", label: "Free delivery + 10% off" },
+      { min: 175, pct: 15, code: "NOCOOKING", label: "Free delivery + 15% off" }
     ],
-    CODES_READY: false,
+    CODES_READY: true,         // Luke 11/18: MYWEEK (620) / BESTPLAN (621) / NOCOOKING (622) created in the admin; SKDELIVER (623) = orders 2-4
     KLAVIYO_LOCKIN: true,      // Luke 11/18 "go ahead with step 3" (only preview browsers see the planner until launch)
     LIST: "WAWZxw",            // "Build Your Week - signups": triggers draft flow UaFzkB; NOT the old code list Tg6vZf
     COMPANY: "RHx7TH",
