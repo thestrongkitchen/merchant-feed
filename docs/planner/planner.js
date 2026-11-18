@@ -280,17 +280,18 @@
     if (qa.goal === "build") meals.sort(function (a, b) { return size(b).protein - size(a).protein; });
     var k = 0, added = [];
     if (meals.length) days.forEach(function (d) { for (var j = 0; j < perDayFor(qa, d); j++) { var m = meals[k++ % meals.length]; takePiece(m.id, size(m).option_id, d); } });
-    // Top up protein toward our share of the day (one meal of three = a third), with protein sides or bites
-    var share = function (d) { return Math.min(1, perDayFor(qa, d) / 3); }, proSides = DATA.items.filter(function (m) { return m.kind === "side" && fits(m) && m.sizes[0].protein >= 25; })
-      .sort(function (a, b) { return b.sizes[0].protein - a.sizes[0].protein; });
+    // Top up protein toward our share of the day (one meal of three = a third) with protein oatmeal and protein bites.
+    // Luke 11/18: drive meals and snacks, not sides.
+    var share = function (d) { return Math.min(1, perDayFor(qa, d) / 3); };
+    var oats = DATA.items.filter(function (m) { return m.kind === "snack" && fits(m) && /protein oatmeal/i.test(m.name); });
     var bites = DATA.items.filter(function (m) { return m.kind === "snack" && fits(m) && /protein bite/i.test(m.name); })[0];
-    if (meals.length) days.forEach(function (d, di) {
-      for (var t = 0; t < 2; t++) {
+    var oi = 0;
+    if (meals.length) days.forEach(function (d) {
+      var hadOats = false;
+      for (var t = 0; t < 3; t++) {
         var T = dayTotals(d), gap = st.pro * share(d) - T.pro, room = st.cal * share(d) + 150 - T.cal;
-        // finish a container already opened before starting another one
-        var spareSide = proSides.filter(function (m) { return st.pieces.some(function (p) { return p.id === m.id && p.day < 0; }); })[0];
-        if (gap >= 20 && proSides.length) { var s = spareSide || proSides[di % proSides.length]; if (s.sizes[0].cal > room) break; takePiece(s.id, s.sizes[0].option_id, d); added.push("side"); }
-        else if (gap >= 8 && bites) { if (bites.sizes[0].cal > room) break; takePiece(bites.id, bites.sizes[0].option_id, d); added.push("bite"); }
+        if (gap >= 12 && oats.length && !hadOats && oats[oi % oats.length].sizes[0].cal <= room) { var o = oats[oi++ % oats.length]; takePiece(o.id, o.sizes[0].option_id, d); hadOats = true; added.push("oats"); }
+        else if (gap >= 6 && bites && bites.sizes[0].cal <= room) { takePiece(bites.id, bites.sizes[0].option_id, d); added.push("bite"); }
         else break;
       }
     });
@@ -512,8 +513,7 @@
     var order = Object.keys(count).map(Number).sort(function (a, b) { return (a < 0 ? 99 : a) - (b < 0 ? 99 : b); }).map(function (k) {
       return (k < 0 ? "not on a day yet" : DAYS[k].short) + (count[k] > 1 ? " ×" + count[k] : "");
     });
-    var rest = mates.length ? ", the other " + mates.length + (mates.length > 1 ? " are" : " is") + " on " + order.join(", ") : "";
-    return '<span class="rportion"><b>' + unitName(m, g.n) + " today</b> · from one " + esc(pack) + rest + "</span>";
+    return '<span class="rportion"><b>' + unitName(m, g.n) + " today</b> · from one " + esc(pack) + "</span>";
   }
   function drawDayView() {
     var box = $(R, "#reveal"), d = st.view, D = DAYS[d], T = dayTotals(d);
