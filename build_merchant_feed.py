@@ -212,8 +212,10 @@ def planner_item(p: dict, ptype: str) -> dict | None:
              for o in p["options"] if o["option_id"] and o["cal"] and o["protein"]]
     if not sizes:
         return None
+    img = p["image"] if p["image"] and not any(h in p["image"] for h in PLACEHOLDER_IMAGE_HINTS) else ""
+    desc = re.sub(r"\s*Nutrition Information is per Serving\.?", "", p["description"], flags=re.I).strip()
     return {"id": p["id"], "name": p["title"], "kind": kind, "serv": serv,
-            "with": p["description"], "badges": p["badges"], "sizes": sizes}
+            "with": desc, "badges": p["badges"], "img": img, "sizes": sizes}
 
 
 # --------------------------------------------------------------------------- feed rows
