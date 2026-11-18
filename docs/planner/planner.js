@@ -131,6 +131,15 @@
       };
       draw(knownVisitor);
       content.insertBefore(card, content.firstChild);
+      // the page's own fallback (a bold line + "Build my week" button saved in the CMS for browsers that block GTM):
+      // when this card is showing, hide that pair so there is one big button, not two
+      var own = content.querySelector('a[href*="utm_medium=top-button"]');
+      if (own) {
+        var btnBlock = own.closest(".block-button") || own.parentNode;
+        var prev = btnBlock && btnBlock.previousElementSibling;
+        if (btnBlock) btnBlock.style.display = "none";
+        if (prev && /build your first week/i.test(prev.textContent)) prev.style.display = "none";
+      }
       checkKnown().then(function (k) { draw(k); }, function () {});
       track("topcard_view");
       card.addEventListener("click", function (e) { if (e.target.tagName === "A") track("topcard_click"); });
