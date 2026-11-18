@@ -56,14 +56,23 @@
   // Same test the first-order popup uses (Luke 11/18: "popup didn't show to current customers"): a browser Klaviyo already
   // knows (signed in, clicked one of our emails, ordered on this phone) is treated as a current customer and sees no
   // discount lines. Someone who locked in on this device keeps their offer, so it can't vanish after they type their email.
-  var knownVisitor = false;
+  var knownVisitor = !!document.querySelector('form[action$="/logout"]');
+  // Signed in: judge by order history (Luke 11/18: an account with no orders is still a new customer and gets the
+  // first-order plan). Unreadable history counts as a current customer, the safe side. Answer cached for the visit.
+  var orderCheck = null;
+  function hasOrders() {
+    if (!orderCheck) orderCheck = fetch("/account/orders", { credentials: "same-origin" })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })
+      .then(function (t) { return /Order\s*#\s*\d{3,}/i.test(t); }, function () { return true; });
+    return orderCheck;
+  }
   function checkKnown() {
-    if (signedIn()) { knownVisitor = true; return Promise.resolve(true); }
+    if (signedIn()) return hasOrders().then(function (has) { knownVisitor = has; return has; });
     var k = window.klaviyo;
     if (!k || typeof k.isIdentified !== "function") return Promise.resolve(knownVisitor);
     return Promise.resolve(k.isIdentified()).then(function (v) { knownVisitor = !!v; return knownVisitor; }, function () { return knownVisitor; });
   }
-  function offerShown() { return !!getOffer() || (!signedIn() && !knownVisitor); }
+  function offerShown() { return !!getOffer() || !knownVisitor; }
   var path = location.pathname.replace(/\/+$/, "") || "/";
   // TSKP_PAGE lets the review playground run the planner off the live site
   var onMenu = window.TSKP_PAGE === "menu" || /^\/menus(\/|$)/.test(path);
@@ -247,7 +256,7 @@
     if (!m) return false;
     var wantsOffer = /[?&]tsko=1/.test(location.search);
     dropParams(["tskcart", "tsko"]);
-    if (wantsOffer && !getOffer() && !signedIn()) setOffer({ email: "", via: "link", at: Date.now() });
+    if (wantsOffer && !getOffer() && !knownVisitor) setOffer({ email: "", via: "link", at: Date.now() });
     var list = m[2].split("_").map(function (x) { return x.split("-").map(Number); }).filter(function (x) { return x.length === 3 && x[2] > 0 && x[2] < 50; });
     var ok = String(m[1]) === String(DATA.week) && list.length && list.every(function (x) { return ITEMS[x[0]] && ITEMS[x[0]].sizes.some(function (z) { return z.option_id === x[1]; }); });
     if (!ok) {
@@ -444,6 +453,8 @@
   }
   // new visitors who haven't locked in yet get the email step; current customers and anyone already locked in go straight to the week
   function askEmailOrBuild() {
+    // signed in with no orders: the account already gives us the email, so the account is the lock-in
+    if (offerShown() && !getOffer() && signedIn()) { setOffer({ email: "", via: "account", at: Date.now() }); return buildWeek(); }
     if (offerShown() && !getOffer()) { qstep = 8; drawQuiz(); var f = $(R, "#qEmail"); if (f) f.focus(); return; }
     return buildWeek();
   }
@@ -1101,7 +1112,7 @@
   function saveWeekly() {
     if (!st.quiz || !window.klaviyo || !window.klaviyo.identify) return Promise.resolve();
     var props = { planner_code: goalsCode(), planner_summary: goalsSummary(), planner_saved: new Date().toISOString().slice(0, 10) };
-    if (!knownVisitor && !signedIn()) {
+    if (!knownVisitor && !signedIn()) {   // signed-in new customers are known to Klaviyo already, no email needed
       if (!OFFER.KLAVIYO_LOCKIN || !getOffer()) return Promise.resolve();
       props.email = getOffer().email;
     }
