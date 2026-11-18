@@ -48,7 +48,7 @@
   function nextRung(sub) { return OFFER.rungs.filter(function (x) { return sub < x.min - 0.005; })[0] || null; }
   function moreFor(x) { return x.pct ? x.pct + "% off" : "free delivery"; }
   function getOffer() {
-    try { var o = JSON.parse(localStorage.getItem(OFFER_KEY)); return o && o.email && Date.now() - o.at < OFFER.DAYS_VALID * 864e5 ? o : null; } catch (e) { return null; }
+    try { var o = JSON.parse(localStorage.getItem(OFFER_KEY)); return o && (o.email || o.via) && Date.now() - o.at < OFFER.DAYS_VALID * 864e5 ? o : null; } catch (e) { return null; }
   }
   function setOffer(o) { try { localStorage.setItem(OFFER_KEY, JSON.stringify(o)); } catch (e) { /* private mode: no lock-in */ } }
   // signed in on the menu = an existing customer: they keep the membership line and get no first-order ladder
@@ -215,8 +215,9 @@
     mountSheet();
     render();
     save();
-    window.TSKP_API = { paper: paper, close: close, goalsCode: goalsCode };
-    fromLink();
+    window.TSKP_API = { paper: paper, close: close, goalsCode: goalsCode, cartLink: cartLink, emailProps: emailProps };
+    if (!fromCartLink()) fromLink();
+    if (/[?&]tskopen=1/.test(location.search)) { dropParams(["tskopen"]); open(); }
   }
 
   // ------------------------------------------------------------------ saved goals as a short code, for the Thursday "your week is built" link
@@ -225,6 +226,67 @@
     if (!st.quiz) return "";
     var q = st.quiz, d = q.days === "wk" || q.days === "all" ? q.days : q.days.join("-");
     return [q.goal, q.avoid.length ? q.avoid.join("-") : "none", PLAN_INFO[q.perDay] ? PLAN_INFO[q.perDay].code : q.perDay, d, st.cal, st.pro].join(".");
+  }
+  // ------------------------------------------------------------------ one-tap cart link (emails: Warm Prospects, Monday recap)
+  // /menus?tskcart=<menu week>.<product id>-<option id>-<qty>_<...>   [&tsko=1 = show first-order savings]   [&tskplan=<goals> = fallback]
+  // Same menu week: fill the cart and go to /cart. Menu moved on: rebuild from the goals if given, else open the planner.
+  function dropParams(names) {
+    try {
+      var q = location.search.replace(/^\?/, "").split("&").filter(function (kv) { return kv && names.indexOf(kv.split("=")[0]) < 0; }).join("&");
+      history.replaceState(null, "", location.pathname + (q ? "?" + q : "") + location.hash);
+    } catch (e) { /* fine */ }
+  }
+  function cartLink(offer) {
+    var q = {};
+    st.packs.forEach(function (k) { var key = k.id + "-" + k.opt; q[key] = (q[key] || 0) + 1; });
+    var items = Object.keys(q).map(function (k) { return k + "-" + q[k]; }).join("_");
+    return location.origin + "/menus?tskcart=" + DATA.week + "." + items + (st.quiz ? "&tskplan=" + goalsCode() : "") + (offer ? "&tsko=1" : "");
+  }
+  function fromCartLink() {
+    var m = /[?&]tskcart=(\d+)\.([0-9_\-]+)/.exec(location.search);
+    if (!m) return false;
+    var wantsOffer = /[?&]tsko=1/.test(location.search);
+    dropParams(["tskcart", "tsko"]);
+    if (wantsOffer && !getOffer() && !signedIn()) setOffer({ email: "", via: "link", at: Date.now() });
+    var list = m[2].split("_").map(function (x) { return x.split("-").map(Number); }).filter(function (x) { return x.length === 3 && x[2] > 0 && x[2] < 50; });
+    var ok = String(m[1]) === String(DATA.week) && list.length && list.every(function (x) { return ITEMS[x[0]] && ITEMS[x[0]].sizes.some(function (z) { return z.option_id === x[1]; }); });
+    if (!ok) {
+      if (/[?&]tskplan=/.test(location.search)) return false;   // fromLink rebuilds the week from their goals
+      open(); showQuiz();
+      $(R, "#quiz").insertAdjacentHTML("afterbegin", '<p class="built"><b>The menu changed since that email.</b> Answer a few taps and we\'ll build this week\'s version.</p>');
+      return true;
+    }
+    dropParams(["tskplan"]);
+    st.packs = []; st.pieces = []; st.pushed = false;
+    list.forEach(function (x) { for (var i = 0; i < x[2]; i++) addPack(x[0], x[1]); });
+    // spread meals Mon-Fri so the planner view makes sense if they open it later
+    var d = 0;
+    st.pieces.forEach(function (p) { p.day = d % 5; d++; });
+    save(); open(); render();
+    checkout();
+    return true;
+  }
+  // what the Week Builder emails read from the profile (sent only once KLAVIYO_LOCKIN is on)
+  function emailProps() {
+    var total = st.packs.reduce(function (t, k) { return t + info(k).sz.price; }, 0), r = rungFor(total), w = weekStats();
+    var groups = {}, order = [];
+    st.packs.forEach(function (k) { var key = k.id + "|" + k.opt; if (!groups[key]) { groups[key] = { k: k, n: 0 }; order.push(key); } groups[key].n++; });
+    order.sort(function (a, b) { var A = ITEMS[groups[a].k.id], B = ITEMS[groups[b].k.id]; return (A.kind === "meal" ? 0 : 1) - (B.kind === "meal" ? 0 : 1) || groups[b].n - groups[a].n; });
+    var items = order.slice(0, 6).map(function (key) {
+      var g = groups[key], x = info(g.k);
+      return { name: x.m.name, n: g.n, img: x.m.img || "",
+        note: (x.m.kind === "meal" && x.m.sizes.length > 1 ? x.sz.name + " · " : "") + x.sz.cal + " cal · " + x.sz.protein + "g protein" };
+    });
+    return {
+      planner_code: goalsCode(), planner_summary: goalsSummary(), planner_saved: new Date().toISOString().slice(0, 10),
+      planner_cart_link: cartLink(true),
+      planner_heard: heardYou().replace(/<[^>]+>/g, ""),
+      planner_week_line: w.nM + " meals" + (w.snackPacks ? " + " + w.snackPacks + " snacks" : "") + " · about " + w.hours + " hours of cooking back",
+      planner_total: total.toFixed(2),
+      planner_paid: r && r.pct ? (total * (1 - r.pct / 100)).toFixed(2) : "",
+      planner_rung: r ? r.label.toLowerCase() : "",
+      planner_items: items, planner_more: Math.max(0, order.length - 6)
+    };
   }
   function fromLink() {
     var m = /[?&]tskplan=([a-z0-9.\-]+)/i.exec(location.search);
@@ -358,7 +420,7 @@
     if (a === "email") {
       var ev = $(R, "#qEmail").value.trim();
       if (!validEmail(ev)) { $(R, "#qErr").hidden = false; $(R, "#qEmail").focus(); return; }
-      lockIn(ev); return buildWeek();
+      buildWeek(); lockIn(ev); return;
     }
     if (a === "noemail") return buildWeek();
     if (a === "custom") { qstep = 6; return drawQuiz(); }
@@ -1052,7 +1114,7 @@
   function lockIn(email) {
     setOffer({ email: email, at: Date.now() });
     if (OFFER.KLAVIYO_LOCKIN && window.klaviyo && window.klaviyo.identify) {
-      try { window.klaviyo.identify({ email: email, planner_code: goalsCode(), planner_summary: goalsSummary() }); } catch (e) { /* the lock-in still holds on this device */ }
+      try { var props = emailProps(); props.email = email; window.klaviyo.identify(props); } catch (e) { /* the lock-in still holds on this device */ }
     }
   }
   function checkout() {
