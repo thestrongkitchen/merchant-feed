@@ -29,15 +29,15 @@
   }
   var STORE = "tskPlanner";
 
-  // ------------------------------------------------------------------ first-order offer ladder (Luke 11/18)
+  // ------------------------------------------------------------------ first-order offer ladder (Luke 11/18; $75/$125/$175 set from the Sept-Nov order spread: median $105, avg $117)
   // Each rung is a site promo code Luke creates in the admin with that ORDER MINIMUM (the site can't count meals).
   // CODES_READY stays false until those codes exist: the ladder shows, but checkout never types a code in.
   // KLAVIYO_LOCKIN stays false until Luke OKs saving the lock-in email/offer to Klaviyo; until then it stays on this device.
   var OFFER = {
     rungs: [
-      { min: 50, pct: 0, code: "MYWEEK", label: "Free delivery" },
+      { min: 75, pct: 0, code: "MYWEEK", label: "Free delivery" },
       { min: 125, pct: 10, code: "MYWEEK10", label: "Free delivery + 10% off" },
-      { min: 200, pct: 15, code: "MYWEEK15", label: "Free delivery + 15% off" }
+      { min: 175, pct: 15, code: "MYWEEK15", label: "Free delivery + 15% off" }
     ],
     CODES_READY: false,
     KLAVIYO_LOCKIN: false,
