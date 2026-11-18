@@ -521,7 +521,8 @@
     var groups = [], seen = {};
     T.on.forEach(function (p) { var k = p.id + "|" + p.opt; if (seen[k]) { seen[k].n++; return; } seen[k] = { p: p, n: 1 }; groups.push(seen[k]); });
     var html = '<div class="rdots">' + DAYS.map(function (X, i) {
-      var n = dayTotals(i).on.length;
+      // two bites on one day count as one item, like the card that shows them
+      var n = dayTotals(i).on.reduce(function (u, p) { var k = p.id + "|" + p.opt; if (u.indexOf(k) < 0) u.push(k); return u; }, []).length;
       return '<button class="rday zone' + (i === d ? " on" : "") + (n ? " has" : "") + '" data-a="rday" data-day="' + i + '"><b>' + X.short + "</b><span>" + X.n + "</span><em>" + (n ? n + " item" + (n > 1 ? "s" : "") : "none") + "</em></button>";
     }).join("") + "</div>";
     html += '<div class="rhead"><h3>' + D.long + "</h3><p>" + D.mon + " " + D.n + "</p></div>";
