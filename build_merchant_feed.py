@@ -422,17 +422,16 @@ def build(out_dir: Path) -> int:
     m = re.search(r"([A-Z][a-z]+) (\d{1,2})(?:st|nd|rd|th)?", fd.get("delivery", ""))
     if m:
         post_url = f"{BASE}/blog/post/whats-on-the-menu-new-haven-county-{m.group(1).lower()}-{int(m.group(2))}"
+    # planner data rides along in products.json: the scheduled jobs already commit that file
+    planner_doc = {"week": week or "", "fulfillment": fulfill, **fd, "built": t0.isoformat(timespec="seconds"), "items": planner}
     (out_dir / "products.json").write_text(
         _json.dumps({"week": week or "", "fulfillment": fulfill, **fd, "post_url": post_url,
-                     "items": items, "meals": meals, "extras": extras},
+                     "items": items, "meals": meals, "extras": extras, "planner": planner_doc},
                     ensure_ascii=False, indent=1) + "\n",
         encoding="utf-8")
 
     # --- "Plan your week" planner data (read by the menu-page planner) -------
-    (out_dir / "planner.json").write_text(
-        _json.dumps({"week": week or "", "fulfillment": fulfill, **fd, "built": t0.isoformat(timespec="seconds"),
-                     "items": planner}, ensure_ascii=False, indent=1) + "\n",
-        encoding="utf-8")
+    (out_dir / "planner.json").write_text(_json.dumps(planner_doc, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
 
     stamp = t0.strftime("%Y-%m-%d %H:%M UTC")
     lines = [f"# TSK Merchant Center feed — build report", "",

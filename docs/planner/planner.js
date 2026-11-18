@@ -16,7 +16,17 @@
   window.__tskPlanner = true;
 
   var BASE_URL = (document.currentScript && document.currentScript.src) ? document.currentScript.src.replace(/[^/]*$/, "") : "https://thestrongkitchen.github.io/merchant-feed/planner/";
-  var DATA_URL = window.TSKP_DATA_URL || BASE_URL + "../planner.json";
+  var DATA_URL = window.TSKP_DATA_URL || BASE_URL + "../products.json";
+  // The menu data lives in the feed's products.json ("planner" section, refreshed by the scheduled jobs);
+  // planner.json is the fallback for a build that predates that section.
+  function loadData() {
+    var get = function (u) { return fetch(u, { cache: "no-cache" }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }); };
+    return get(DATA_URL).then(function (d) {
+      if (d.planner) return d.planner;
+      if (d.items && d.items[0] && d.items[0].sizes) return d;
+      return get(BASE_URL + "../planner.json");
+    });
+  }
   var STORE = "tskPlanner";
   var path = location.pathname.replace(/\/+$/, "") || "/";
   // TSKP_PAGE lets the review playground run the planner off the live site
@@ -51,7 +61,7 @@
 
   // ------------------------------------------------------------------ menu page
   function boot() {
-    fetch(DATA_URL, { cache: "no-cache" }).then(function (r) { return r.json(); }).then(function (d) {
+    loadData().then(function (d) {
       DATA = d;
       // Never plan against a stale menu: the site reports its current menu week
       return fetch("/cart/status", { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); }).then(function (s) {
@@ -624,7 +634,7 @@
   function successPage() {
     if (!st.pushed || !st.pieces || !st.pieces.some(function (p) { return p.day >= 0; })) return;
     if (st.pushedAt && Date.now() - st.pushedAt > 3 * 864e5) return;   // only right after the planned checkout
-    fetch(DATA_URL, { cache: "no-cache" }).then(function (r) { return r.json(); }).then(function (d) {
+    loadData().then(function (d) {
       DATA = d;
       d.items.forEach(function (m) { m.short = m.kind === "side" && m.sizes[0].protein >= 15 ? m.name + " (side)" : m.name; ITEMS[m.id] = m; });
       if (st.week !== d.week) return;
