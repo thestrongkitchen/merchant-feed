@@ -923,6 +923,7 @@
     var em = $(R, "#wkEmail");
     if (!em.hidden && em.value) props.email = em.value.trim();
     else if (getOffer()) props.email = getOffer().email;
+    else if (validEmail($(R, "#liEmail").value.trim())) props.email = $(R, "#liEmail").value.trim();
     var sent;
     try { sent = Promise.resolve(window.klaviyo.identify(props)); } catch (e) { return Promise.resolve(); }
     // never hold up checkout for more than a moment if Klaviyo is slow
@@ -932,6 +933,8 @@
     var box = $(R, "#wkOpt"), em = $(R, "#wkEmail");
     box.addEventListener("change", function () {
       if (!box.checked) { em.hidden = true; return; }
+      // Luke 11/18: never ask twice. The lock-in box (or a lock-in already done) supplies the email.
+      if (getOffer() || !$(R, "#lockin").hidden) { em.hidden = true; if (!getOffer()) $(R, "#liEmail").focus(); return; }
       // ask for an email only when Klaviyo doesn't already know who this is
       var known = window.klaviyo && window.klaviyo.isIdentified ? Promise.resolve(window.klaviyo.isIdentified()) : Promise.resolve(false);
       known.then(function (yes) { em.hidden = !!yes; if (!yes) em.focus(); }, function () { em.hidden = false; });
@@ -961,6 +964,9 @@
       }
     }
     var em = $(R, "#wkEmail");
+    if (weeklyWanted() && em.hidden && !getOffer() && !knownVisitor && !validEmail($(R, "#liEmail").value.trim())) {
+      em.hidden = false; msg("Add your email so we can send your week on Thursdays, or untick the box.", true); em.focus(); return;
+    }
     if (weeklyWanted() && !em.hidden && !validEmail(em.value.trim())) { msg("Add your email so we can send your week on Thursdays, or untick the box.", true); em.focus(); return; }
     fetch("/cart/count", { credentials: "same-origin", headers: { Accept: "application/json" } }).then(function (r) { return r.json(); }).then(function (c) {
       var existing = (c && c.items) || [];
