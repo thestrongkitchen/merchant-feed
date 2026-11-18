@@ -53,6 +53,17 @@
   function setOffer(o) { try { localStorage.setItem(OFFER_KEY, JSON.stringify(o)); } catch (e) { /* private mode: no lock-in */ } }
   // signed in on the menu = an existing customer: they keep the membership line and get no first-order ladder
   function signedIn() { return !!document.querySelector('form[action$="/logout"]'); }
+  // Same test the first-order popup uses (Luke 11/18: "popup didn't show to current customers"): a browser Klaviyo already
+  // knows (signed in, clicked one of our emails, ordered on this phone) is treated as a current customer and sees no
+  // discount lines. Someone who locked in on this device keeps their offer, so it can't vanish after they type their email.
+  var knownVisitor = false;
+  function checkKnown() {
+    if (signedIn()) { knownVisitor = true; return Promise.resolve(true); }
+    var k = window.klaviyo;
+    if (!k || typeof k.isIdentified !== "function") return Promise.resolve(knownVisitor);
+    return Promise.resolve(k.isIdentified()).then(function (v) { knownVisitor = !!v; return knownVisitor; }, function () { return knownVisitor; });
+  }
+  function offerShown() { return !!getOffer() || (!signedIn() && !knownVisitor); }
   var path = location.pathname.replace(/\/+$/, "") || "/";
   // TSKP_PAGE lets the review playground run the planner off the live site
   var onMenu = window.TSKP_PAGE === "menu" || /^\/menus(\/|$)/.test(path);
@@ -126,8 +137,11 @@
     if (tried) return;
     var m = /Coupon \/ gift card\s*-?\$([\d.,]+)/i.exec(document.body.innerText);
     if (m && parseFloat(m[1].replace(/,/g, "")) > 0) return;   // a code is already on the order
-    cartSubtotal().then(function (sub) {
-      var r = rungFor(sub);
+    var pastOrders = fetch("/account/orders", { credentials: "same-origin" }).then(function (r) { return r.text(); })
+      .then(function (t) { return /Order\s*#\s*\d{3,}/i.test(t); }, function () { return true; });   // can't tell = don't apply
+    Promise.all([cartSubtotal(), pastOrders]).then(function (a) {
+      var sub = a[0], r = rungFor(sub);
+      if (a[1]) { note("Preview: this account has past orders, so no first-order code goes on.", 8000); return; }
       if (!r) return;
       if (!OFFER.CODES_READY) { note("Preview: checkout would apply " + r.code + " now ($" + sub.toFixed(2) + " order). Codes aren't switched on yet, so nothing was typed.", 10000); return; }
       try { sessionStorage.setItem("tskpCouponTried", r.code); } catch (e) { return; }   // can't remember the try = don't risk a loop
@@ -179,6 +193,7 @@
   }
 
   function start() {
+    checkKnown().then(function () { if (R && st && st.packs) render(); });
     DATA.items.forEach(function (m) {
       m.short = m.kind === "side" && m.sizes[0].protein >= 15 ? m.name + " (side)" : m.name;
       ITEMS[m.id] = m;
@@ -743,7 +758,7 @@
     var total = st.packs.reduce(function (t, k) { return t + info(k).sz.price; }, 0), save5 = total * 0.05;
     // Basic membership: $10 every 4 weeks, first month free, 5% off the whole order (Luke 10/23)
     // new visitors see the first-order ladder; signed-in customers see the membership line
-    var newbie = !signedIn(), r = rungFor(total), nx = nextRung(total), locked = getOffer();
+    var newbie = offerShown(), r = rungFor(total), nx = nextRung(total), locked = getOffer();
     var ladder = '<div class="member offer">' + (r
         ? "<b>✓ " + esc(r.label) + "</b>" + (r.pct ? " <span>(−$" + (total * r.pct / 100).toFixed(2) + ")</span>" : "") +
           (nx ? " <span>· add $" + (nx.min - total).toFixed(2) + " for " + moreFor(nx) + "</span>" : "") + " <span>· first order" + (locked ? " · locked in" : "") + "</span>"
@@ -874,6 +889,7 @@
   }
 
   function open() {
+    checkKnown().then(function () { if (R && st.packs) render(); });
     lastFocus = document.activeElement; sheet.hidden = false; $(R, ".scrim").hidden = false; document.documentElement.style.overflow = "hidden";
     if (!st.quiz && !st.packs.length) showQuiz();   // first visit starts with the quiz
     $(R, ".x").focus({ preventScroll: true });
@@ -932,7 +948,7 @@
   function checkout() {
     if (busy || !st.packs.length) return;
     var total = st.packs.reduce(function (t, k) { return t + info(k).sz.price; }, 0), r = rungFor(total);
-    if (!signedIn() && r && !getOffer() && !skipOffer) {
+    if (offerShown() && r && !getOffer() && !skipOffer) {
       var li = $(R, "#liEmail"), v = li.value.trim();
       if (validEmail(v)) { lockIn(v); render(); }
       else {
