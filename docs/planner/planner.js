@@ -865,8 +865,9 @@
     chain.then(saveWeekly).then(function () {
       st.pushed = true; st.pushedAt = Date.now(); save();
       if (window.TSKP_ON_CHECKOUT) { busy = false; msg(""); render(); window.TSKP_ON_CHECKOUT(); return; }
-      msg("Done. Taking you to checkout…");
-      location.href = "/checkout";
+      // the cart, not /checkout: guests can see the cart, while /checkout sends them to Log In first (Luke 11/18)
+      msg("Done. Taking you to your cart…");
+      location.href = "/cart";
     }).catch(function (e) {
       busy = false; render();
       msg("Something went wrong putting your plan in the cart: " + e.message + ". Your plan is saved; try again, or add items from the menu.", true);
