@@ -34,6 +34,17 @@
   var onSuccess = path === "/checkout/success";
   if (!onMenu && !onSuccess) return;
 
+  // Soft launch: only a browser that has opened a page with ?planner=preview sees the planner (remembered on that
+  // device; ?planner=off forgets it). Set PREVIEW_ONLY to false to show it to everyone.
+  var PREVIEW_ONLY = true;
+  try {
+    var pv = /[?&]planner=(preview|off)/.exec(location.search);
+    if (pv) localStorage.setItem("tskPlannerPreview", pv[1] === "preview" ? "1" : "0");
+  } catch (e) { /* storage blocked: the gate below simply stays closed */ }
+  var previewer = false;
+  try { previewer = localStorage.getItem("tskPlannerPreview") === "1"; } catch (e) { /* closed */ }
+  if (PREVIEW_ONLY && !previewer && !window.TSKP_PAGE) return;
+
   // ------------------------------------------------------------------ helpers
   function $(root, sel) { return root.querySelector(sel); }
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
