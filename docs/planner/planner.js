@@ -486,9 +486,13 @@
         '<button class="qlink" data-q="custom">Let me choose meals a day and days</button>';
     } else if (qstep === 8) {
       var e8 = previewPlan(qa.perDay), r8 = rungFor(e8.total);
-      body = '<span class="qkick">Your week is ready</span><h3>Where should we save it?</h3>' +
-        "<p>" + (OFFER.KLAVIYO_LOCKIN ? "We'll email you your week so you can finish anytime" : "We'll hold your week so you can finish anytime") +
-        (r8 ? ", and lock in <b>" + esc(r8.label.toLowerCase()) + "</b> on your first order." : ".") + "</p>" +
+      // Luke 11/19: lead with the money. The % rungs show a dollar figure; delivery fees vary, so delivery stays in words.
+      var off8 = r8 && r8.pct ? Math.round(e8.total * r8.pct) / 100 : 0;
+      var head8 = off8 ? "Where should we send your $" + off8.toFixed(2) + " off?" : r8 ? "Where should we send your free delivery?" : "Where should we save it?";
+      body = '<span class="qkick">Your week is ready</span><h3>' + head8 + "</h3>" +
+        "<p>" + (off8 ? "That's " + r8.pct + "% off this week, plus free delivery, on your first order. "
+                      : r8 ? "Free delivery on your first order. " : "") +
+        (OFFER.KLAVIYO_LOCKIN ? "We'll also email you your week so you can finish anytime." : "We'll hold your week so you can finish anytime.") + "</p>" +
         '<div class="qrow"><input id="qEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" style="width:100%"></div>' +
         '<p class="qerr" id="qErr" hidden>That email doesn\'t look right.</p>' +
         '<button class="qnext" data-q="email">Show my week</button>' +
