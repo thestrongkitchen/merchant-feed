@@ -413,7 +413,30 @@
   // ------------------------------------------------------------------ funnel events for GA4 (Luke 11/18: who uses it, where they drop)
   // GTM already forwards every dataLayer event that starts with skf_ to GA4 with its skf_form value (popup chat 11/18).
   var STEP_NAMES = ["goal", "obstacle", "good_week", "avoid", "weight", "plan", "per_day", "days", "email"], lastStep = -1;
-  function track(name) { try { (window.dataLayer = window.dataLayer || []).push({ event: "skf_planner_" + name, skf_form: "planner" }); } catch (e) { /* fine */ } }
+  // Who is this visitor, for reporting (Luke 11/19: "how many were current customers?"). Rides in skf_form, which GA4
+  // already collects, so no GTM/GA4 change: planner-customer = signed in with orders, planner-account = signed in, no
+  // orders, planner-known = not signed in but Klaviyo knows the browser (customer OR email subscriber), planner-new = neither.
+  // Worked out once per visit; every event waits for it (max ~3 s) so events keep their order. No names or emails.
+  var kindP = null;
+  function visitorKind() {
+    if (kindP) return kindP;
+    if (signedIn()) return (kindP = hasOrders().then(function (h) { return h ? "customer" : "account"; }));
+    kindP = new Promise(function (done) {
+      var tries = 0;
+      (function look() {
+        var k = window.klaviyo;
+        if (k && typeof k.isIdentified === "function") {
+          Promise.resolve(k.isIdentified()).then(function (v) { done(v ? "known" : "new"); }, function () { done("unknown"); });
+        } else if (++tries > 12) done("unknown"); else setTimeout(look, 250);
+      })();
+    });
+    return kindP;
+  }
+  function track(name) {
+    visitorKind().then(function (kind) {
+      try { (window.dataLayer = window.dataLayer || []).push({ event: "skf_planner_" + name, skf_form: "planner-" + kind }); } catch (e) { /* fine */ }
+    }, function () { /* fine */ });
+  }
   function drawQuiz() {
     if (qstep !== lastStep) { lastStep = qstep; track("step_" + (STEP_NAMES[qstep] || qstep)); }
     var q = $(R, "#quiz"), n = qstep === 8 ? 6 : qstep > 5 ? 8 : 6;
