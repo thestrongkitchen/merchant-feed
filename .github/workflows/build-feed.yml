@@ -4,6 +4,10 @@ on:
     - cron: "0 10 * * *"      # daily 10:00 UTC = 6 AM ET
     - cron: "30 12 * * *"     # backup run 8:30 AM ET in case the first cron is skipped
     - cron: "30 14 * * 4"     # Thursdays 10:30 AM ET: fresh week for the noon menu email
+    # The site rolls to the new menu week at Wed midnight ET and the planner hides until this feed matches (found 11/19:
+    # dark midnight-6:45 AM). Hourly tries 04:05-09:05 UTC Thursday = 11:05 PM Wed-4:05 AM ET in winter, 12:05-5:05 AM in
+    # summer, since GitHub often runs scheduled jobs late. A run with nothing new commits nothing.
+    - cron: "5 4-9 * * 4"
   workflow_dispatch:
 permissions:
   contents: write
