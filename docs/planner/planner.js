@@ -235,10 +235,13 @@
 
   // ------------------------------------------------------------------ menu page
   function boot() {
+    // Both downloads start together (Luke 11/19 "seems slow to load": they used to run one after the other)
+    var statusP = fetch("/cart/status", { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); });
+    statusP.catch(function () { /* reported through the chain below */ });
     loadData().then(function (d) {
       DATA = d;
       // Never plan against a stale menu: the site reports its current menu week
-      return fetch("/cart/status", { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); }).then(function (s) {
+      return statusP.then(function (s) {
         if (String(s.current_week) !== String(d.week)) {
           console.info("[TSK planner] menu week", s.current_week, "≠ data week", d.week, "— planner hidden until the data catches up");
           note("Build Your Week preview: the menu just changed and the planner's data hasn't caught up yet (site week " + s.current_week + ", data week " + d.week + "). Try again in 30 minutes.");
