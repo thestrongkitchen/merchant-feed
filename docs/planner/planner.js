@@ -472,6 +472,13 @@
     return list.filter(function (o) { return q.good.indexOf(o[0]) >= 0; }).map(function (o) { return o[1]; });
   }
   function handlePlan(q) { var h = Q2.handle.filter(function (x) { return x[0] === (q && q.handle); })[0]; return h ? h[1] : "best"; }
+  function handleScreen() {
+      var rec = Q2.handleRec[qa.block] || "week";
+      return '<span class="qkick">Your week</span>' + lukeSays(esc(rec === "all" ? Q2.handleIntroHate : Q2.handleIntro)) + "<h3>How much of your food do you want us to handle?</h3>" +
+        '<div class="opts">' + Q2.handle.map(function (h) {
+          return '<button class="opt' + (h[0] === rec ? " best" : "") + '" data-q="handle" data-v="' + h[0] + '">' + (h[0] === rec ? "★ " : "") + esc(h[2]) + "<small>" + esc(h[3]) + "</small></button>";
+        }).join("") + "</div>";
+  }
   function lowerFirst(t) { return t.charAt(0).toLowerCase() + t.slice(1); }
   function joinList(a) { return a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1]; }
   var qa = null, qstep = 0, plansOpen = false;
@@ -529,6 +536,7 @@
     else if (v2 && qstep === 2) body = lukeSays(esc(Q2.goodIntro[qa.block] || "")) + "<h3>What would a good week look like?</h3><p>Pick any that matter to you.</p>" +
       opts("good", Q2.good[qa.block] || [], true) +
       '<button class="qnext" data-q="next"' + (qa.good.length ? "" : " disabled") + ">Next</button>";
+    else if (v2 && qstep === 3 && !qa.handle && !qa.handleDone) body = handleScreen();
     else if (qstep === 0) body = '<span class="qkick">30 seconds</span><h3>What are you working toward?</h3><p>We\'ll build a week of our meals around it.</p>' +
       opts("goal", Object.keys(GOALS).map(function (k) { return [k, GOALS[k].label, GOALS[k].note]; }));
     else if (qstep === 1) body = "<h3>What gets in the way most?</h3><p>Pick the biggest one.</p>" +
@@ -552,12 +560,8 @@
         '<button class="qlink" data-q="own">' + (qa.own ? "Use my weight instead" : "I already know my numbers") + "</button>" +
         '<button class="qlink" data-q="skip">Skip, use typical numbers (' + fmt(g.dflt[0]) + " cal · " + g.dflt[1] + "g)</button>" +
         '<p class="qnote">An estimate to plan with, not medical advice.</p>';
-    } else if (v2 && (qstep === 5 || (qstep === 3 && !qa.handleDone)) && !qa.handle) {
-      var rec = Q2.handleRec[qa.block] || "week";
-      body = '<span class="qkick">Your week</span>' + lukeSays(esc(rec === "all" ? Q2.handleIntroHate : Q2.handleIntro)) + "<h3>How much of your food do you want us to handle?</h3>" +
-        '<div class="opts">' + Q2.handle.map(function (h) {
-          return '<button class="opt' + (h[0] === rec ? " best" : "") + '" data-q="handle" data-v="' + h[0] + '">' + (h[0] === rec ? "★ " : "") + esc(h[2]) + "<small>" + esc(h[3]) + "</small></button>";
-        }).join("") + "</div>";
+    } else if (v2 && qstep === 5 && !qa.handle) {
+      body = handleScreen();
     } else if (qstep === 5) {
       // Luke 11/18: three plans, the middle one recommended, the top one the anchor. Prices are this week's menu, built to their goal.
       var mine = v2 ? handlePlan(qa) : "best", showPlans = v2 && !plansOpen ? [mine] : PLANS;
