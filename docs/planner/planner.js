@@ -460,6 +460,7 @@
     RATE_LOSS: 1, RATE_GAIN: 0.5,
     tlWeek1: { lean: "Balanced meals in the fridge and nothing to figure out.", build: "Protein in every meal. Most people feel better right away.", maintain: "No cooking and no deciding what's for dinner." },
     tlDay30: "Weigh in again and see how it's going.",
+    deadline: "Order by {day} and you get:",
     goalWhy: {
       lean: "You want to eat better, feel better and move better. That comes from balanced meals, eaten consistently.",
       build: "You want your calories and protein on target. That's easiest when both big meals of the day are already planned.",
@@ -743,16 +744,25 @@
       body = '<span class="qkick">Last step</span>' + lukeSays(esc(Q2.planIntro)) + "<h3>Your plan</h3><p>Priced on this week's menu and built to your goal, protein snacks included. Change anything after.</p>" + ASSURE +
         '<div class="opts">' + list.map(function (k) {
           var P = PLAN_INFO[k], e = previewPlan(k), rr = offerShown() ? rungFor(e.total) : null, star = k === mine;
-          var price = rr && rr.pct ? '<s class="pold">$' + Math.round(e.total) + "</s> $" + Math.round(e.total * (1 - rr.pct / 100)) : "$" + Math.round(e.total);
+          // Luke 11/20: the full price first (the anchor), then what ordering by the deadline takes off it
+          var off = rr && rr.pct ? Math.round(e.total * rr.pct) / 100 : 0;
+          var stack = rr ? '<span class="pstack"><span class="pdead">' + esc(v2Deadline()) + "</span>" +
+            '<span class="prow"><span>✓ Free delivery</span><span>Free</span></span>' +
+            (off ? '<span class="prow"><span>✓ ' + rr.pct + "% off your first order</span><span>−$" + off.toFixed(2) + "</span></span>" : "") +
+            '<span class="prow ptot"><span>Your first order</span><span>$' + (e.total - off).toFixed(2) + "</span></span></span>" : "";
           return '<button class="opt plan' + (star ? " best" : "") + '" data-q="plan" data-v="' + k + '">' +
-            '<span class="ptop"><span>' + (star ? "★ Your plan" : esc(P.name)) + '</span><span class="pprice">' + price + "</span></span>" +
+            '<span class="ptop"><span>' + (star ? "★ Your plan" : esc(P.name)) + '</span><span class="pprice">$' + e.total.toFixed(2) + "</span></span>" +
             "<small>" + esc(P.what) + " · " + e.meals + " meals" + (e.snacks ? " + " + e.snacks + " snack" + (e.snacks > 1 ? "s" : "") : "") + "</small>" +
-            (rr ? '<em class="prung">First order: ' + esc(rr.label.toLowerCase()) + "</em>" : "") +
-            (star ? whyRec(e, k) + '<span class="pcta">Build my week →</span>' : "") + "</button>";
+            stack + (star ? whyRec(e, k) + '<span class="pcta">Build my week →</span>' : "") + "</button>";
         }).join("") + "</div>" +
         (plansOpen ? "" : '<button class="qlink" data-q="moreplans">See the other plans</button>');
     }
     q.innerHTML = head + back + body;
+  }
+  function v2Deadline() {
+    var d = new Date(), add = (3 - d.getDay() + 7) % 7;   // 3 = Wednesday; on a Wednesday it's tonight
+    d.setDate(d.getDate() + add);
+    return Q2.deadline.replace("{day}", add === 0 ? "tonight" : add === 1 ? "tomorrow night" : "Wednesday " + (d.getMonth() + 1) + "/" + d.getDate());
   }
   function quizClickV2(b) {
     var a = b.dataset.q;
@@ -854,7 +864,7 @@
       " " + esc(Q2.planWhy[k || "best"]) +
       (picks.length ? " You told me a good week means " + esc(joinList(picks)) + ". This plan does that for " + e.meals + " meals." : "") +
       (qa.handle === "all" ? " " + esc(Q2.expectBlock.hate) : "") +
-      (v2Weeks() ? " Stay with it each week and you're on track for about " + v2Weeks().t + " lbs around week " + v2Weeks().weeks + "." : "") + save + "</span>";
+      (v2Weeks() ? " Stay with it each week and you're on track for about " + v2Weeks().t + " lbs around week " + v2Weeks().weeks + "." : "") + "</span>";
   }
   function quizDays() { return qa.days === "wk" ? [0, 1, 2, 3, 4] : qa.days === "all" ? [0, 1, 2, 3, 4, 5, 6] : qa.days.slice().sort(); }
   function planCore() {
@@ -946,6 +956,7 @@
   CSS += "\n.sugrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}\n.sul{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:700;color:var(--muted)}\n.sul input{font:inherit;font-size:17px;font-weight:600;color:var(--fg);width:100%;border:2px solid var(--line);border-radius:10px;padding:11px 12px;background:#fff}\n.sul input:focus{outline:none;border-color:var(--green)}\n.sulab{margin:4px 0 0!important;font-size:13px!important;font-weight:700;color:var(--muted)!important}\n.suchips{display:flex;flex-wrap:wrap;gap:8px}\n.suchips button{border:2px solid var(--line);background:#fff;border-radius:999px;padding:9px 13px;font:inherit;font-size:14px;font-weight:700;color:var(--fg);cursor:pointer}\n.suchips button[aria-pressed=true]{border-color:var(--green);background:var(--chip)}\n.supw{display:flex;gap:8px}\n.supw input{flex:1}\n.supw button{border:2px solid var(--line);background:#fff;border-radius:10px;padding:0 14px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;color:var(--fg)}\n.surules{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:13px;color:var(--muted)}\n.surules li:before{content:'\\25CB  '}\n.surules li.ok{color:var(--green-ink);font-weight:700}\n.surules li.ok:before{content:'\\2713  '}\n.suck{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.4;color:var(--fg);cursor:pointer}\n.suck input{width:20px;height:20px;margin:0;flex:none;accent-color:var(--green)}\n.suck a{color:var(--green-ink)}\n.suts{min-height:65px}\n.qerr a{color:inherit}\n@media (max-width:420px){.sugrid,.surules{grid-template-columns:1fr}}\n";   // sign-up screens
   CSS += "\n.luke{display:flex;gap:10px;align-items:flex-start;background:#fbf5e8;border:1px solid #ecdcb4;border-radius:14px;padding:10px 12px}\n.luke img{width:44px;height:44px;border-radius:50%;object-fit:cover;object-position:50% 35%;flex:none;border:2px solid var(--gold)}\n.luke b{display:block;font-size:12px;color:var(--muted);margin-bottom:2px}\n.luke p{margin:0!important;font-size:14.5px!important;line-height:1.45;color:var(--fg)!important}\n";   // Luke's talk-through lines
   CSS += "\n.tl{list-style:none;margin:0;padding:0 0 0 14px;border-left:3px solid var(--gold);display:flex;flex-direction:column;gap:10px}\n.tl li{display:flex;flex-direction:column;gap:2px;font-size:14.5px;line-height:1.4;color:var(--fg)}\n.tl b{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--green-ink)}\n.pcta{display:block;margin-top:10px;text-align:center;background:var(--green);color:#fff;border-radius:10px;padding:11px;font-weight:800;font-size:15px}\n";   // v2 timeline
+  CSS += "\n.pstack{display:flex;flex-direction:column;gap:4px;width:100%;margin-top:10px;padding:10px 12px;background:#fff;border:1px dashed var(--gold);border-radius:10px;font-size:14px;font-weight:600}\n.pdead{font-size:12.5px;font-weight:800;color:var(--forest)}\n.prow{display:flex;justify-content:space-between;gap:10px;color:var(--green-ink)}\n.ptot{margin-top:4px;padding-top:6px;border-top:1px solid var(--line);font-size:16px;font-weight:800;color:var(--fg)}\n";   // v2 price stack
   function mountSheet() {
     host = el("div"); host.id = "tsk-planner";
     document.body.appendChild(host);
