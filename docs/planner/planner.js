@@ -461,7 +461,10 @@
     expectBlock: { hate: "You never have to cook again if you don't want to. And as you eat our meals, you'll get a feel for what a healthy portion looks like." },
     expectAsk: "The one thing I need from you: order by Wednesday night each week.",
     emailLine: "I'll hold this week for you. When you're ready to check out, it only takes a minute to set up your account.",
-    emailSub: "Up to 15% off plus free delivery on your first order, depending on the plan you pick. Your week stays saved, so you can check out anytime.",
+    emailSub: "You'll also get up to 15% off plus free delivery on your first order, and your week stays saved so you can check out anytime.",
+    emailAsk: "I'll put together a plan for you. Can I have your name and email?",
+    recapGoal: { lean: "to eat better and feel better", build: "more protein and balanced calories for your training", maintain: "good food without the hassle" },
+    recapBlock: { time: "time is the problem", what: "knowing what to eat is the hard part", bored: "you get bored eating the same things" },
     targetSub: { lean: "Skip this if your goal isn't about the scale.", build: "Not every fitness goal is about the scale. Skip this if yours isn't." },
     // timeline (Claude's draft; the pace numbers are placeholders for Luke)
     RATE_LOSS: 1, RATE_GAIN: 0.5,   // no longer shown (Luke 11/20: no weight promises)
@@ -705,9 +708,14 @@
     var f = $(R, "#quiz input:not([type=checkbox])"); if (f && dir > 0) f.focus({ preventScroll: true });
   }
   // the email is held until the week exists, so the first follow-up email can show it; leaving early still signs them up
-  function v2Flush() { if (V2.pending) { var e = V2.pending; V2.pending = null; lockIn(e); } }
+  function v2Flush() { if (V2.pending) { var e = V2.pending; V2.pending = null; lockIn(e, V2.name); } }
   window.addEventListener("pagehide", v2Flush);
   document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") v2Flush(); });
+  function v2Recap() {
+    var picks = goodLabels(qa).map(lowerFirst);
+    return "Got it. You want " + (Q2.recapGoal[qa.goal] || "to eat better") + ", " + (Q2.recapBlock[qa.block] || "it's hard to keep up") +
+      (picks.length ? ", and a good week means " + joinList(picks) : "") + ". " + Q2.emailAsk;
+  }
   function v2Weeks() {
     var w = +qa.weight, t = +qa.target;
     if (!(w > 0 && t > 0) || w === t) return null;
@@ -739,11 +747,12 @@
     else if (at === "block") body = lukeSays(esc(Q2.affirm[qa.goal] || "")) + "<h3>" + esc(Q2.blockQ[qa.goal] || "What gets in the way the most?") + "</h3>" + opts("block", Q2.block);
     else if (at === "good") body = lukeSays(esc(Q2.goodIntro[qa.block] || "")) + "<h3>What would a good week look like?</h3><p>Pick any that matter to you.</p>" +
       opts("good", Q2.good[qa.block] || [], true) + '<button class="qnext" data-q="next"' + ((qa.good || []).length ? "" : " disabled") + ">Next</button>";
-    else if (at === "email") body = '<span class="qkick">Your savings</span>' + lukeSays(esc(Q2.emailLine)) +
-      "<h3>Enter your email to activate your savings</h3><p>" + esc(Q2.emailSub) + "</p>" +
-      '<div class="qrow"><input id="qEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" style="width:100%" value="' + esc(V2.pending || "") + '"></div>' +
+    else if (at === "email") body = '<span class="qkick">Your plan</span>' + lukeSays(esc(v2Recap())) +
+      "<h3>Where should I send your plan?</h3><p>" + esc(Q2.emailSub) + "</p>" +
+      '<label class="sul"><span>First name</span><input id="qName" type="text" autocomplete="given-name" value="' + esc(V2.name || "") + '"></label>' +
+      '<label class="sul"><span>Email</span><input id="qEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" value="' + esc(V2.pending || "") + '"></label>' +
       '<p class="qerr" id="qErr" hidden>That email doesn&#39;t look right.</p>' +
-      '<button class="qnext" data-q="v2email">Activate my savings</button><button class="qlink" data-q="next">Skip for now</button>' +
+      '<button class="qnext" data-q="v2email">Build my plan</button><button class="qlink" data-q="next">Skip for now</button>' +
       (OFFER.KLAVIYO_LOCKIN ? '<p class="qnote">You&#39;ll get emails from The Strong Kitchen. Unsubscribe anytime.</p>' : "");
     else if (at === "avoid") body = "<h3>Anything you avoid?</h3><p>Pick any that apply.</p>" + opts("avoid", [["gluten", "Gluten"], ["dairy", "Dairy"]], true) +
       '<button class="qnext" data-q="next">' + (qa.avoid.length ? "Next" : "No restrictions, next") + "</button>";
@@ -811,7 +820,10 @@
     if (a === "v2email") {
       var ev = $(R, "#qEmail").value.trim();
       if (!validEmail(ev)) { $(R, "#qErr").hidden = false; $(R, "#qEmail").focus(); return; }
-      track("email"); setOffer({ email: ev, at: Date.now() }); V2.pending = ev; return v2Go(1);
+      V2.name = ($(R, "#qName").value || "").trim().slice(0, 40);
+      track("email"); setOffer({ email: ev, at: Date.now() }); V2.pending = ev;
+      if (V2.name) SU.f.first = SU.f.first || V2.name;   // the sign-up at checkout starts with it filled in
+      return v2Go(1);
     }
     if (a === "own") { readQuizInputs(); qa.own = !qa.own; return drawQuizV2(); }
     if (a === "v2w") { readQuizInputs(); return v2Go(1); }
@@ -1567,14 +1579,14 @@
   var skipOffer = false;
   // Lock-in: subscribe the email to the Build Your Week list with the whole week on the profile (same public subscribe
   // call the popup uses), then tell the onsite Klaviyo script who this browser is. The lock-in holds on this device either way.
-  function lockIn(email) {
+  function lockIn(email, first) {
     setOffer({ email: email, at: Date.now() });
     if (!OFFER.KLAVIYO_LOCKIN) return;
     var props;
     try { props = emailProps(); } catch (e) { props = { planner_code: goalsCode() }; }
     props.lead_source = "build-your-week"; props.signup_page = location.pathname;
     var body = { data: { type: "subscription", attributes: { custom_source: "Build Your Week planner",
-      profile: { data: { type: "profile", attributes: { email: email, properties: props } } } },
+      profile: { data: { type: "profile", attributes: first ? { email: email, first_name: first, properties: props } : { email: email, properties: props } } } },
       relationships: { list: { data: { type: "list", id: OFFER.LIST } } } } };
     try {
       fetch("https://a.klaviyo.com/client/subscriptions/?company_id=" + OFFER.COMPANY, {
