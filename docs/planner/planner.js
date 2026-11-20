@@ -416,7 +416,7 @@
     ON: false,
     PHOTO: BASE_URL + "../img/luke-portrait.jpg",
     goalNote: { lean: "Eat better, feel better, move better", build: "More protein and balanced calories for training and recovery", maintain: "Delicious, convenient food without the hassle" },
-    block: [["hate", "I hate cooking", "Shopping, cooking, dishes: it all stresses me out"], ["time", "I don't have the time", "Long days, always something to do"], ["what", "I don't know what to eat", "Nutrition info is confusing"]],
+    block: [["time", "I don't have the time", "Long days, always something to do"], ["what", "I don't know what to eat", "Nutrition info is confusing"]],
     affirm: {
       lean: "Health doesn't have to be complicated. It mostly comes down to balanced calories, enough protein and fairly consistent mealtimes. Add good sleep and exercise and it's even more powerful.",
       build: "Most fitness goals come down to how many calories you eat and how much protein you get, paired with consistent exercise and strength training.",
@@ -439,7 +439,7 @@
     handle: [["all", "full", "I hate cooking. Do all of it for me", "14 meals + snacks: lunch and dinner, every day"],
              ["week", "best", "Handle my weekdays", "10 meals + snacks: lunch and dinner, Monday to Friday"],
              ["some", "lunch", "I want to cook some myself", "5 meals + snacks: lunch, Monday to Friday"]],
-    handleRec: { hate: "all", time: "week", what: "week" },
+    handleRec: {},
     planWhy: {
       full: "Lunch and dinner every day means you never have to think about food.",
       best: "Lunch and dinner, Monday to Friday, covers the days that are hardest to get right and leaves your weekends free.",
@@ -454,6 +454,12 @@
     expectBlock: { hate: "You never have to cook again if you don't want to. And as you eat our meals, you'll get a feel for what a healthy portion looks like." },
     expectAsk: "The one thing I need from you: order by Wednesday night each week.",
     emailLine: "I'll hold this week for you. When you're ready to check out, it only takes a minute to set up your account.",
+    emailSub: "Up to 15% off plus free delivery on your first order, depending on the plan you pick. Your week stays saved, so you can check out anytime.",
+    targetSub: { lean: "Skip this if your goal isn't about the scale.", build: "Not every fitness goal is about the scale. Skip this if yours isn't." },
+    // timeline (Claude's draft; the pace numbers are placeholders for Luke)
+    RATE_LOSS: 1, RATE_GAIN: 0.5,
+    tlWeek1: { lean: "Balanced meals in the fridge and nothing to figure out.", build: "Protein in every meal. Most people feel better right away.", maintain: "No cooking and no deciding what's for dinner." },
+    tlDay30: "Weigh in again and see how it's going.",
     goalWhy: {
       lean: "You want to eat better, feel better and move better. That comes from balanced meals, eaten consistently.",
       build: "You want your calories and protein on target. That's easiest when both big meals of the day are already planned.",
@@ -485,7 +491,7 @@
   function showQuiz() {
     qa = st.quiz ? JSON.parse(JSON.stringify(st.quiz)) : { goal: null, block: null, want: null, avoid: [], perDay: null, days: null, weight: "", own: false, cal: "", pro: "" };
     if (!qa.good) qa.good = [];
-    qa.handleDone = false; qa.handle = null;
+    qa.handleDone = false; qa.handle = null; V2.at = "goal"; V2.email = null;
     qstep = 0; plansOpen = false;
     $(R, ".in").classList.add("quizzing"); $(R, "#quiz").hidden = false; $(R, "#built").hidden = true;
     drawQuiz();
@@ -519,6 +525,7 @@
     }, function () { /* fine */ });
   }
   function drawQuiz() {
+    if (quizV2()) return drawQuizV2();
     if (qstep !== lastStep) { lastStep = qstep; track("step_" + (STEP_NAMES[qstep] || qstep)); }
     var q = $(R, "#quiz"), n = qstep === 8 ? 6 : qstep > 5 ? 8 : 6;
     var head = '<div class="qdots">' + Array.apply(null, Array(n)).map(function (_, i) { return '<i class="' + (i <= qstep ? "on" : "") + '"></i>'; }).join("") + "</div>";
@@ -615,6 +622,7 @@
   function quizClick(b) {
     var a = b.dataset.q;
     if (/^su/.test(a)) return signupClick(a, b);
+    if (quizV2()) return quizClickV2(b);
     if (a === "back" && quizV2() && qstep === 3 && qa.handle) { qa.handle = null; qa.handleDone = false; return drawQuiz(); }
     if (a === "back" && quizV2() && qstep === 3 && !qa.handle) { qstep = 2; return drawQuiz(); }
     if (a === "back") { qstep = qstep === 8 ? (PLAN_INFO[qa.perDay] ? 5 : 7) : qstep - 1; return drawQuiz(); }
@@ -654,6 +662,130 @@
     if (offerShown() && !getOffer()) { qstep = 8; drawQuiz(); var f = $(R, "#qEmail"); if (f) f.focus(); return; }
     return buildWeek();
   }
+  // ------------------------------------------------------------------ quiz v2 order (Luke 11/20, Hormozi's diagnostic sale):
+  // questionnaire -> info (email) -> current -> desired -> timeline -> the option (how much we handle) -> price.
+  // Steps are named, not numbered, so screens can come and go (email only for new visitors, target weight only with a weight).
+  var V2 = { at: "goal", email: null, pending: null };
+  function v2Steps() {
+    var s = ["goal", "block", "good"];
+    if (V2.email) s.push("email");
+    s.push("avoid", "weight");
+    if (qa.goal !== "maintain" && +qa.weight > 0 && !qa.own) s.push("target");
+    return s.concat(["timeline", "handle", "plan"]);
+  }
+  function v2Go(dir) {
+    if (V2.at === "good" && dir > 0 && V2.email === null) V2.email = offerShown() && !getOffer();
+    var s = v2Steps(), i = s.indexOf(V2.at);
+    V2.at = s[Math.max(0, Math.min(s.length - 1, i + dir))];
+    drawQuizV2();
+    var f = $(R, "#quiz input:not([type=checkbox])"); if (f && dir > 0) f.focus({ preventScroll: true });
+  }
+  // the email is held until the week exists, so the first follow-up email can show it; leaving early still signs them up
+  function v2Flush() { if (V2.pending) { var e = V2.pending; V2.pending = null; lockIn(e); } }
+  window.addEventListener("pagehide", v2Flush);
+  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") v2Flush(); });
+  function v2Weeks() {
+    var w = +qa.weight, t = +qa.target;
+    if (!(w > 0 && t > 0) || w === t) return null;
+    var lose = w > t, rate = lose ? Q2.RATE_LOSS : Q2.RATE_GAIN;
+    return { lose: lose, diff: Math.abs(w - t), weeks: Math.ceil(Math.abs(w - t) / rate), rate: rate, t: t };
+  }
+  function v2Timeline() {
+    var rows = [["This week", Q2.tlWeek1[qa.goal]]];
+    if (qa.goal !== "maintain") rows.push(["Day 30", Q2.tlDay30]);
+    var wk = v2Weeks();
+    if (wk) rows.push(["Week " + wk.weeks, "Around " + wk.t + " lbs, " + (wk.lose ? "losing" : "adding") + " about " + wk.rate + " lb a week."]);
+    rows.push(["Every Wednesday", Q2.expectAsk]);
+    return '<ol class="tl">' + rows.map(function (r) { return "<li><b>" + esc(r[0]) + "</b><span>" + esc(r[1]) + "</span></li>"; }).join("") + "</ol>";
+  }
+  function drawQuizV2() {
+    if (V2.at !== lastStep) { lastStep = V2.at; track("step_" + V2.at); }
+    var q = $(R, "#quiz"), s = v2Steps(), i = Math.max(0, s.indexOf(V2.at));
+    var head = '<div class="qdots">' + s.map(function (_, j) { return '<i class="' + (j <= i ? "on" : "") + '"></i>'; }).join("") + "</div>";
+    var back = i ? '<button class="qback" data-q="back">← Back</button>' : "";
+    function opts(key, list, multi) {
+      return '<div class="opts">' + list.map(function (o) {
+        var on = multi ? (qa[key] || []).indexOf(o[0]) >= 0 : qa[key] === o[0];
+        return '<button class="opt" data-q="' + (multi ? "toggle" : "pick") + '" data-k="' + key + '" data-v="' + o[0] + '" aria-pressed="' + on + '">' + esc(o[1]) + (o[2] ? "<small>" + esc(o[2]) + "</small>" : "") + "</button>";
+      }).join("") + "</div>";
+    }
+    var body = "", at = V2.at, g = GOALS[qa.goal];
+    if (at === "goal") body = '<span class="qkick">30 seconds</span><h3>What are you working toward?</h3><p>We\'ll build a week of our meals around it.</p>' +
+      opts("goal", Object.keys(GOALS).map(function (k) { return [k, GOALS[k].label, Q2.goalNote[k]]; }));
+    else if (at === "block") body = lukeSays(esc(Q2.affirm[qa.goal] || "")) + "<h3>What gets in the way the most?</h3>" + opts("block", Q2.block);
+    else if (at === "good") body = lukeSays(esc(Q2.goodIntro[qa.block] || "")) + "<h3>What would a good week look like?</h3><p>Pick any that matter to you.</p>" +
+      opts("good", Q2.good[qa.block] || [], true) + '<button class="qnext" data-q="next"' + ((qa.good || []).length ? "" : " disabled") + ">Next</button>";
+    else if (at === "email") body = '<span class="qkick">Your savings</span>' + lukeSays(esc(Q2.emailLine)) +
+      "<h3>Enter your email to activate your savings</h3><p>" + esc(Q2.emailSub) + "</p>" +
+      '<div class="qrow"><input id="qEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" style="width:100%" value="' + esc(V2.pending || "") + '"></div>' +
+      '<p class="qerr" id="qErr" hidden>That email doesn&#39;t look right.</p>' +
+      '<button class="qnext" data-q="v2email">Activate my savings</button><button class="qlink" data-q="next">Skip for now</button>' +
+      (OFFER.KLAVIYO_LOCKIN ? '<p class="qnote">You&#39;ll get emails from The Strong Kitchen. Unsubscribe anytime.</p>' : "");
+    else if (at === "avoid") body = "<h3>Anything you avoid?</h3><p>Pick any that apply.</p>" + opts("avoid", [["gluten", "Gluten"], ["dairy", "Dairy"]], true) +
+      '<button class="qnext" data-q="next">' + (qa.avoid.length ? "Next" : "No restrictions, next") + "</button>";
+    else if (at === "weight") body = "<h3>What do you weigh today?</h3><p>We use it to estimate your daily calories and protein. It stays on this device.</p>" +
+      (qa.own
+        ? '<div class="qrow"><input id="qCal" type="number" inputmode="numeric" placeholder="Calories" value="' + esc(qa.cal) + '"><input id="qPro" type="number" inputmode="numeric" placeholder="Protein (g)" value="' + esc(qa.pro) + '"></div>'
+        : '<div class="qrow"><input id="qW" type="number" inputmode="numeric" placeholder="e.g. 180" value="' + esc(qa.weight) + '"><span>lbs</span></div>') +
+      '<button class="qnext" data-q="v2w">Next</button>' +
+      '<button class="qlink" data-q="own">' + (qa.own ? "Use my weight instead" : "I already know my numbers") + "</button>" +
+      '<button class="qlink" data-q="v2wskip">Skip, use typical numbers (' + fmt(g.dflt[0]) + " cal · " + g.dflt[1] + "g)</button>" +
+      '<p class="qnote">An estimate to plan with, not medical advice.</p>';
+    else if (at === "target") body = "<h3>What weight are you aiming for?</h3><p>" + esc(Q2.targetSub[qa.goal] || "") + "</p>" +
+      '<div class="qrow"><input id="qT" type="number" inputmode="numeric" placeholder="e.g. ' + Math.round(+qa.weight * (qa.goal === "build" ? 1.03 : 0.92)) + '" value="' + esc(qa.target || "") + '"><span>lbs</span></div>' +
+      '<p class="qerr" id="qErr" hidden>Add a weight, or skip this one.</p>' +
+      '<button class="qnext" data-q="v2t">Next</button><button class="qlink" data-q="v2tskip">Skip this one</button>';
+    else if (at === "timeline") body = '<span class="qkick">What to expect</span>' + lukeSays(esc(Q2.expect[qa.goal] || "")) + v2Timeline() +
+      '<button class="qnext" data-q="next">See my options</button>';
+    else if (at === "handle") body = handleScreen();
+    else {
+      var mine = handlePlan(qa), list = plansOpen ? PLANS : [mine];
+      body = '<span class="qkick">Last step</span>' + lukeSays(esc(Q2.planIntro)) + "<h3>Your plan</h3><p>Priced on this week's menu and built to your goal, protein snacks included. Change anything after.</p>" + ASSURE +
+        '<div class="opts">' + list.map(function (k) {
+          var P = PLAN_INFO[k], e = previewPlan(k), rr = offerShown() ? rungFor(e.total) : null, star = k === mine;
+          var price = rr && rr.pct ? '<s class="pold">$' + Math.round(e.total) + "</s> $" + Math.round(e.total * (1 - rr.pct / 100)) : "$" + Math.round(e.total);
+          return '<button class="opt plan' + (star ? " best" : "") + '" data-q="plan" data-v="' + k + '">' +
+            '<span class="ptop"><span>' + (star ? "★ Your plan" : esc(P.name)) + '</span><span class="pprice">' + price + "</span></span>" +
+            "<small>" + esc(P.what) + " · " + e.meals + " meals" + (e.snacks ? " + " + e.snacks + " snack" + (e.snacks > 1 ? "s" : "") : "") + "</small>" +
+            (rr ? '<em class="prung">First order: ' + esc(rr.label.toLowerCase()) + "</em>" : "") +
+            (star ? whyRec(e, k) + '<span class="pcta">Build my week →</span>' : "") + "</button>";
+        }).join("") + "</div>" +
+        (plansOpen ? "" : '<button class="qlink" data-q="moreplans">See the other plans</button>');
+    }
+    q.innerHTML = head + back + body;
+  }
+  function quizClickV2(b) {
+    var a = b.dataset.q;
+    if (a === "back") { readQuizInputs(); return v2Go(-1); }
+    if (a === "pick") {
+      var k = b.dataset.k, v = b.dataset.v;
+      if (k === "block" && qa.block !== v) qa.good = [];
+      qa[k] = v; return v2Go(1);
+    }
+    if (a === "toggle") { var arr = qa[b.dataset.k] || (qa[b.dataset.k] = []), i = arr.indexOf(b.dataset.v); if (i >= 0) arr.splice(i, 1); else arr.push(b.dataset.v); return drawQuizV2(); }
+    if (a === "next") { if (V2.at === "email") track("email_skip"); return v2Go(1); }
+    if (a === "v2email") {
+      var ev = $(R, "#qEmail").value.trim();
+      if (!validEmail(ev)) { $(R, "#qErr").hidden = false; $(R, "#qEmail").focus(); return; }
+      track("email"); setOffer({ email: ev, at: Date.now() }); V2.pending = ev; return v2Go(1);
+    }
+    if (a === "own") { readQuizInputs(); qa.own = !qa.own; return drawQuizV2(); }
+    if (a === "v2w") { readQuizInputs(); return v2Go(1); }
+    if (a === "v2wskip") { qa.weight = ""; qa.own = false; qa.target = ""; return v2Go(1); }
+    if (a === "v2t") {
+      var t = +$(R, "#qT").value;
+      if (!(t > 50 && t < 600)) { $(R, "#qErr").hidden = false; return; }
+      qa.target = String(Math.round(t)); return v2Go(1);
+    }
+    if (a === "v2tskip") { qa.target = ""; return v2Go(1); }
+    if (a === "handle") { qa.handle = b.dataset.v; plansOpen = false; track("handle_" + b.dataset.v); return v2Go(1); }
+    if (a === "moreplans") { plansOpen = true; track("plans_more"); return drawQuizV2(); }
+    if (a === "plan") {
+      track("plan_" + b.dataset.v); qa.perDay = b.dataset.v; qa.days = PLAN_INFO[b.dataset.v].days;
+      buildWeek(); v2Flush(); return;
+    }
+  }
+
   function readQuizInputs() {
     var w = $(R, "#qW"), c = $(R, "#qCal"), p = $(R, "#qPro");
     if (w) qa.weight = w.value; if (c) qa.cal = c.value; if (p) qa.pro = p.value;
@@ -720,7 +852,9 @@
     var save = r && r.pct && (!rl || rl.pct < r.pct) ? " It also unlocks " + r.pct + "% off your first order." : "";
     return '<span class="pwhyrec"><b>Why I recommend it:</b> ' + esc(Q2.goalWhy[qa.goal] || "") +
       " " + esc(Q2.planWhy[k || "best"]) +
-      (picks.length ? " You told me a good week means " + esc(joinList(picks)) + ". This plan does that for " + e.meals + " meals." : "") + save + "</span>";
+      (picks.length ? " You told me a good week means " + esc(joinList(picks)) + ". This plan does that for " + e.meals + " meals." : "") +
+      (qa.handle === "all" ? " " + esc(Q2.expectBlock.hate) : "") +
+      (v2Weeks() ? " Stay with it each week and you're on track for about " + v2Weeks().t + " lbs around week " + v2Weeks().weeks + "." : "") + save + "</span>";
   }
   function quizDays() { return qa.days === "wk" ? [0, 1, 2, 3, 4] : qa.days === "all" ? [0, 1, 2, 3, 4, 5, 6] : qa.days.slice().sort(); }
   function planCore() {
@@ -811,6 +945,7 @@
 
   CSS += "\n.sugrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}\n.sul{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:700;color:var(--muted)}\n.sul input{font:inherit;font-size:17px;font-weight:600;color:var(--fg);width:100%;border:2px solid var(--line);border-radius:10px;padding:11px 12px;background:#fff}\n.sul input:focus{outline:none;border-color:var(--green)}\n.sulab{margin:4px 0 0!important;font-size:13px!important;font-weight:700;color:var(--muted)!important}\n.suchips{display:flex;flex-wrap:wrap;gap:8px}\n.suchips button{border:2px solid var(--line);background:#fff;border-radius:999px;padding:9px 13px;font:inherit;font-size:14px;font-weight:700;color:var(--fg);cursor:pointer}\n.suchips button[aria-pressed=true]{border-color:var(--green);background:var(--chip)}\n.supw{display:flex;gap:8px}\n.supw input{flex:1}\n.supw button{border:2px solid var(--line);background:#fff;border-radius:10px;padding:0 14px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;color:var(--fg)}\n.surules{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:13px;color:var(--muted)}\n.surules li:before{content:'\\25CB  '}\n.surules li.ok{color:var(--green-ink);font-weight:700}\n.surules li.ok:before{content:'\\2713  '}\n.suck{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.4;color:var(--fg);cursor:pointer}\n.suck input{width:20px;height:20px;margin:0;flex:none;accent-color:var(--green)}\n.suck a{color:var(--green-ink)}\n.suts{min-height:65px}\n.qerr a{color:inherit}\n@media (max-width:420px){.sugrid,.surules{grid-template-columns:1fr}}\n";   // sign-up screens
   CSS += "\n.luke{display:flex;gap:10px;align-items:flex-start;background:#fbf5e8;border:1px solid #ecdcb4;border-radius:14px;padding:10px 12px}\n.luke img{width:44px;height:44px;border-radius:50%;object-fit:cover;object-position:50% 35%;flex:none;border:2px solid var(--gold)}\n.luke b{display:block;font-size:12px;color:var(--muted);margin-bottom:2px}\n.luke p{margin:0!important;font-size:14.5px!important;line-height:1.45;color:var(--fg)!important}\n";   // Luke's talk-through lines
+  CSS += "\n.tl{list-style:none;margin:0;padding:0 0 0 14px;border-left:3px solid var(--gold);display:flex;flex-direction:column;gap:10px}\n.tl li{display:flex;flex-direction:column;gap:2px;font-size:14.5px;line-height:1.4;color:var(--fg)}\n.tl b{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--green-ink)}\n.pcta{display:block;margin-top:10px;text-align:center;background:var(--green);color:#fff;border-radius:10px;padding:11px;font-weight:800;font-size:15px}\n";   // v2 timeline
   function mountSheet() {
     host = el("div"); host.id = "tsk-planner";
     document.body.appendChild(host);
@@ -1372,7 +1507,7 @@
       relationships: { list: { data: { type: "list", id: OFFER.LIST } } } } };
     try {
       fetch("https://a.klaviyo.com/client/subscriptions/?company_id=" + OFFER.COMPANY, {
-        method: "POST", headers: { "Content-Type": "application/vnd.api+json", revision: "2024-10-15" }, body: JSON.stringify(body)
+        method: "POST", keepalive: true, headers: { "Content-Type": "application/vnd.api+json", revision: "2024-10-15" }, body: JSON.stringify(body)
       }).then(function (r) { note("Build Your Week preview: saved to Klaviyo (" + r.status + ")", 6000); }, function () { /* offline: still locked in here */ });
     } catch (e) { /* fine */ }
     try { if (window.klaviyo && window.klaviyo.identify) window.klaviyo.identify({ email: email }); } catch (e) { /* fine */ }
