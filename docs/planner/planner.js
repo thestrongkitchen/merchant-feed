@@ -694,14 +694,14 @@
   // Steps are named, not numbered, so screens can come and go (email only for new visitors, target weight only with a weight).
   var V2 = { at: "goal", email: null, pending: null };
   function v2Steps() {
-    var s = ["goal", "block", "good"];
+    var s = ["goal", "block", "good", "avoid"];   // Luke 11/20: all the questions before we ask for name + email
     if (V2.email) s.push("email");
-    s.push("avoid", "weight");
+    s.push("weight");
     // (the target-weight screen is off: Luke 11/20, we don't promise a weight)
     return s.concat(["timeline", "handle", "plan"]);
   }
   function v2Go(dir) {
-    if (V2.at === "good" && dir > 0 && V2.email === null) V2.email = offerShown() && !getOffer();
+    if (V2.at === "avoid" && dir > 0 && V2.email === null) V2.email = offerShown() && !getOffer();
     var s = v2Steps(), i = s.indexOf(V2.at);
     V2.at = s[Math.max(0, Math.min(s.length - 1, i + dir))];
     drawQuizV2();
