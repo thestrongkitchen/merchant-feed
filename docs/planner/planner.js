@@ -433,6 +433,7 @@
       what: [["portion", "No worrying about portion control"], ["protein", "Always getting enough protein"], ["enjoy", "Looking forward to my meals"], ["variety", "A good mix of proteins, vegetables and starches"], ["label", "Calories and protein listed on every meal"]]
     },
     planIntro: "Based on what you told me, this is the plan I'd start you on.",
+    emailLine: "I'll hold this week for you. When you're ready to check out, it only takes a minute to set up your account.",
     goalWhy: {
       lean: "You want to eat better, feel better and move better. That comes from balanced meals, eaten consistently.",
       build: "You want your calories and protein on target. That's easiest when both big meals of the day are already planned.",
@@ -548,6 +549,16 @@
       // Luke 11/19: lead with the money. The % rungs show a dollar figure; delivery fees vary, so delivery stays in words.
       var off8 = r8 && r8.pct ? Math.round(e8.total * r8.pct) / 100 : 0;
       var head8 = off8 ? "Where should we send your $" + off8.toFixed(2) + " off?" : r8 ? "Where should we send your free delivery?" : "Where should we save it?";
+      if (v2) {   // Luke 11/20: "entering their email to activate the code", and they can check out any time
+        head8 = off8 ? "Enter your email to activate your $" + off8.toFixed(2) + " off" : r8 ? "Enter your email to activate free delivery" : "Enter your email to save your week";
+        body = '<span class="qkick">Your week is ready</span>' + lukeSays(esc(Q2.emailLine)) + "<h3>" + head8 + "</h3>" +
+          "<p>" + (off8 ? r8.pct + "% off this week plus free delivery, on your first order. " : r8 ? "Free delivery on your first order. " : "") + "Your week stays saved, so you can check out anytime.</p>" +
+          '<div class="qrow"><input id="qEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" style="width:100%"></div>' +
+          '<p class="qerr" id="qErr" hidden>That email doesn&#39;t look right.</p>' +
+          '<button class="qnext" data-q="email">Activate my savings</button>' +
+          '<button class="qlink" data-q="noemail">Skip for now</button>' +
+          (OFFER.KLAVIYO_LOCKIN ? '<p class="qnote">You&#39;ll get emails from The Strong Kitchen. Unsubscribe anytime.</p>' : "");
+      } else
       body = '<span class="qkick">Your week is ready</span><h3>' + head8 + "</h3>" +
         "<p>" + (off8 ? "That's " + r8.pct + "% off this week, plus free delivery, on your first order. "
                       : r8 ? "Free delivery on your first order. " : "") +
