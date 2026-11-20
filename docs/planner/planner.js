@@ -459,6 +459,13 @@
     // timeline (Claude's draft; the pace numbers are placeholders for Luke)
     RATE_LOSS: 1, RATE_GAIN: 0.5,   // no longer shown (Luke 11/20: no weight promises)
     REST_CAL: 1205, FAT_CAL: 3500,
+    MIN_PER_MEAL: 30,   // shopping, prep, cooking, packing and cleanup per home-cooked meal (same figure the built week uses)
+    promiseIntro: "Here's what I can promise you:",
+    promise: {
+      lean: ["Enough protein in every meal", "Controlled calories, already portioned", "Fiber, plus a mix of vegetables, starches and proteins", "A wide variety of flavors, week to week"],
+      build: ["Enough protein for full muscle recovery", "Balanced calories, so you can build muscle without gaining fat, or lean out", "Every meal counted, so you know your numbers"],
+      maintain: ["About {hrs} hours back each week: no shopping, prepping, cooking, packing or cleanup", "Lunch and dinner decided before the week starts"]
+    },
     tlWeek1: { lean: "Balanced meals in the fridge and nothing to figure out.", build: "Protein in every meal. Most people feel better right away.", maintain: "No cooking and no deciding what's for dinner." },
     tlDay30: "Weigh in again and see how it's going.",
     deadline: "Order by {day} and you get:",
@@ -737,7 +744,8 @@
       '<div class="qrow"><input id="qT" type="number" inputmode="numeric" placeholder="e.g. ' + Math.round(+qa.weight * (qa.goal === "build" ? 1.03 : 0.92)) + '" value="' + esc(qa.target || "") + '"><span>lbs</span></div>' +
       '<p class="qerr" id="qErr" hidden>Add a weight, or skip this one.</p>' +
       '<button class="qnext" data-q="v2t">Next</button><button class="qlink" data-q="v2tskip">Skip this one</button>';
-    else if (at === "timeline") body = '<span class="qkick">What to expect</span>' + lukeSays(esc(Q2.expect[qa.goal] || "")) + v2Timeline() +
+    else if (at === "timeline") body = '<span class="qkick">What to expect</span>' + lukeSays(esc(Q2.promiseIntro) + '<ul class="prom">' +
+        (Q2.promise[qa.goal] || []).map(function (x) { return "<li>" + esc(x.replace("{hrs}", v2Hours(previewPlan("best").meals))) + "</li>"; }).join("") + "</ul>") + v2Timeline() +
       '<button class="qnext" data-q="next">See my options</button>';
     else if (at === "handle") body = handleScreen();
     else {
@@ -859,7 +867,9 @@
     return '<span class="pwhyrec"><b>Why we recommend it:</b> weekdays are when cooking falls apart. Lunch and dinner, Monday to Friday, ' +
       "covers those and leaves your weekends free. " + esc(tie) + save + "</span>";
   }
+  function v2Hours(meals) { return Math.round(meals * Q2.MIN_PER_MEAL / 60); }
   function calSwap(e) {
+    if (qa.goal === "maintain") return " That's about " + v2Hours(e.meals) + " hours of shopping, prepping, cooking and cleanup back each week.";
     if (qa.goal === "maintain" || !e.mealCal || e.mealCal >= Q2.REST_CAL) return "";
     var saved = Math.round(e.meals * (Q2.REST_CAL - e.mealCal) / 100) * 100;
     return " If these " + e.meals + " meals replace takeout, that's about " + fmt(saved) + " fewer calories a week, around " +
@@ -966,6 +976,7 @@
   CSS += "\n.luke{display:flex;gap:10px;align-items:flex-start;background:#fbf5e8;border:1px solid #ecdcb4;border-radius:14px;padding:10px 12px}\n.luke img{width:44px;height:44px;border-radius:50%;object-fit:cover;object-position:50% 35%;flex:none;border:2px solid var(--gold)}\n.luke b{display:block;font-size:12px;color:var(--muted);margin-bottom:2px}\n.luke p{margin:0!important;font-size:14.5px!important;line-height:1.45;color:var(--fg)!important}\n";   // Luke's talk-through lines
   CSS += "\n.tl{list-style:none;margin:0;padding:0 0 0 14px;border-left:3px solid var(--gold);display:flex;flex-direction:column;gap:10px}\n.tl li{display:flex;flex-direction:column;gap:2px;font-size:14.5px;line-height:1.4;color:var(--fg)}\n.tl b{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--green-ink)}\n.pcta{display:block;margin-top:10px;text-align:center;background:var(--green);color:#fff;border-radius:10px;padding:11px;font-weight:800;font-size:15px}\n";   // v2 timeline
   CSS += "\n.pstack{display:flex;flex-direction:column;gap:4px;width:100%;margin-top:10px;padding:10px 12px;background:#fff;border:1px dashed var(--gold);border-radius:10px;font-size:14px;font-weight:600}\n.pdead{font-size:12.5px;font-weight:800;color:var(--forest)}\n.prow{display:flex;justify-content:space-between;gap:10px;color:var(--green-ink)}\n.ptot{margin-top:4px;padding-top:6px;border-top:1px solid var(--line);font-size:16px;font-weight:800;color:var(--fg)}\n";   // v2 price stack
+  CSS += "\n.prom{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}\n.prom li{font-size:14.5px;line-height:1.4;padding-left:20px;position:relative}\n.prom li:before{content:'\\2713';position:absolute;left:0;color:var(--green-ink);font-weight:800}\n";   // v2 promises
   function mountSheet() {
     host = el("div"); host.id = "tsk-planner";
     document.body.appendChild(host);
