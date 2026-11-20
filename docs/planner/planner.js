@@ -462,7 +462,7 @@
     expectAsk: "The one thing I need from you: order by Wednesday night each week.",
     emailLine: "I'll hold this week for you. When you're ready to check out, it only takes a minute to set up your account.",
     emailSub: "You'll also get up to 15% off plus free delivery on your first order, and your week stays saved so you can check out anytime.",
-    emailAsk: "I'll put together a plan for you. Can I have your name and email?",
+    emailAsk: "I'll put together a plan for you.",
     recapGoal: { lean: "to eat better and feel better", build: "more protein and balanced calories for your training", maintain: "good food without the hassle" },
     recapBlock: { time: "time is the problem", what: "knowing what to eat is the hard part", bored: "you get bored eating the same things" },
     targetSub: { lean: "Skip this if your goal isn't about the scale.", build: "Not every fitness goal is about the scale. Skip this if yours isn't." },
@@ -694,9 +694,7 @@
   // Steps are named, not numbered, so screens can come and go (email only for new visitors, target weight only with a weight).
   var V2 = { at: "goal", email: null, pending: null };
   function v2Steps() {
-    var s = ["goal", "block", "good", "avoid"];   // Luke 11/20: all the questions before we ask for name + email
-    if (V2.email) s.push("email");
-    s.push("weight");
+    var s = ["goal", "block", "good", "avoid", "name", "weight"];   // Luke 11/20: questions, then just their first name
     // (the target-weight screen is off: Luke 11/20, we don't promise a weight)
     return s.concat(["timeline", "handle", "plan"]);
   }
@@ -747,6 +745,10 @@
     else if (at === "block") body = lukeSays(esc(Q2.affirm[qa.goal] || "")) + "<h3>" + esc(Q2.blockQ[qa.goal] || "What gets in the way the most?") + "</h3>" + opts("block", Q2.block);
     else if (at === "good") body = lukeSays(esc(Q2.goodIntro[qa.block] || "")) + "<h3>What would a good week look like?</h3><p>Pick any that matter to you.</p>" +
       opts("good", Q2.good[qa.block] || [], true) + '<button class="qnext" data-q="next"' + ((qa.good || []).length ? "" : " disabled") + ">Next</button>";
+    else if (at === "name") body = '<span class="qkick">Your plan</span>' + lukeSays(esc(v2Recap())) +
+      "<h3>What's your first name?</h3>" +
+      '<label class="sul"><input id="qName" type="text" autocomplete="given-name" placeholder="First name" value="' + esc(qa.name || "") + '"></label>' +
+      '<button class="qnext" data-q="v2name">Next</button><button class="qlink" data-q="next">Skip</button>';
     else if (at === "email") body = '<span class="qkick">Your plan</span>' + lukeSays(esc(v2Recap())) +
       "<h3>Where should I send your plan?</h3><p>" + esc(Q2.emailSub) + "</p>" +
       '<label class="sul"><span>First name</span><input id="qName" type="text" autocomplete="given-name" value="' + esc(V2.name || "") + '"></label>' +
@@ -774,7 +776,7 @@
     else if (at === "handle") body = handleScreen();
     else {
       var mine = handlePlan(qa), list = plansOpen ? PLANS : [mine];
-      body = '<span class="qkick">Last step</span>' + lukeSays(esc(Q2.planIntro)) + "<h3>Your plan</h3><p>Priced on this week's menu and built to your goal, protein snacks included. Change anything after.</p>" + ASSURE +
+      body = '<span class="qkick">Last step</span>' + lukeSays(esc((qa.name ? qa.name + ", b" : "B") + Q2.planIntro.slice(1))) + "<h3>" + esc(qa.name ? qa.name + "'s plan" : "Your plan") + "</h3><p>Priced on this week's menu and built to your goal, protein snacks included. Change anything after.</p>" + ASSURE +
         '<div class="opts">' + list.map(function (k) {
           var P = PLAN_INFO[k], e = previewPlan(k), rr = offerShown() ? rungFor(e.total) : null, star = k === mine;
           // Luke 11/20: the full price first (the anchor), then what ordering by the deadline takes off it
@@ -817,6 +819,11 @@
     }
     if (a === "toggle") { var arr = qa[b.dataset.k] || (qa[b.dataset.k] = []), i = arr.indexOf(b.dataset.v); if (i >= 0) arr.splice(i, 1); else arr.push(b.dataset.v); return drawQuizV2(); }
     if (a === "next") { if (V2.at === "email") track("email_skip"); return v2Go(1); }
+    if (a === "v2name") {
+      qa.name = ($(R, "#qName").value || "").trim().replace(/[<>"]/g, "").slice(0, 40);
+      if (qa.name) { track("name"); SU.f.first = SU.f.first || qa.name; }
+      return v2Go(1);
+    }
     if (a === "v2email") {
       var ev = $(R, "#qEmail").value.trim();
       if (!validEmail(ev)) { $(R, "#qErr").hidden = false; $(R, "#qEmail").focus(); return; }
@@ -1258,6 +1265,7 @@
         said = said + calSwap({ meals: ws.nM, mealCal: avg, hours: ws.hours });
         qa = qaKeep;
       }
+      if (said && quizV2() && st.quiz.name) said = esc(st.quiz.name) + ", y" + said.slice(1);
       html += (said ? (quizV2() ? lukeSays(said) : '<p class="rheard">' + said + "</p>") : "") + ASSURE +
         '<p class="rwhy">Built for you: <b>' + esc(why.join(", ")) + "</b>. Tap a day to see it. Nothing is charged until you check out" +
         (DATA.deadline ? ", and you can change it until " + esc(DATA.deadline) + " at midnight." : ".") + "</p>";
@@ -1580,6 +1588,7 @@
   // Lock-in: subscribe the email to the Build Your Week list with the whole week on the profile (same public subscribe
   // call the popup uses), then tell the onsite Klaviyo script who this browser is. The lock-in holds on this device either way.
   function lockIn(email, first) {
+    if (!first && st.quiz && st.quiz.name) first = st.quiz.name;
     setOffer({ email: email, at: Date.now() });
     if (!OFFER.KLAVIYO_LOCKIN) return;
     var props;
