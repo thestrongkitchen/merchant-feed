@@ -433,6 +433,16 @@
       what: [["portion", "No worrying about portion control"], ["protein", "Always getting enough protein"], ["enjoy", "Looking forward to my meals"], ["variety", "A good mix of proteins, vegetables and starches"], ["label", "Calories and protein listed on every meal"]]
     },
     planIntro: "Based on what you told me, this is the plan I'd start you on.",
+    // Luke 11/20: they choose how much we handle; the plan card then prices that choice. Priciest first.
+    handleIntro: "I'd start most people with their weekdays covered, but it's your call.",
+    handle: [["all", "full", "I don't want to think about food at all", "Lunch and dinner, every day"],
+             ["week", "best", "I want my weekends free", "Lunch and dinner, Monday to Friday"],
+             ["some", "lunch", "I want to do some of my own cooking", "Lunch, Monday to Friday"]],
+    planWhy: {
+      full: "Lunch and dinner every day means you never have to think about food.",
+      best: "Lunch and dinner, Monday to Friday, covers the days that are hardest to get right and leaves your weekends free.",
+      lunch: "Lunch, Monday to Friday, covers the meal that usually falls apart on a workday, and your evenings stay yours to cook."
+    },
     // what to expect, by goal (Luke 11/20 on mic; the Health line is Claude's draft for him to edit)
     expect: {
       maintain: "You'll feel the difference the first week: no cooking and no deciding what's for dinner.",
@@ -459,6 +469,7 @@
     var list = (q && q.good && Q2.good[q.block]) || [];
     return list.filter(function (o) { return q.good.indexOf(o[0]) >= 0; }).map(function (o) { return o[1]; });
   }
+  function handlePlan(q) { var h = Q2.handle.filter(function (x) { return x[0] === (q && q.handle); })[0]; return h ? h[1] : "best"; }
   function lowerFirst(t) { return t.charAt(0).toLowerCase() + t.slice(1); }
   function joinList(a) { return a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1]; }
   var qa = null, qstep = 0, plansOpen = false;
@@ -538,17 +549,23 @@
         '<button class="qlink" data-q="own">' + (qa.own ? "Use my weight instead" : "I already know my numbers") + "</button>" +
         '<button class="qlink" data-q="skip">Skip, use typical numbers (' + fmt(g.dflt[0]) + " cal · " + g.dflt[1] + "g)</button>" +
         '<p class="qnote">An estimate to plan with, not medical advice.</p>';
+    } else if (v2 && qstep === 5 && !qa.handle) {
+      body = '<span class="qkick">Almost done</span>' + lukeSays(esc(Q2.handleIntro)) + "<h3>How much of your food do you want us to handle?</h3>" +
+        '<div class="opts">' + Q2.handle.map(function (h) {
+          return '<button class="opt' + (h[1] === "best" ? " best" : "") + '" data-q="handle" data-v="' + h[0] + '">' + (h[1] === "best" ? "★ " : "") + esc(h[2]) + "<small>" + esc(h[3]) + "</small></button>";
+        }).join("") + "</div>";
     } else if (qstep === 5) {
       // Luke 11/18: three plans, the middle one recommended, the top one the anchor. Prices are this week's menu, built to their goal.
-      var showPlans = v2 && !plansOpen ? ["best"] : PLANS;
+      var mine = v2 ? handlePlan(qa) : "best", showPlans = v2 && !plansOpen ? [mine] : PLANS;
       body = (v2 ? '<span class="qkick">Last step</span>' + lukeSays(esc(Q2.planIntro)) + "<h3>Your plan</h3><p>Priced on this week\'s menu and built to your goal, protein snacks included. Change anything after.</p>"
                  : '<span class="qkick">Last step</span><h3>Pick your plan</h3><p>Priced on this week\'s menu and built to your goal, protein snacks included. Change anything after.</p>') + ASSURE +
         '<div class="opts">' + showPlans.map(function (k) {
           var P = PLAN_INFO[k], e = previewPlan(k), rr = offerShown() ? rungFor(e.total) : null;
           var price = rr && rr.pct ? '<s class="pold">$' + Math.round(e.total) + "</s> $" + Math.round(e.total * (1 - rr.pct / 100)) : "$" + Math.round(e.total);
-          return '<button class="opt plan' + (k === "best" ? " best" : "") + '" data-q="plan" data-v="' + k + '">' +
-            '<span class="ptop"><span>' + (k === "best" ? "★ " : "") + esc(P.name) + '</span><span class="pprice">' + price + "</span></span>" +
-            "<small>" + esc(P.what) + " · " + e.meals + " meals" + (e.snacks ? " + " + e.snacks + " snack" + (e.snacks > 1 ? "s" : "") : "") + "</small>" + (offerShown() && rungFor(e.total) ? '<em class="prung">First order: ' + esc(rungFor(e.total).label.toLowerCase()) + "</em>" : "") + (k === "best" ? whyRec(e) : "") + "</button>";
+          var star = k === mine;
+          return '<button class="opt plan' + (star ? " best" : "") + '" data-q="plan" data-v="' + k + '">' +
+            '<span class="ptop"><span>' + (star ? "★ " : "") + esc(v2 && star ? "Your plan" : P.name) + '</span><span class="pprice">' + price + "</span></span>" +
+            "<small>" + esc(P.what) + " · " + e.meals + " meals" + (e.snacks ? " + " + e.snacks + " snack" + (e.snacks > 1 ? "s" : "") : "") + "</small>" + (offerShown() && rungFor(e.total) ? '<em class="prung">First order: ' + esc(rungFor(e.total).label.toLowerCase()) + "</em>" : "") + (k === mine ? whyRec(e, k) : "") + "</button>";
         }).join("") + "</div>" +
         (v2 ? '<p class="sulab">What to expect</p>' + lukeSays(esc([Q2.expectBlock[qa.block], Q2.expect[qa.goal], Q2.expectAsk].filter(Boolean).join(" "))) : "") +
         (v2 && !plansOpen ? '<button class="qlink" data-q="moreplans">See the other plans</button>' : "") +
@@ -590,6 +607,7 @@
   function quizClick(b) {
     var a = b.dataset.q;
     if (/^su/.test(a)) return signupClick(a, b);
+    if (a === "back" && quizV2() && qstep === 5 && qa.handle) { qa.handle = null; plansOpen = false; return drawQuiz(); }
     if (a === "back") { qstep = qstep === 8 ? (PLAN_INFO[qa.perDay] ? 5 : 7) : qstep - 1; return drawQuiz(); }
     if (a === "plan") { track("plan_" + b.dataset.v); qa.perDay = b.dataset.v; qa.days = PLAN_INFO[b.dataset.v].days; return askEmailOrBuild(); }
     if (a === "email") {
@@ -612,6 +630,7 @@
       qstep++; return drawQuiz();
     }
     if (a === "toggle") { var arr = qa[b.dataset.k] || (qa[b.dataset.k] = []), i = arr.indexOf(b.dataset.v); if (i >= 0) arr.splice(i, 1); else arr.push(b.dataset.v); return drawQuiz(); }
+    if (a === "handle") { qa.handle = b.dataset.v; plansOpen = false; track("handle_" + b.dataset.v); return drawQuiz(); }
     if (a === "moreplans") { plansOpen = true; track("plans_more"); return drawQuiz(); }
     if (a === "day") { var d = +b.dataset.v, j = qa.days.indexOf(d); if (j >= 0) qa.days.splice(j, 1); else qa.days.push(d); return drawQuiz(); }
     if (a === "next") { if (qstep === 7) return askEmailOrBuild(); qstep++; return drawQuiz(); }
@@ -671,7 +690,7 @@
   // lunch + dinner Mon-Fri covers those meals and leaves weekends free. Then one line tied to their obstacle, and the
   // discount when this plan is the one that reaches it.
   function whyRec(e) {
-    if (quizV2()) return whyRecV2(e);
+    if (quizV2()) return whyRecV2(e, arguments[1]);
     var hrs = Math.round(e.meals * 30 / 60);
     var tie = {
       hate: "That's " + e.meals + " meals you never cook.",
@@ -686,12 +705,12 @@
     return '<span class="pwhyrec"><b>Why we recommend it:</b> weekdays are when cooking falls apart. Lunch and dinner, Monday to Friday, ' +
       "covers those and leaves your weekends free. " + esc(tie) + save + "</span>";
   }
-  function whyRecV2(e) {
+  function whyRecV2(e, k) {
     var picks = goodLabels(qa).map(lowerFirst);
     var lunch = previewPlan("lunch"), r = offerShown() ? rungFor(e.total) : null, rl = offerShown() ? rungFor(lunch.total) : null;
     var save = r && r.pct && (!rl || rl.pct < r.pct) ? " It also unlocks " + r.pct + "% off your first order." : "";
     return '<span class="pwhyrec"><b>Why I recommend it:</b> ' + esc(Q2.goalWhy[qa.goal] || "") +
-      " Lunch and dinner, Monday to Friday, covers the days that are hardest to get right and leaves your weekends free." +
+      " " + esc(Q2.planWhy[k || "best"]) +
       (picks.length ? " You told me a good week means " + esc(joinList(picks)) + ". This plan does that for " + e.meals + " meals." : "") + save + "</span>";
   }
   function quizDays() { return qa.days === "wk" ? [0, 1, 2, 3, 4] : qa.days === "all" ? [0, 1, 2, 3, 4, 5, 6] : qa.days.slice().sort(); }
