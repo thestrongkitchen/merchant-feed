@@ -457,7 +457,8 @@
     emailSub: "Up to 15% off plus free delivery on your first order, depending on the plan you pick. Your week stays saved, so you can check out anytime.",
     targetSub: { lean: "Skip this if your goal isn't about the scale.", build: "Not every fitness goal is about the scale. Skip this if yours isn't." },
     // timeline (Claude's draft; the pace numbers are placeholders for Luke)
-    RATE_LOSS: 1, RATE_GAIN: 0.5,
+    RATE_LOSS: 1, RATE_GAIN: 0.5,   // no longer shown (Luke 11/20: no weight promises)
+    REST_CAL: 1205, FAT_CAL: 3500,
     tlWeek1: { lean: "Balanced meals in the fridge and nothing to figure out.", build: "Protein in every meal. Most people feel better right away.", maintain: "No cooking and no deciding what's for dinner." },
     tlDay30: "Weigh in again and see how it's going.",
     deadline: "Order by {day} and you get:",
@@ -671,7 +672,7 @@
     var s = ["goal", "block", "good"];
     if (V2.email) s.push("email");
     s.push("avoid", "weight");
-    if (qa.goal !== "maintain" && +qa.weight > 0 && !qa.own) s.push("target");
+    // (the target-weight screen is off: Luke 11/20, we don't promise a weight)
     return s.concat(["timeline", "handle", "plan"]);
   }
   function v2Go(dir) {
@@ -694,8 +695,8 @@
   function v2Timeline() {
     var rows = [["This week", Q2.tlWeek1[qa.goal]]];
     if (qa.goal !== "maintain") rows.push(["Day 30", Q2.tlDay30]);
-    var wk = v2Weeks();
-    if (wk) rows.push(["Week " + wk.weeks, "Around " + wk.t + " lbs, " + (wk.lose ? "losing" : "adding") + " about " + wk.rate + " lb a week."]);
+    var pv = previewPlan("best");
+    if (pv.mealCal) rows.splice(1, 0, ["Every meal", "About " + pv.mealCal + " calories, already portioned. The average restaurant meal is about " + fmt(Math.round(Q2.REST_CAL / 100) * 100) + " (Tufts University study)."]);
     rows.push(["Every Wednesday", Q2.expectAsk]);
     return '<ol class="tl">' + rows.map(function (r) { return "<li><b>" + esc(r[0]) + "</b><span>" + esc(r[1]) + "</span></li>"; }).join("") + "</ol>";
   }
@@ -834,6 +835,8 @@
     var out = { total: st.packs.reduce(function (t, x) { return t + info(x).sz.price; }, 0),
       meals: st.pieces.filter(function (x) { return x.day >= 0 && ITEMS[x.id].kind === "meal"; }).length,
       snacks: st.packs.filter(function (x) { return ITEMS[x.id].kind !== "meal"; }).length };
+    var mp = st.pieces.filter(function (x) { return x.day >= 0 && ITEMS[x.id].kind === "meal"; });
+    out.mealCal = mp.length ? Math.round(mp.reduce(function (t, x) { return t + info(x).sz.cal; }, 0) / mp.length) : 0;
     st = JSON.parse(keepSt); qa = JSON.parse(keepQa);
     return out;
   }
@@ -856,6 +859,12 @@
     return '<span class="pwhyrec"><b>Why we recommend it:</b> weekdays are when cooking falls apart. Lunch and dinner, Monday to Friday, ' +
       "covers those and leaves your weekends free. " + esc(tie) + save + "</span>";
   }
+  function calSwap(e) {
+    if (qa.goal === "maintain" || !e.mealCal || e.mealCal >= Q2.REST_CAL) return "";
+    var saved = Math.round(e.meals * (Q2.REST_CAL - e.mealCal) / 100) * 100;
+    return " If these " + e.meals + " meals replace takeout, that's about " + fmt(saved) + " fewer calories a week, around " +
+      (Math.round(saved / Q2.FAT_CAL * 2) / 2) + " lb of fat's worth.";
+  }
   function whyRecV2(e, k) {
     var picks = goodLabels(qa).map(lowerFirst);
     var lunch = previewPlan("lunch"), r = offerShown() ? rungFor(e.total) : null, rl = offerShown() ? rungFor(lunch.total) : null;
@@ -864,7 +873,7 @@
       " " + esc(Q2.planWhy[k || "best"]) +
       (picks.length ? " You told me a good week means " + esc(joinList(picks)) + ". This plan does that for " + e.meals + " meals." : "") +
       (qa.handle === "all" ? " " + esc(Q2.expectBlock.hate) : "") +
-      (v2Weeks() ? " Stay with it each week and you're on track for about " + v2Weeks().t + " lbs around week " + v2Weeks().weeks + "." : "") + "</span>";
+      calSwap(e) + "</span>";
   }
   function quizDays() { return qa.days === "wk" ? [0, 1, 2, 3, 4] : qa.days === "all" ? [0, 1, 2, 3, 4, 5, 6] : qa.days.slice().sort(); }
   function planCore() {
