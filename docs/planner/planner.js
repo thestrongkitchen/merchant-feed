@@ -435,9 +435,11 @@
     planIntro: "Based on what you told me, this is the plan I'd start you on.",
     // Luke 11/20: they choose how much we handle; the plan card then prices that choice. Priciest first.
     handleIntro: "I'd start most people with their weekdays covered, but it's your call.",
-    handle: [["all", "full", "I don't want to think about food at all", "Lunch and dinner, every day"],
-             ["week", "best", "I want my weekends free", "Lunch and dinner, Monday to Friday"],
-             ["some", "lunch", "I want to do some of my own cooking", "Lunch, Monday to Friday"]],
+    handleIntroHate: "Since you hate cooking, I'd have us do all of it. But it's your call.",
+    handle: [["all", "full", "I hate cooking. Do all of it for me", "14 meals + snacks: lunch and dinner, every day"],
+             ["week", "best", "Handle my weekdays", "10 meals + snacks: lunch and dinner, Monday to Friday"],
+             ["some", "lunch", "I want to cook some myself", "5 meals + snacks: lunch, Monday to Friday"]],
+    handleRec: { hate: "all", time: "week", what: "week" },
     planWhy: {
       full: "Lunch and dinner every day means you never have to think about food.",
       best: "Lunch and dinner, Monday to Friday, covers the days that are hardest to get right and leaves your weekends free.",
@@ -476,6 +478,7 @@
   function showQuiz() {
     qa = st.quiz ? JSON.parse(JSON.stringify(st.quiz)) : { goal: null, block: null, want: null, avoid: [], perDay: null, days: null, weight: "", own: false, cal: "", pro: "" };
     if (!qa.good) qa.good = [];
+    qa.handleDone = false; qa.handle = null;
     qstep = 0; plansOpen = false;
     $(R, ".in").classList.add("quizzing"); $(R, "#quiz").hidden = false; $(R, "#built").hidden = true;
     drawQuiz();
@@ -549,10 +552,11 @@
         '<button class="qlink" data-q="own">' + (qa.own ? "Use my weight instead" : "I already know my numbers") + "</button>" +
         '<button class="qlink" data-q="skip">Skip, use typical numbers (' + fmt(g.dflt[0]) + " cal · " + g.dflt[1] + "g)</button>" +
         '<p class="qnote">An estimate to plan with, not medical advice.</p>';
-    } else if (v2 && qstep === 5 && !qa.handle) {
-      body = '<span class="qkick">Almost done</span>' + lukeSays(esc(Q2.handleIntro)) + "<h3>How much of your food do you want us to handle?</h3>" +
+    } else if (v2 && (qstep === 5 || (qstep === 3 && !qa.handleDone)) && !qa.handle) {
+      var rec = Q2.handleRec[qa.block] || "week";
+      body = '<span class="qkick">Your week</span>' + lukeSays(esc(rec === "all" ? Q2.handleIntroHate : Q2.handleIntro)) + "<h3>How much of your food do you want us to handle?</h3>" +
         '<div class="opts">' + Q2.handle.map(function (h) {
-          return '<button class="opt' + (h[1] === "best" ? " best" : "") + '" data-q="handle" data-v="' + h[0] + '">' + (h[1] === "best" ? "★ " : "") + esc(h[2]) + "<small>" + esc(h[3]) + "</small></button>";
+          return '<button class="opt' + (h[0] === rec ? " best" : "") + '" data-q="handle" data-v="' + h[0] + '">' + (h[0] === rec ? "★ " : "") + esc(h[2]) + "<small>" + esc(h[3]) + "</small></button>";
         }).join("") + "</div>";
     } else if (qstep === 5) {
       // Luke 11/18: three plans, the middle one recommended, the top one the anchor. Prices are this week's menu, built to their goal.
@@ -607,7 +611,8 @@
   function quizClick(b) {
     var a = b.dataset.q;
     if (/^su/.test(a)) return signupClick(a, b);
-    if (a === "back" && quizV2() && qstep === 5 && qa.handle) { qa.handle = null; plansOpen = false; return drawQuiz(); }
+    if (a === "back" && quizV2() && qstep === 3 && qa.handle) { qa.handle = null; qa.handleDone = false; return drawQuiz(); }
+    if (a === "back" && quizV2() && qstep === 3 && !qa.handle) { qstep = 2; return drawQuiz(); }
     if (a === "back") { qstep = qstep === 8 ? (PLAN_INFO[qa.perDay] ? 5 : 7) : qstep - 1; return drawQuiz(); }
     if (a === "plan") { track("plan_" + b.dataset.v); qa.perDay = b.dataset.v; qa.days = PLAN_INFO[b.dataset.v].days; return askEmailOrBuild(); }
     if (a === "email") {
@@ -625,12 +630,12 @@
         if (v === "pick") return drawQuiz();
         return askEmailOrBuild();   // the days question is the last one on the custom path
       }
-      if (k === "block" && qa.block !== v) qa.good = [];
+      if (k === "block" && qa.block !== v) { qa.good = []; qa.handle = null; qa.handleDone = false; }
       qa[k] = v;
       qstep++; return drawQuiz();
     }
     if (a === "toggle") { var arr = qa[b.dataset.k] || (qa[b.dataset.k] = []), i = arr.indexOf(b.dataset.v); if (i >= 0) arr.splice(i, 1); else arr.push(b.dataset.v); return drawQuiz(); }
-    if (a === "handle") { qa.handle = b.dataset.v; plansOpen = false; track("handle_" + b.dataset.v); return drawQuiz(); }
+    if (a === "handle") { qa.handle = b.dataset.v; qa.handleDone = true; plansOpen = false; track("handle_" + b.dataset.v); return drawQuiz(); }
     if (a === "moreplans") { plansOpen = true; track("plans_more"); return drawQuiz(); }
     if (a === "day") { var d = +b.dataset.v, j = qa.days.indexOf(d); if (j >= 0) qa.days.splice(j, 1); else qa.days.push(d); return drawQuiz(); }
     if (a === "next") { if (qstep === 7) return askEmailOrBuild(); qstep++; return drawQuiz(); }
