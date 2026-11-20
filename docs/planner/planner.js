@@ -418,7 +418,7 @@
     goalNote: { lean: "Eat better, feel better, move better", build: "More protein and balanced calories for training and recovery", maintain: "Delicious, convenient food without the hassle" },
     // Luke 11/20: the question names their goal (Time saved wording is Claude's)
     blockQ: { lean: "What gets in the way of eating healthy?", build: "What gets in the way of eating enough protein?", maintain: "What gets in the way of eating well on busy days?" },
-    block: [["time", "I don't have the time", "Long days, always something to do"], ["what", "I don't know what to eat", "Nutrition info is confusing"]],
+    block: [["time", "I don't have the time", "Long days, always something to do"], ["what", "I don't know what to eat", "Nutrition info is confusing"], ["cook", "I don't know how to cook the right foods", "I know what I should eat, just not how to make it taste good"]],
     affirm: {
       lean: "Health doesn't have to be complicated. It mostly comes down to balanced calories, enough protein and fairly consistent mealtimes. Add good sleep and exercise and it's even more powerful.",
       build: "Most fitness goals come down to how many calories you eat and how much protein you get, paired with consistent exercise and strength training.",
@@ -427,11 +427,13 @@
     goodIntro: {
       hate: "You hate cooking, so a good week is one where you don't do any of the hard parts.",
       time: "You're short on time, so a good week is one where food never slows you down.",
-      what: "You're not sure what to eat, so a good week is one where it's all figured out for you."
+      what: "You're not sure what to eat, so a good week is one where it's all figured out for you.",
+      cook: "Cooking healthy food well is a skill. A good week is one where it's already made, and made right."
     },
     good: {
       hate: [["shop", "No grocery shopping"], ["prep", "No prepping"], ["cook", "No cooking"], ["portion", "No portioning"], ["clean", "No cleanup"]],
       time: [["stop", "Never stopping to figure out lunch or dinner"], ["rush", "No rushed grocery trips"], ["uber", "No Uber Eats"], ["fast", "No money wasted on calorie-loaded fast food"], ["eve", "Evenings back for what you'd rather do"]],
+      cook: [["taste", "Healthy meals that actually taste good"], ["recipes", "No recipes to figure out"], ["waste", "No groceries wasted on meals that didn't work out"], ["protein", "Proteins cooked right, every time"], ["portion", "Learning what a good portion looks like"]],
       what: [["portion", "No worrying about portion control"], ["protein", "Always getting enough protein"], ["enjoy", "Looking forward to my meals"], ["variety", "A good mix of proteins, vegetables and starches"], ["label", "Calories and protein listed on every meal"]]
     },
     planIntro: "Based on what you told me, this is the plan I'd start you on.",
@@ -1205,6 +1207,7 @@
     var first = {
       hate: "You said you hate cooking. This week is <b>" + nM + " meals you never cook</b>: no shopping, no pans, no dishes.",
       what: "You said you never know what to eat. This week <b>" + nM + " meals are already picked</b>, " + dishes + " different dishes built around your goal.",
+      cook: "You said you don't know how to cook the right foods. This week is <b>" + nM + " meals made by our chefs</b>, " + dishes + " different dishes built around your goal.",
       time:"You said there's no time to cook. This week is <b>" + nM + " meals cooked for you</b>, about " + hours + " hours of cooking and dishes you get back.",
       out: "You said you end up eating out or grabbing whatever. This week puts <b>" + nM + " ready meals in your fridge</b>, about $" + mealCost.toFixed(2) + " each.",
       bored: "You said the meals get boring. This week has <b>" + dishes + " different dishes</b>, and the menu changes every week.",
@@ -1376,6 +1379,7 @@
       var lead = {
         hate: w.nM + " meals you never cook",
         what: w.nM + " meals already picked for you",
+        cook: w.nM + " meals made by our chefs",
         time: "about " + w.hours + " hours of cooking back",
         out: "about $" + w.mealCost.toFixed(2) + " a meal",
         bored: w.dishes + " different dishes",
