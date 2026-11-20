@@ -416,6 +416,8 @@
     ON: true,   // LIVE 11/20 (Luke: "push this live")
     PHOTO: BASE_URL + "../img/luke-portrait.jpg",
     goalNote: { lean: "Eat better, feel better, move better", build: "More protein and balanced calories for training and recovery", maintain: "Delicious, convenient food without the hassle" },
+    // Luke 11/20: the question names their goal (Time saved wording is Claude's)
+    blockQ: { lean: "What gets in the way of eating healthy?", build: "What gets in the way of eating enough protein?", maintain: "What gets in the way of eating well on busy days?" },
     block: [["time", "I don't have the time", "Long days, always something to do"], ["what", "I don't know what to eat", "Nutrition info is confusing"]],
     affirm: {
       lean: "Health doesn't have to be complicated. It mostly comes down to balanced calories, enough protein and fairly consistent mealtimes. Add good sleep and exercise and it's even more powerful.",
@@ -732,7 +734,7 @@
     var body = "", at = V2.at, g = GOALS[qa.goal];
     if (at === "goal") body = '<span class="qkick">30 seconds</span><h3>What are you working toward?</h3><p>We\'ll build a week of our meals around it.</p>' +
       opts("goal", Object.keys(GOALS).map(function (k) { return [k, GOALS[k].label, Q2.goalNote[k]]; }));
-    else if (at === "block") body = lukeSays(esc(Q2.affirm[qa.goal] || "")) + "<h3>What gets in the way the most?</h3>" + opts("block", Q2.block);
+    else if (at === "block") body = lukeSays(esc(Q2.affirm[qa.goal] || "")) + "<h3>" + esc(Q2.blockQ[qa.goal] || "What gets in the way the most?") + "</h3>" + opts("block", Q2.block);
     else if (at === "good") body = lukeSays(esc(Q2.goodIntro[qa.block] || "")) + "<h3>What would a good week look like?</h3><p>Pick any that matter to you.</p>" +
       opts("good", Q2.good[qa.block] || [], true) + '<button class="qnext" data-q="next"' + ((qa.good || []).length ? "" : " disabled") + ">Next</button>";
     else if (at === "email") body = '<span class="qkick">Your savings</span>' + lukeSays(esc(Q2.emailLine)) +
