@@ -234,12 +234,16 @@
   var btn, pill, host, R, sheet;
 
   // ------------------------------------------------------------------ menu page
+  function whenReady(fn) { if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn); else fn(); }
   function boot() {
     // Both downloads start together (Luke 11/19 "seems slow to load": they used to run one after the other)
     var statusP = fetch("/cart/status", { headers: { Accept: "application/json" } }).then(function (r) { return r.json(); });
     statusP.catch(function () { /* reported through the chain below */ });
     loadData().then(function (d) {
       DATA = d;
+      return new Promise(function (ok) { whenReady(ok); });
+    }).then(function () {
+      var d = DATA;
       try { start(); } catch (e) { note("Build Your Week preview hit an error: " + (e && e.message ? e.message : e)); throw e; }
       note(btn && btn.parentNode ? "Build Your Week preview: ready. The gold button is in the All / Meals / Sides / Snacks row." : "Build Your Week preview: loaded, but couldn't find the menu's filter row to put the button in.", btn && btn.parentNode ? 5000 : 0);
       // Never plan against a stale menu: the site reports its current menu week (checked alongside, not before)
@@ -1955,5 +1959,5 @@
   if (onMenu && /[?&]tskopen=1/.test(location.search)) {
     if (document.body) loadingPanel(true); else document.addEventListener("DOMContentLoaded", function () { loadingPanel(true); });
   }
-  if (onMenu) boot(); else successPage();
+  if (onMenu) boot(); else whenReady(successPage);
 })();
