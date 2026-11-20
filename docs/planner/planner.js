@@ -773,6 +773,12 @@
       (off ? '<span class="prow"><span>✓ ' + rr.pct + "% off your first order</span><span>−$" + off.toFixed(2) + "</span></span>" : "") +
       '<span class="prow ptot"><span>Your first order</span><span>$' + (total - off).toFixed(2) + "</span></span></span>";
   }
+  // the bottom bar's one-line version (a phone has no room for the box there)
+  function savingsLine(total, rr) {
+    var off = rr.pct ? Math.round(total * rr.pct) / 100 : 0;
+    return '<div class="member offer"><b>' + esc(v2Deadline().replace(/ and you get:$/, "")) + ":</b> free delivery" + (off ? " + " + rr.pct + "% off" : "") +
+      " · first order <b>$" + (total - off).toFixed(2) + "</b></div>";
+  }
   function v2Deadline() {
     var d = new Date(), add = (3 - d.getDay() + 7) % 7;   // 3 = Wednesday; on a Wednesday it's tonight
     d.setDate(d.getDate() + add);
@@ -983,7 +989,7 @@
   CSS += "\n.tl{list-style:none;margin:0;padding:0 0 0 14px;border-left:3px solid var(--gold);display:flex;flex-direction:column;gap:10px}\n.tl li{display:flex;flex-direction:column;gap:2px;font-size:14.5px;line-height:1.4;color:var(--fg)}\n.tl b{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--green-ink)}\n.pcta{display:block;margin-top:10px;text-align:center;background:var(--green);color:#fff;border-radius:10px;padding:11px;font-weight:800;font-size:15px}\n";   // v2 timeline
   CSS += "\n.pstack{display:flex;flex-direction:column;gap:4px;width:100%;margin-top:10px;padding:10px 12px;background:#fff;border:1px dashed var(--gold);border-radius:10px;font-size:14px;font-weight:600}\n.pdead{font-size:12.5px;font-weight:800;color:var(--forest)}\n.prow{display:flex;justify-content:space-between;gap:10px;color:var(--green-ink)}\n.ptot{margin-top:4px;padding-top:6px;border-top:1px solid var(--line);font-size:16px;font-weight:800;color:var(--fg)}\n";   // v2 price stack
   CSS += "\n.prom{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}\n.prom li{font-size:14.5px;line-height:1.4;padding-left:20px;position:relative}\n.prom li:before{content:'\\2713';position:absolute;left:0;color:var(--green-ink);font-weight:800}\n";   // v2 promises
-  CSS += "\n#sum .pstack{max-width:420px}\n";   // v2 bar savings box
+  CSS += "\n.luke p b{display:inline;font-size:inherit;color:inherit;margin:0}\n";   // v2 bar savings box
   function mountSheet() {
     host = el("div"); host.id = "tsk-planner";
     document.body.appendChild(host);
@@ -1371,7 +1377,7 @@
       : "<b>" + st.packs.length + "</b> item" + (st.packs.length > 1 ? "s" : "") + " · <b>$" + total.toFixed(2) + "</b>";
     $(R, "#sum").innerHTML = st.packs.length
       ? head + why +
-        (newbie && v2 ? (r ? savingsStack(total, r) : ladder.split('<div class="member offer mstack">')[0]) + (r && nx ? '<div class="member offer"><span>Add $' + (nx.min - total).toFixed(2) + " for " + moreFor(nx) + "</span></div>" : "")
+        (newbie && v2 ? (r ? savingsLine(total, r) : ladder.split('<div class="member offer mstack">')[0]) + (r && nx ? '<div class="member offer"><span>Add $' + (nx.min - total).toFixed(2) + " for " + moreFor(nx) + "</span></div>" : "")
           : newbie ? ladder
           : '<div class="member">With a <b>Basic membership</b>: <b>$' + (total - save5).toFixed(2) + "</b> <span>(save $" + save5.toFixed(2) + " this week · first month free · add it at checkout)</span></div>")
       : "Nothing picked yet";
