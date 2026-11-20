@@ -567,7 +567,7 @@
   }
   // meals a day from us on day d (0 = Monday): the recommended plan is 2 on weekdays, 1 on the weekend
   var ASSURE = '<div class="assure"><span>✓ Keeps 7 days</span><span>✓ Hot in 3 minutes</span><span>✓ No subscription</span></div>';
-  var PLANS = ["lunch", "best", "full"];
+  var PLANS = ["full", "best", "lunch"];   // Luke 11/19: priciest on top, so it gets more affordable as they read down
   var PLAN_INFO = {
     lunch: { name: "Lunch plan", what: "Lunch Mon–Fri", days: "wk", code: "l" },
     best: { name: "Recommended", what: "Lunch + dinner Mon–Fri", days: "wk", code: "b" },
