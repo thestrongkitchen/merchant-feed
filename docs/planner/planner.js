@@ -434,14 +434,14 @@
     },
     planIntro: "Based on what you told me, this is the plan I'd start you on.",
     // Luke 11/20: they choose how much we handle; the plan card then prices that choice. Priciest first.
-    handleIntro: "The more of your week we handle, the faster you get there. I'd start most people with their weekdays covered, but it's your call.",
+    handleIntro: "The more of your week we handle, the faster you get there. Most people pick the middle one, but it's your call.",
     pace: { all: "Fastest", week: "Steady", some: "A start" },
     covers: { all: "Every lunch and dinner, all week", week: "Lunch and dinner Monday to Friday. Weekends are yours", some: "Lunch on workdays" },
     handleIntroHate: "Since you hate cooking, I'd have us do all of it. But it's your call.",
     // Luke 11/20 wording; priciest first, as on the plan screen
-    handle: [["all", "full", "I don't want to do any cooking", "14 meals + snacks: lunch and dinner, every day"],
-             ["week", "best", "I need weekdays covered and I'll handle weekends", "10 meals + snacks: lunch and dinner, Monday to Friday"],
-             ["some", "lunch", "I just need one meal a day during the week", "5 meals + snacks: lunch, Monday to Friday"]],
+    handle: [["all", "full", "I need to see results as fast as possible", "14 meals + snacks: lunch and dinner, every day"],
+             ["week", "best", "As fast as possible, without overhauling my life", "10 meals + snacks: lunch and dinner, Monday to Friday"],
+             ["some", "lunch", "I'll take my time. I'm not in a rush", "5 meals + snacks: lunch, Monday to Friday"]],
     handleRec: {},
     planWhy: {
       full: "Lunch and dinner every day means you never have to think about food.",
@@ -492,11 +492,11 @@
   function handlePlan(q) { var h = Q2.handle.filter(function (x) { return x[0] === (q && q.handle); })[0]; return h ? h[1] : "best"; }
   function handleScreen() {
       var rec = Q2.handleRec[qa.block] || "week";
-      return '<span class="qkick">Your week</span>' + lukeSays(esc(rec === "all" ? Q2.handleIntroHate : Q2.handleIntro)) + "<h3>How much of your food do you want us to handle?</h3>" +
+      return '<span class="qkick">Your pace</span>' + lukeSays(esc(Q2.handleIntro)) + "<h3>How fast do you want to see results?</h3>" +
         '<div class="opts">' + Q2.handle.map(function (h) {
           var e = previewPlan(h[1]);
           return '<button class="opt' + (h[0] === rec ? " best" : "") + '" data-q="handle" data-v="' + h[0] + '">' + (h[0] === rec ? "★ " : "") + esc(h[2]) +
-            "<small>" + esc(Q2.covers[h[0]]) + '</small><em class="ppace"><b>' + esc(Q2.pace[h[0]]) + ":</b> " + esc(paceLine(e)) + "</em></button>";
+            "<small>We handle: " + esc(lowerFirst(Q2.covers[h[0]])) + '</small><em class="ppace">' + esc(paceLine(e).charAt(0).toUpperCase() + paceLine(e).slice(1)) + "</em></button>";
         }).join("") + "</div>";
   }
   function paceLine(e) {
