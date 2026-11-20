@@ -433,6 +433,14 @@
       what: [["portion", "No worrying about portion control"], ["protein", "Always getting enough protein"], ["enjoy", "Looking forward to my meals"], ["variety", "A good mix of proteins, vegetables and starches"], ["label", "Calories and protein listed on every meal"]]
     },
     planIntro: "Based on what you told me, this is the plan I'd start you on.",
+    // what to expect, by goal (Luke 11/20 on mic; the Health line is Claude's draft for him to edit)
+    expect: {
+      maintain: "You'll feel the difference the first week: no cooking and no deciding what's for dinner.",
+      build: "Most people feel better right away from the extra protein, and see a little progress each week that keeps adding up. Give yourself 30 days before you weigh in again.",
+      lean: "The first week takes the guesswork out. Stick with it and the small, steady changes add up. Give yourself 30 days before you judge the results."
+    },
+    expectBlock: { hate: "You never have to cook again if you don't want to. And as you eat our meals, you'll get a feel for what a healthy portion looks like." },
+    expectAsk: "The one thing I need from you: order by Wednesday night each week.",
     emailLine: "I'll hold this week for you. When you're ready to check out, it only takes a minute to set up your account.",
     goalWhy: {
       lean: "You want to eat better, feel better and move better. That comes from balanced meals, eaten consistently.",
@@ -542,6 +550,7 @@
             '<span class="ptop"><span>' + (k === "best" ? "★ " : "") + esc(P.name) + '</span><span class="pprice">' + price + "</span></span>" +
             "<small>" + esc(P.what) + " · " + e.meals + " meals" + (e.snacks ? " + " + e.snacks + " snack" + (e.snacks > 1 ? "s" : "") : "") + "</small>" + (offerShown() && rungFor(e.total) ? '<em class="prung">First order: ' + esc(rungFor(e.total).label.toLowerCase()) + "</em>" : "") + (k === "best" ? whyRec(e) : "") + "</button>";
         }).join("") + "</div>" +
+        (v2 ? '<p class="sulab">What to expect</p>' + lukeSays(esc([Q2.expectBlock[qa.block], Q2.expect[qa.goal], Q2.expectAsk].filter(Boolean).join(" "))) : "") +
         (v2 && !plansOpen ? '<button class="qlink" data-q="moreplans">See the other plans</button>' : "") +
         '<button class="qlink" data-q="custom">Let me choose meals a day and days</button>';
     } else if (qstep === 8) {
