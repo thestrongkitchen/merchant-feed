@@ -434,7 +434,7 @@
     },
     planIntro: "Based on what you told me, this is the plan I'd start you on.",
     // Luke 11/20: they choose how much we handle; the plan card then prices that choice. Priciest first.
-    handleIntro: "The more of your week we handle, the faster you get there. Most people pick the middle one, but it's your call.",
+    handleIntro: "The more of your week we handle, the faster you get there. I'd start most people in the middle, but it's your call.",
     pace: { all: "Fastest", week: "Steady", some: "A start" },
     covers: { all: "Every lunch and dinner, all week", week: "Lunch and dinner Monday to Friday. Weekends are yours", some: "Lunch on workdays" },
     handleIntroHate: "Since you hate cooking, I'd have us do all of it. But it's your call.",
