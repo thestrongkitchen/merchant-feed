@@ -745,7 +745,7 @@
       '<p class="qerr" id="qErr" hidden>Add a weight, or skip this one.</p>' +
       '<button class="qnext" data-q="v2t">Next</button><button class="qlink" data-q="v2tskip">Skip this one</button>';
     else if (at === "timeline") body = '<span class="qkick">What to expect</span>' + lukeSays(esc(Q2.promiseIntro) + '<ul class="prom">' +
-        (Q2.promise[qa.goal] || []).map(function (x) { return "<li>" + esc(x.replace("{hrs}", v2Hours(previewPlan("best").meals))) + "</li>"; }).join("") + "</ul>") + v2Timeline() +
+        (Q2.promise[qa.goal] || []).map(function (x) { return "<li>" + esc(x.replace("{hrs}", previewPlan("best").hours)) + "</li>"; }).join("") + "</ul>") + v2Timeline() +
       '<button class="qnext" data-q="next">See my options</button>';
     else if (at === "handle") body = handleScreen();
     else {
@@ -844,6 +844,7 @@
       meals: st.pieces.filter(function (x) { return x.day >= 0 && ITEMS[x.id].kind === "meal"; }).length,
       snacks: st.packs.filter(function (x) { return ITEMS[x.id].kind !== "meal"; }).length };
     var mp = st.pieces.filter(function (x) { return x.day >= 0 && ITEMS[x.id].kind === "meal"; });
+    try { out.hours = weekStats().hours; } catch (e) { out.hours = Math.round(out.meals * 30 / 60); }   // same count the built week shows
     out.mealCal = mp.length ? Math.round(mp.reduce(function (t, x) { return t + info(x).sz.cal; }, 0) / mp.length) : 0;
     st = JSON.parse(keepSt); qa = JSON.parse(keepQa);
     return out;
@@ -869,7 +870,7 @@
   }
   function v2Hours(meals) { return Math.round(meals * Q2.MIN_PER_MEAL / 60); }
   function calSwap(e) {
-    if (qa.goal === "maintain") return " That's about " + v2Hours(e.meals) + " hours of shopping, prepping, cooking and cleanup back each week.";
+    if (qa.goal === "maintain") return " That's about " + e.hours + " hours of shopping, prepping, cooking and cleanup back each week.";
     if (qa.goal === "maintain" || !e.mealCal || e.mealCal >= Q2.REST_CAL) return "";
     var saved = Math.round(e.meals * (Q2.REST_CAL - e.mealCal) / 100) * 100;
     return " If these " + e.meals + " meals replace takeout, that's about " + fmt(saved) + " fewer calories a week, around " +
