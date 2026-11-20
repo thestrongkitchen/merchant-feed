@@ -459,7 +459,7 @@
     // timeline (Claude's draft; the pace numbers are placeholders for Luke)
     RATE_LOSS: 1, RATE_GAIN: 0.5,   // no longer shown (Luke 11/20: no weight promises)
     REST_CAL: 1205, FAT_CAL: 3500,
-    MIN_PER_MEAL: 30,   // shopping, prep, cooking, packing and cleanup per home-cooked meal (same figure the built week uses)
+    MIN_PER_MEAL: 40,   // Luke 11/20: shopping, prep, cooking, packing and cleanup per home-cooked meal (BLS: ~1 hr/day prep+cleanup for people who cook)
     promiseIntro: "Here's what I can promise you:",
     promise: {
       lean: ["Enough protein in every meal", "Controlled calories, already portioned", "Fiber, plus a mix of vegetables, starches and proteins", "A wide variety of flavors, week to week"],
@@ -754,11 +754,7 @@
         '<div class="opts">' + list.map(function (k) {
           var P = PLAN_INFO[k], e = previewPlan(k), rr = offerShown() ? rungFor(e.total) : null, star = k === mine;
           // Luke 11/20: the full price first (the anchor), then what ordering by the deadline takes off it
-          var off = rr && rr.pct ? Math.round(e.total * rr.pct) / 100 : 0;
-          var stack = rr ? '<span class="pstack"><span class="pdead">' + esc(v2Deadline()) + "</span>" +
-            '<span class="prow"><span>✓ Free delivery</span><span>Free</span></span>' +
-            (off ? '<span class="prow"><span>✓ ' + rr.pct + "% off your first order</span><span>−$" + off.toFixed(2) + "</span></span>" : "") +
-            '<span class="prow ptot"><span>Your first order</span><span>$' + (e.total - off).toFixed(2) + "</span></span></span>" : "";
+          var stack = savingsStack(e.total, rr);
           return '<button class="opt plan' + (star ? " best" : "") + '" data-q="plan" data-v="' + k + '">' +
             '<span class="ptop"><span>' + (star ? "★ Your plan" : esc(P.name)) + '</span><span class="pprice">$' + e.total.toFixed(2) + "</span></span>" +
             "<small>" + esc(P.what) + " · " + e.meals + " meals" + (e.snacks ? " + " + e.snacks + " snack" + (e.snacks > 1 ? "s" : "") : "") + "</small>" +
@@ -767,6 +763,14 @@
         (plansOpen ? "" : '<button class="qlink" data-q="moreplans">See the other plans</button>');
     }
     q.innerHTML = head + back + body;
+  }
+  function savingsStack(total, rr) {
+    if (!rr) return "";
+    var off = rr.pct ? Math.round(total * rr.pct) / 100 : 0;
+    return '<span class="pstack"><span class="pdead">' + esc(v2Deadline()) + "</span>" +
+      '<span class="prow"><span>✓ Free delivery</span><span>Free</span></span>' +
+      (off ? '<span class="prow"><span>✓ ' + rr.pct + "% off your first order</span><span>−$" + off.toFixed(2) + "</span></span>" : "") +
+      '<span class="prow ptot"><span>Your first order</span><span>$' + (total - off).toFixed(2) + "</span></span></span>";
   }
   function v2Deadline() {
     var d = new Date(), add = (3 - d.getDay() + 7) % 7;   // 3 = Wednesday; on a Wednesday it's tonight
@@ -844,7 +848,7 @@
       meals: st.pieces.filter(function (x) { return x.day >= 0 && ITEMS[x.id].kind === "meal"; }).length,
       snacks: st.packs.filter(function (x) { return ITEMS[x.id].kind !== "meal"; }).length };
     var mp = st.pieces.filter(function (x) { return x.day >= 0 && ITEMS[x.id].kind === "meal"; });
-    try { out.hours = weekStats().hours; } catch (e) { out.hours = Math.round(out.meals * 30 / 60); }   // same count the built week shows
+    try { out.hours = weekStats().hours; } catch (e) { out.hours = Math.round(out.meals * Q2.MIN_PER_MEAL / 60); }   // same count the built week shows
     out.mealCal = mp.length ? Math.round(mp.reduce(function (t, x) { return t + info(x).sz.cal; }, 0) / mp.length) : 0;
     st = JSON.parse(keepSt); qa = JSON.parse(keepQa);
     return out;
@@ -854,7 +858,7 @@
   // discount when this plan is the one that reaches it.
   function whyRec(e) {
     if (quizV2()) return whyRecV2(e, arguments[1]);
-    var hrs = Math.round(e.meals * 30 / 60);
+    var hrs = Math.round(e.meals * Q2.MIN_PER_MEAL / 60);
     var tie = {
       hate: "That's " + e.meals + " meals you never cook.",
       time: "That's about " + hrs + " hours of cooking and dishes back.",
@@ -978,6 +982,7 @@
   CSS += "\n.tl{list-style:none;margin:0;padding:0 0 0 14px;border-left:3px solid var(--gold);display:flex;flex-direction:column;gap:10px}\n.tl li{display:flex;flex-direction:column;gap:2px;font-size:14.5px;line-height:1.4;color:var(--fg)}\n.tl b{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--green-ink)}\n.pcta{display:block;margin-top:10px;text-align:center;background:var(--green);color:#fff;border-radius:10px;padding:11px;font-weight:800;font-size:15px}\n";   // v2 timeline
   CSS += "\n.pstack{display:flex;flex-direction:column;gap:4px;width:100%;margin-top:10px;padding:10px 12px;background:#fff;border:1px dashed var(--gold);border-radius:10px;font-size:14px;font-weight:600}\n.pdead{font-size:12.5px;font-weight:800;color:var(--forest)}\n.prow{display:flex;justify-content:space-between;gap:10px;color:var(--green-ink)}\n.ptot{margin-top:4px;padding-top:6px;border-top:1px solid var(--line);font-size:16px;font-weight:800;color:var(--fg)}\n";   // v2 price stack
   CSS += "\n.prom{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}\n.prom li{font-size:14.5px;line-height:1.4;padding-left:20px;position:relative}\n.prom li:before{content:'\\2713';position:absolute;left:0;color:var(--green-ink);font-weight:800}\n";   // v2 promises
+  CSS += "\n#sum .pstack{max-width:420px}\n";   // v2 bar savings box
   function mountSheet() {
     host = el("div"); host.id = "tsk-planner";
     document.body.appendChild(host);
@@ -1166,7 +1171,7 @@
     return {
       nM: nM,
       snackPacks: st.packs.filter(function (k) { return ITEMS[k.id].kind !== "meal"; }).length,
-      hours: Math.round((nM * 30 + snacks * 5) / 60),
+      hours: Math.round((nM * Q2.MIN_PER_MEAL + snacks * 5) / 60),
       mealCost: nM ? meals.reduce(function (t, p) { return t + info(p).sz.price; }, 0) / nM : 0,
       dishes: meals.reduce(function (u, p) { if (u.indexOf(p.id) < 0) u.push(p.id); return u; }, []).length,
       proDay: days.length ? Math.round(days.reduce(function (t, T) { return t + T.pro; }, 0) / days.length) : 0
@@ -1210,7 +1215,14 @@
     if (justBuilt && st.quiz) {
       var said = heardYou();
       var why = [GOALS[st.quiz.goal].label.toLowerCase()].concat(st.quiz.avoid.map(function (a) { return a + " free"; }));
-      html += (said ? '<p class="rheard">' + said + "</p>" : "") + ASSURE +
+      if (said && quizV2()) {
+        var ws = weekStats(), mp = st.pieces.filter(function (x) { return x.day >= 0 && ITEMS[x.id].kind === "meal"; });
+        var avg = mp.length ? Math.round(mp.reduce(function (t, x) { return t + info(x).sz.cal; }, 0) / mp.length) : 0;
+        var qaKeep = qa; qa = st.quiz;
+        said = said + calSwap({ meals: ws.nM, mealCal: avg, hours: ws.hours });
+        qa = qaKeep;
+      }
+      html += (said ? (quizV2() ? lukeSays(said) : '<p class="rheard">' + said + "</p>") : "") + ASSURE +
         '<p class="rwhy">Built for you: <b>' + esc(why.join(", ")) + "</b>. Tap a day to see it. Nothing is charged until you check out" +
         (DATA.deadline ? ", and you can change it until " + esc(DATA.deadline) + " at midnight." : ".") + "</p>";
     }
@@ -1351,13 +1363,15 @@
       why = '<div class="pwhy">' + lead.charAt(0).toUpperCase() + lead.slice(1) + "</div>";
     }
     var paid = newbie && r && r.pct ? total * (1 - r.pct / 100) : null;
-    var priceHtml = paid !== null ? '<s class="pold">$' + total.toFixed(2) + "</s> <b>$" + paid.toFixed(2) + "</b>" : "<b>$" + total.toFixed(2) + "</b>";
+    var v2 = quizV2();
+    var priceHtml = paid !== null && !v2 ? '<s class="pold">$' + total.toFixed(2) + "</s> <b>$" + paid.toFixed(2) + "</b>" : "<b>$" + total.toFixed(2) + "</b>";
     var head = st.quiz && w.nM
       ? priceHtml + " for your week · " + w.nM + " meal" + (w.nM > 1 ? "s" : "") + (w.snackPacks ? " + " + w.snackPacks + " snack" + (w.snackPacks > 1 ? "s" : "") : "")
       : "<b>" + st.packs.length + "</b> item" + (st.packs.length > 1 ? "s" : "") + " · <b>$" + total.toFixed(2) + "</b>";
     $(R, "#sum").innerHTML = st.packs.length
       ? head + why +
-        (newbie ? ladder
+        (newbie && v2 ? (r ? savingsStack(total, r) : ladder.split('<div class="member offer mstack">')[0]) + (r && nx ? '<div class="member offer"><span>Add $' + (nx.min - total).toFixed(2) + " for " + moreFor(nx) + "</span></div>" : "")
+          : newbie ? ladder
           : '<div class="member">With a <b>Basic membership</b>: <b>$' + (total - save5).toFixed(2) + "</b> <span>(save $" + save5.toFixed(2) + " this week · first month free · add it at checkout)</span></div>")
       : "Nothing picked yet";
     $(R, "#lockin").hidden = !(newbie && r && !locked && st.packs.length);
@@ -1505,7 +1519,7 @@
   function goalsSummary() {
     if (!st.quiz) return "";
     var q = st.quiz, d = q.days === "wk" ? "Mon–Fri" : q.days === "all" ? "every day" : q.days.slice().sort().map(function (i) { return DAYS[i].short; }).join(", ");
-    if (PLAN_INFO[q.perDay]) return [GOALS[q.goal].label, PLAN_INFO[q.perDay].name + ": " + PLAN_INFO[q.perDay].what].concat(q.avoid.map(function (a) { return a + " free"; })).join(" · ");
+    if (PLAN_INFO[q.perDay]) return [GOALS[q.goal].label, (quizV2() ? "Your plan" : PLAN_INFO[q.perDay].name) + ": " + PLAN_INFO[q.perDay].what].concat(q.avoid.map(function (a) { return a + " free"; })).join(" · ");
     return [GOALS[q.goal].label, q.perDay + " meal" + (q.perDay > 1 ? "s" : "") + " a day", d].concat(q.avoid.map(function (a) { return a + " free"; })).join(" · ");
   }
   function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
