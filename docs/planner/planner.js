@@ -243,6 +243,7 @@
       // Never plan against a stale menu: the site reports its current menu week
       return statusP.then(function (s) {
         if (String(s.current_week) !== String(d.week)) {
+          loadingPanel(false);
           console.info("[TSK planner] menu week", s.current_week, "≠ data week", d.week, "— planner hidden until the data catches up");
           note("Build Your Week preview: the menu just changed and the planner's data hasn't caught up yet (site week " + s.current_week + ", data week " + d.week + "). Try again in 30 minutes.");
           return;
@@ -250,7 +251,7 @@
         try { start(); } catch (e) { note("Build Your Week preview hit an error: " + (e && e.message ? e.message : e)); throw e; }
         note(btn && btn.parentNode ? "Build Your Week preview: ready. The gold button is in the All / Meals / Sides / Snacks row." : "Build Your Week preview: loaded, but couldn't find the menu's filter row to put the button in.", btn && btn.parentNode ? 5000 : 0);
       });
-    }).catch(function (e) { console.warn("[TSK planner] not started:", e); note("Build Your Week preview couldn't load: " + (e && e.message ? e.message : e)); });
+    }).catch(function (e) { loadingPanel(false); console.warn("[TSK planner] not started:", e); note("Build Your Week preview couldn't load: " + (e && e.message ? e.message : e)); });
   }
 
   function start() {
@@ -1540,6 +1541,7 @@
 
   var opened = false;
   function open() {
+    loadingPanel(false);
     if (!opened) { opened = true; track("open"); }
     checkKnown().then(function () { if (R && st.packs) render(); });
     lastFocus = document.activeElement; sheet.hidden = false; $(R, ".scrim").hidden = false; document.documentElement.style.overflow = "hidden";
@@ -1931,5 +1933,23 @@
     return wrap;
   }
 
+  function loadingPanel(on) {
+    var d = document.getElementById("tskp-loading");
+    if (!on) { if (d) d.parentNode.removeChild(d); return; }
+    if (d || !document.body) return;
+    d = document.createElement("div"); d.id = "tskp-loading";
+    d.setAttribute("role", "status");
+    d.style.cssText = "position:fixed;inset:0;z-index:2147483001;background:rgba(29,35,20,.55);display:flex;align-items:flex-end;justify-content:center;font-family:'Plus Jakarta Sans',Arial,sans-serif";
+    d.innerHTML = '<div style="width:100%;max-width:560px;background:#f6f6f1;border-radius:18px 18px 0 0;padding:28px 22px 40px;box-shadow:0 -8px 30px rgba(0,0,0,.25)">' +
+      '<div style="font-weight:800;font-size:22px;color:#2e3a18;margin-bottom:6px">Building your week…</div>' +
+      '<div style="font-size:14px;color:#646b58;margin-bottom:16px">Loading this week\'s menu.</div>' +
+      '<div style="height:6px;border-radius:3px;background:#e9ebe0;overflow:hidden"><div id="tskp-ld-bar" style="height:100%;width:30%;background:#73933c;border-radius:3px;transition:width 2.5s ease-out"></div></div></div>';
+    document.body.appendChild(d);
+    setTimeout(function () { var b = document.getElementById("tskp-ld-bar"); if (b) b.style.width = "85%"; }, 30);
+    setTimeout(function () { loadingPanel(false); }, 12000);   // never leave it up if something fails
+  }
+  if (onMenu && /[?&]tskopen=1/.test(location.search)) {
+    if (document.body) loadingPanel(true); else document.addEventListener("DOMContentLoaded", function () { loadingPanel(true); });
+  }
   if (onMenu) boot(); else successPage();
 })();
