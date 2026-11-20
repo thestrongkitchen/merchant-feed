@@ -400,10 +400,13 @@
   }
 
   // ------------------------------------------------------------------ the quiz: a few taps, then a week built around the answers
+  // Luke 11/19: the three goals read Health / Fitness / Time saved. The keys stay lean / build / maintain so saved plans
+  // and ?tskplan links keep working; only the words and the order changed. Health = Fat Loss sizes, most protein per
+  // calorie; Fitness = biggest sizes, most protein; Time saved = Performance sizes, menu order.
   var GOALS = {
-    lean: { label: "Lean out", note: "Lose fat, keep muscle", calPerLb: 12, proPerLb: 0.9, size: ["Fat Loss"], dflt: [1800, 140] },
-    maintain: { label: "Stay where I am", note: "Eat well without thinking about it", calPerLb: 14, proPerLb: 0.8, size: ["Performance", "Fat Loss"], dflt: [2200, 150] },
-    build: { label: "Build muscle", note: "More protein, more fuel", calPerLb: 16, proPerLb: 1.0, size: ["Protein Plus", "Performance", "Fat Loss"], dflt: [2700, 180] }
+    lean: { label: "Health", note: "Eat better, feel better, lose a little", calPerLb: 12, proPerLb: 0.9, size: ["Fat Loss"], dflt: [1800, 140] },
+    build: { label: "Fitness", note: "More protein for training and recovery", calPerLb: 16, proPerLb: 1.0, size: ["Protein Plus", "Performance", "Fat Loss"], dflt: [2700, 180] },
+    maintain: { label: "Time saved", note: "Good food without the cooking", calPerLb: 14, proPerLb: 0.8, size: ["Performance", "Fat Loss"], dflt: [2200, 150] }
   };
   var qa = null, qstep = 0;
   function showQuiz() {
@@ -455,11 +458,13 @@
     if (qstep === 0) body = '<span class="qkick">30 seconds</span><h3>What are you working toward?</h3><p>We\'ll build a week of our meals around it.</p>' +
       opts("goal", Object.keys(GOALS).map(function (k) { return [k, GOALS[k].label, GOALS[k].note]; }));
     else if (qstep === 1) body = "<h3>What gets in the way most?</h3><p>Pick the biggest one.</p>" +
-      opts("block", [["time", "No time to cook", "Long days, and cooking eats the evening"], ["out", "Eating out or grabbing whatever", "Takeout when nothing's ready"],
-        ["bored", "Same boring meals", "Chicken and rice again"], ["protein", "Hard to hit my protein", "Not sure I'm eating enough"]]);
+      // Luke 11/19: three obstacles. Old answers (out / bored / protein) still read back for saved plans.
+      opts("block", [["hate", "I hate cooking", "Shopping, cooking, dishes: none of it"], ["time", "I don't have the time", "Long days, and cooking eats the evening"],
+        ["what", "I don't know what to eat", "Every night it's the same question"]]);
     else if (qstep === 2) body = "<h3>What would a good week look like?</h3>" +
-      opts("want", [["time", "My evenings back", "No cooking, no dishes"], ["protein", "Hitting my protein", "Without tracking every bite"],
-        ["progress", "Seeing progress", "On the scale or in the mirror"], ["easy", "Never wondering what's for dinner", "It's already in the fridge"]]);
+      // Luke 11/19: three answers. Old ones (time / protein / progress) still read back for saved plans.
+      opts("want", [["easy", "Never wondering what to eat", "It's already in the fridge"], ["health", "Improved health", "Real food, portioned right"],
+        ["recovery", "Better workout recovery", "Protein in every meal"]]);
     else if (qstep === 3) body = "<h3>Anything you avoid?</h3><p>Pick any that apply.</p>" +
       opts("avoid", [["gluten", "Gluten"], ["dairy", "Dairy"]], true) +
       '<button class="qnext" data-q="next">' + (qa.avoid.length ? "Next" : "No restrictions, next") + "</button>";
@@ -871,12 +876,16 @@
     var w = weekStats(), nM = w.nM; if (!nM) return "";
     var hours = w.hours, mealCost = w.mealCost, dishes = w.dishes, proDay = w.proDay;
     var first = {
-      time: "You said there's no time to cook. This week is <b>" + nM + " meals cooked for you</b>, about " + hours + " hours of cooking and dishes you get back.",
+      hate: "You said you hate cooking. This week is <b>" + nM + " meals you never cook</b>: no shopping, no pans, no dishes.",
+      what: "You said you never know what to eat. This week <b>" + nM + " meals are already picked</b>, " + dishes + " different dishes built around your goal.",
+      time:"You said there's no time to cook. This week is <b>" + nM + " meals cooked for you</b>, about " + hours + " hours of cooking and dishes you get back.",
       out: "You said you end up eating out or grabbing whatever. This week puts <b>" + nM + " ready meals in your fridge</b>, about $" + mealCost.toFixed(2) + " each.",
       bored: "You said the meals get boring. This week has <b>" + dishes + " different dishes</b>, and the menu changes every week.",
       protein: "You said protein is hard to hit. This week gives you about <b>" + proDay + "g a day from us</b>, already counted."
     }[q.block] || "";
-    var second = q.want === q.block ? "" : {
+    var second = q.want === q.block || (q.want === "easy" && q.block === "what") ? "" : {
+      health: " Every meal is real food, portioned and counted, so eating well isn't a guess.",
+      recovery: " About " + proDay + "g of protein a day from us, so you recover between workouts.",
       time: " No cooking, so your evenings are yours.",
       protein: " Your protein is planned before the week starts.",
       progress: " Each week is built around your goal, so you're not starting over every Monday.",
@@ -1029,6 +1038,8 @@
     var w = weekStats(), why = "";
     if (st.quiz && w.nM) {
       var lead = {
+        hate: w.nM + " meals you never cook",
+        what: w.nM + " meals already picked for you",
         time: "about " + w.hours + " hours of cooking back",
         out: "about $" + w.mealCost.toFixed(2) + " a meal",
         bored: w.dishes + " different dishes",
