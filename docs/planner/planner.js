@@ -436,9 +436,10 @@
     // Luke 11/20: they choose how much we handle; the plan card then prices that choice. Priciest first.
     handleIntro: "I'd start most people with their weekdays covered, but it's your call.",
     handleIntroHate: "Since you hate cooking, I'd have us do all of it. But it's your call.",
-    handle: [["all", "full", "I hate cooking. Do all of it for me", "14 meals + snacks: lunch and dinner, every day"],
-             ["week", "best", "Handle my weekdays", "10 meals + snacks: lunch and dinner, Monday to Friday"],
-             ["some", "lunch", "I want to cook some myself", "5 meals + snacks: lunch, Monday to Friday"]],
+    // Luke 11/20 wording; priciest first, as on the plan screen
+    handle: [["all", "full", "I don't want to do any cooking", "14 meals + snacks: lunch and dinner, every day"],
+             ["week", "best", "I need weekdays covered and I'll handle weekends", "10 meals + snacks: lunch and dinner, Monday to Friday"],
+             ["some", "lunch", "I just need one meal a day during the week", "5 meals + snacks: lunch, Monday to Friday"]],
     handleRec: {},
     planWhy: {
       full: "Lunch and dinner every day means you never have to think about food.",
