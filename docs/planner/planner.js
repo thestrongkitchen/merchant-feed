@@ -434,7 +434,9 @@
     },
     planIntro: "Based on what you told me, this is the plan I'd start you on.",
     // Luke 11/20: they choose how much we handle; the plan card then prices that choice. Priciest first.
-    handleIntro: "I'd start most people with their weekdays covered, but it's your call.",
+    handleIntro: "The more of your week we handle, the faster you get there. I'd start most people with their weekdays covered, but it's your call.",
+    pace: { all: "Fastest", week: "Steady", some: "A start" },
+    covers: { all: "Every lunch and dinner, all week", week: "Lunch and dinner Monday to Friday. Weekends are yours", some: "Lunch on workdays" },
     handleIntroHate: "Since you hate cooking, I'd have us do all of it. But it's your call.",
     // Luke 11/20 wording; priciest first, as on the plan screen
     handle: [["all", "full", "I don't want to do any cooking", "14 meals + snacks: lunch and dinner, every day"],
@@ -492,8 +494,16 @@
       var rec = Q2.handleRec[qa.block] || "week";
       return '<span class="qkick">Your week</span>' + lukeSays(esc(rec === "all" ? Q2.handleIntroHate : Q2.handleIntro)) + "<h3>How much of your food do you want us to handle?</h3>" +
         '<div class="opts">' + Q2.handle.map(function (h) {
-          return '<button class="opt' + (h[0] === rec ? " best" : "") + '" data-q="handle" data-v="' + h[0] + '">' + (h[0] === rec ? "★ " : "") + esc(h[2]) + "<small>" + esc(h[3]) + "</small></button>";
+          var e = previewPlan(h[1]);
+          return '<button class="opt' + (h[0] === rec ? " best" : "") + '" data-q="handle" data-v="' + h[0] + '">' + (h[0] === rec ? "★ " : "") + esc(h[2]) +
+            "<small>" + esc(Q2.covers[h[0]]) + '</small><em class="ppace"><b>' + esc(Q2.pace[h[0]]) + ":</b> " + esc(paceLine(e)) + "</em></button>";
         }).join("") + "</div>";
+  }
+  function paceLine(e) {
+    if (qa.goal === "build") return "about " + fmt(Math.round(e.proWeek / 10) * 10) + "g of protein a week from us";
+    if (qa.goal === "maintain") return "about " + e.hours + " hours back a week";
+    var saved = Math.round(e.meals * (Q2.REST_CAL - e.mealCal) / 100) * 100;
+    return "about " + fmt(saved) + " fewer calories a week than takeout";
   }
   function lowerFirst(t) { return t.charAt(0).toLowerCase() + t.slice(1); }
   function joinList(a) { return a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1]; }
@@ -856,6 +866,7 @@
       snacks: st.packs.filter(function (x) { return ITEMS[x.id].kind !== "meal"; }).length };
     var mp = st.pieces.filter(function (x) { return x.day >= 0 && ITEMS[x.id].kind === "meal"; });
     try { out.hours = weekStats().hours; } catch (e) { out.hours = Math.round(out.meals * Q2.MIN_PER_MEAL / 60); }   // same count the built week shows
+    out.proWeek = st.pieces.filter(function (x) { return x.day >= 0; }).reduce(function (t, x) { return t + info(x).sz.protein; }, 0);
     out.mealCal = mp.length ? Math.round(mp.reduce(function (t, x) { return t + info(x).sz.cal; }, 0) / mp.length) : 0;
     st = JSON.parse(keepSt); qa = JSON.parse(keepQa);
     return out;
@@ -990,6 +1001,7 @@
   CSS += "\n.pstack{display:flex;flex-direction:column;gap:4px;width:100%;margin-top:10px;padding:10px 12px;background:#fff;border:1px dashed var(--gold);border-radius:10px;font-size:14px;font-weight:600}\n.pdead{font-size:12.5px;font-weight:800;color:var(--forest)}\n.prow{display:flex;justify-content:space-between;gap:10px;color:var(--green-ink)}\n.ptot{margin-top:4px;padding-top:6px;border-top:1px solid var(--line);font-size:16px;font-weight:800;color:var(--fg)}\n";   // v2 price stack
   CSS += "\n.prom{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}\n.prom li{font-size:14.5px;line-height:1.4;padding-left:20px;position:relative}\n.prom li:before{content:'\\2713';position:absolute;left:0;color:var(--green-ink);font-weight:800}\n";   // v2 promises
   CSS += "\n.luke p b{display:inline;font-size:inherit;color:inherit;margin:0}\n";   // v2 bar savings box
+  CSS += "\n.ppace{font-style:normal;font-size:13.5px;font-weight:600;color:var(--green-ink);margin-top:4px}\n.ppace b{color:var(--forest)}\n";   // pace lines
   function mountSheet() {
     host = el("div"); host.id = "tsk-planner";
     document.body.appendChild(host);
