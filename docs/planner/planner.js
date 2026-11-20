@@ -1610,7 +1610,7 @@
     var total = st.packs.reduce(function (t, k) { return t + info(k).sz.price; }, 0), r = rungFor(total);
     if (offerShown() && r && !getOffer() && !skipOffer && !(signupOn() && !signedIn() && !SU.skip)) {   // sign-up asks for the email itself
       var li = $(R, "#liEmail"), v = li.value.trim();
-      if (validEmail(v)) { lockIn(v); render(); }
+      if (validEmail(v)) { track("email_end"); lockIn(v); render(); }   // Luke 11/20: measure the end-of-quiz email ask
       else {
         msg("Add your email to lock in " + r.label.toLowerCase() + " on your first order.", true);
         var box = $(R, "#choice"); box.hidden = false; box.innerHTML = "";
