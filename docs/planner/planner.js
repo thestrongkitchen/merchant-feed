@@ -413,7 +413,7 @@
   // questions, a pick-any "good week" list per obstacle, only the recommended plan up front. Test link only until he
   // edits the text: ?tskquiz=2 turns it on in one browser, ?tskquiz=1 back to the live version. Q2.ON = true = everyone.
   var Q2 = {
-    ON: false,
+    ON: true,   // LIVE 11/20 (Luke: "push this live")
     PHOTO: BASE_URL + "../img/luke-portrait.jpg",
     goalNote: { lean: "Eat better, feel better, move better", build: "More protein and balanced calories for training and recovery", maintain: "Delicious, convenient food without the hassle" },
     block: [["time", "I don't have the time", "Long days, always something to do"], ["what", "I don't know what to eat", "Nutrition info is confusing"]],
