@@ -240,17 +240,17 @@
     statusP.catch(function () { /* reported through the chain below */ });
     loadData().then(function (d) {
       DATA = d;
-      // Never plan against a stale menu: the site reports its current menu week
-      return statusP.then(function (s) {
-        if (String(s.current_week) !== String(d.week)) {
-          loadingPanel(false);
-          console.info("[TSK planner] menu week", s.current_week, "≠ data week", d.week, "— planner hidden until the data catches up");
-          note("Build Your Week preview: the menu just changed and the planner's data hasn't caught up yet (site week " + s.current_week + ", data week " + d.week + "). Try again in 30 minutes.");
-          return;
-        }
-        try { start(); } catch (e) { note("Build Your Week preview hit an error: " + (e && e.message ? e.message : e)); throw e; }
-        note(btn && btn.parentNode ? "Build Your Week preview: ready. The gold button is in the All / Meals / Sides / Snacks row." : "Build Your Week preview: loaded, but couldn't find the menu's filter row to put the button in.", btn && btn.parentNode ? 5000 : 0);
-      });
+      try { start(); } catch (e) { note("Build Your Week preview hit an error: " + (e && e.message ? e.message : e)); throw e; }
+      note(btn && btn.parentNode ? "Build Your Week preview: ready. The gold button is in the All / Meals / Sides / Snacks row." : "Build Your Week preview: loaded, but couldn't find the menu's filter row to put the button in.", btn && btn.parentNode ? 5000 : 0);
+      // Never plan against a stale menu: the site reports its current menu week (checked alongside, not before)
+      statusP.then(function (s) {
+        if (String(s.current_week) === String(d.week)) return;
+        console.info("[TSK planner] menu week", s.current_week, "≠ data week", d.week, "— planner hidden until the data catches up");
+        try { close(); } catch (e) { /* fine */ }
+        var host = document.getElementById("tsk-planner"); if (host && host.parentNode) host.parentNode.removeChild(host);
+        [btn, pill].forEach(function (x) { if (x && x.parentNode) x.parentNode.removeChild(x); });
+        note("Build Your Week preview: the menu just changed and the planner's data hasn't caught up yet (site week " + s.current_week + ", data week " + d.week + "). Try again in 30 minutes.");
+      }, function () { /* no status: keep going */ });
     }).catch(function (e) { loadingPanel(false); console.warn("[TSK planner] not started:", e); note("Build Your Week preview couldn't load: " + (e && e.message ? e.message : e)); });
   }
 
