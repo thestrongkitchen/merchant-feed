@@ -416,6 +416,10 @@
   var Q2 = {
     ON: true,   // LIVE 11/20 (Luke: "push this live")
     PHOTO: BASE_URL + "../img/luke-portrait.jpg",
+    // one photo per screen (all the van portrait until Luke sends more): add files to docs/img and name them here,
+    // e.g. goal: "luke-wave.jpg", block: "luke-listening.jpg", expect: "luke-kitchen.jpg", plan: "luke-bag.jpg"
+    photos: {},
+    welcome: "Hey, I'm Luke. I own The Strong Kitchen. Answer a few quick questions and I'll build a week of our meals around you.",
     goalNote: { lean: "Eat better, feel better, move better", build: "More protein and balanced calories for training and recovery", maintain: "Delicious, convenient food without the hassle" },
     // Luke 11/20: the question names their goal (Time saved wording is Claude's)
     blockQ: { lean: "What gets in the way of eating healthy?", build: "What gets in the way of eating enough protein?", maintain: "What gets in the way of eating well on busy days?" },
@@ -492,7 +496,7 @@
   })();
   function quizV2() { if (Q2.ON) return true; try { return localStorage.getItem("tskpQuiz2") === "1"; } catch (e) { return false; } }
   // Luke "talking": his photo beside his words
-  function lukeSays(html) { return '<div class="luke"><img src="' + Q2.PHOTO + '" alt="Luke" width="44" height="44"><div><b>Luke, owner &amp; chef</b><p>' + html + "</p></div></div>"; }
+  function lukeSays(html) { var ph = Q2.photos[V2.at]; ph = ph ? BASE_URL + "../img/" + ph : Q2.PHOTO; return '<div class="luke"><img src="' + ph + '" alt="Luke" width="44" height="44"><div><b>Luke, owner &amp; chef</b><p>' + html + "</p></div></div>"; }
   function goodLabels(q) {
     var list = (q && q.good && Q2.good[q.block]) || [];
     return list.filter(function (o) { return q.good.indexOf(o[0]) >= 0; }).map(function (o) { return o[1]; });
@@ -741,7 +745,7 @@
       }).join("") + "</div>";
     }
     var body = "", at = V2.at, g = GOALS[qa.goal];
-    if (at === "goal") body = '<span class="qkick">30 seconds</span><h3>What are you working toward?</h3><p>We\'ll build a week of our meals around it.</p>' +
+    if (at === "goal") body = lukeSays(esc(Q2.welcome)) + "<h3>What are you working toward?</h3>" +
       opts("goal", Object.keys(GOALS).map(function (k) { return [k, GOALS[k].label, Q2.goalNote[k]]; }));
     else if (at === "block") body = lukeSays(esc(Q2.affirm[qa.goal] || "")) + "<h3>" + esc(Q2.blockQ[qa.goal] || "What gets in the way the most?") + "</h3>" + opts("block", Q2.block);
     else if (at === "good") body = lukeSays(esc(Q2.goodIntro[qa.block] || "")) + "<h3>What would a good week look like?</h3><p>Pick any that matter to you.</p>" +
