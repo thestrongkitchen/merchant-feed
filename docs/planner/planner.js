@@ -348,6 +348,8 @@
       planner_code: goalsCode(), planner_summary: goalsSummary(), planner_saved: new Date().toISOString().slice(0, 10),
       planner_cart_link: cartLink(offerShown()),
       planner_heard: heardYou().replace(/<[^>]+>/g, ""),
+      planner_goal: st.quiz && GOALS[st.quiz.goal] ? GOALS[st.quiz.goal].label : "", planner_pain: (st.quiz && st.quiz.block) || "",
+      planner_goal_line: (st.quiz && Q2.emailGoal[st.quiz.goal]) || "", planner_pain_line: (st.quiz && Q2.emailPain[st.quiz.block]) || "",
       planner_week_line: w.nM + " meals" + (w.snackPacks ? " + " + w.snackPacks + " snacks" : "") + " · about " + w.hours + " hours of cooking back",
       planner_total: total.toFixed(2),
       planner_paid: r && r.pct ? (total * (1 - r.pct / 100)).toFixed(2) : "",
@@ -491,6 +493,10 @@
     // Luke 11/21: sum up their biggest pain point; never read their ticked choices back word for word
     recapPain: { time: "long days leave [no time] or energy to cook", what: "figuring out [what to eat] is the hard part", bored: "[the same few meals] get old fast" },
     recapFix: { time: "I'll put together a plan that takes cooking off your plate.", what: "I'll put together a plan that takes the guesswork out.", bored: "I'll put together a plan with something new to look forward to every week." },
+    // Luke 11/21: the follow-up emails say back what they told us. Saved on their Klaviyo profile as planner_goal_line /
+    // planner_pain_line; the email templates drop them in ("Your health is important to you, so...").
+    emailGoal: { lean: "Your health is important to you", build: "Hitting your calories and protein matters to you", maintain: "Your time matters to you" },
+    emailPain: { time: "You said time is what gets in the way", what: "You said knowing what to eat is the hard part", bored: "You said eating the same few meals gets old" },
     whyPain: { time: "That's {n} meals off your plate.", what: "That's {n} meals already balanced and portioned for you.", bored: "That's {n} meals from a menu that changes every week." },
     recapBlock: { time: "time is the problem", what: "knowing what to eat is the hard part", bored: "you get bored eating the same things" },
     targetSub: { lean: "Skip this if your goal isn't about the scale.", build: "Not every fitness goal is about the scale. Skip this if yours isn't." },
