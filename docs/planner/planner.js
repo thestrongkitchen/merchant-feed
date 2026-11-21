@@ -41,7 +41,7 @@
     ],
     CODES_READY: true,         // Luke 11/18: MYWEEK (620) / BESTPLAN (621) / NOCOOKING (622) created in the admin; SKDELIVER (623) = orders 2-4
     KLAVIYO_LOCKIN: true,      // Luke 11/18 "go ahead with step 3" (only preview browsers see the planner until launch)
-    LIST: "WAWZxw",            // "Build Your Week - signups": triggers draft flow UaFzkB; NOT the old code list Tg6vZf
+    LIST: "T3RtUY",            // Luke 11/21: "Build Your Week - signups v4" -> live flow VnF9GG. Old list WAWZxw (flow UaFzkB) takes no new people
     COMPANY: "RHx7TH",
     DAYS_VALID: 21
   };
