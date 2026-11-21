@@ -452,13 +452,21 @@
     // Luke 11/21: one real Google review on the plan screen that matches what they told us. Word for word from Google
     // (trimmed only, never reworded). Pulled 11/21 from the Google Maps listing.
     reviews: {
+      // Luke 11/21 "Yes, use them": one per goal x pain point, word for word from Google (trimmed only). Pulled 11/21.
+      jordan: { who: "Jordan F.", text: "Getting home so late from work everyday it made it so difficult to cook a good nutritious meal and this takes care of that!" },
+      george: { who: "George L.", text: "The Strong Kitchen has been instrumental in helping me lose weight over the last few months." },
+      xan: { who: "Xan M.", text: "I\u2019ve tried other meal services before and felt that I was sacrificing flavor for healthy meals. That is NOT the case with TSK." },
       rena: { who: "J. Rena", text: "As someone balancing two kids, a full work schedule and regular training, Strong Kitchen has been a huge support. It\u2019s made recovery and consistency so much easier without adding more to my day." },
+      rachel: { who: "Rachel W.", text: "It\u2019s been a game-changer for helping me stick to my macro goals. Every meal is thoughtfully prepared with macros in mind, making it so much easier to stay on track." },
+      sarah: { who: "Sarah P.", text: "The variety of their menu alone has kept me a customer for many years. I love that the food is not only delicious but keeps me on track for my fitness and performance goals as well." },
       victoriaTime: { who: "Victoria W.", text: "They are an absolute game changer for busy professionals who don\u2019t want to compromise on quality or nutrition, but don\u2019t have the time to cook!" },
-      victoriaMenu: { who: "Victoria W.", text: "We love that the menu is constantly changing and always delicious. The macros support our fitness goals too." },
-      rebecca: { who: "Rebecca", text: "It has made it so much easier for me to achieve and maintain my goals without having to do the guessing work of counting calories and protein." },
+      rob: { who: "Rob", text: "It\u2019s a great balance of convenience and nutrition, and it\u2019s helped take the stress out of planning and cooking during the week." },
       edward: { who: "Edward G.", text: "The variety keeps things interesting, and it\u2019s clear they use quality ingredients and put a lot of care into every meal." }
     },
-    reviewFor: { time: { build: "rena", dflt: "victoriaTime" }, what: { dflt: "rebecca" }, bored: { build: "victoriaMenu", dflt: "edward" } },
+    // pain point -> goal (lean = Health, build = Fitness, maintain = Time saved)
+    reviewFor: { time: { lean: "jordan", build: "rena", maintain: "victoriaTime", dflt: "victoriaTime" },
+                 what: { lean: "george", build: "rachel", maintain: "rob", dflt: "rob" },
+                 bored: { lean: "xan", build: "sarah", maintain: "edward", dflt: "edward" } },
     planIntro: "Based on what you told me, this is the plan I'd start you on.",
     // Luke 11/20: they choose how much we handle; the plan card then prices that choice. Priciest first.
     handleIntro: "The more of your week we handle, the faster you get there. Here's the choice I recommend.",
