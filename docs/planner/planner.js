@@ -1539,6 +1539,24 @@
       if (a.dataset.a === "addto") { var np = takePiece(+a.dataset.id, +a.dataset.opt, st.view); addOpen = false; render(); popAt(st.view, np); }
     });
     $(R, ".scrim").addEventListener("click", close);
+    // Luke 11/21: on phones the keyboard covered the name and weight boxes. Fit the panel to the space above the
+    // keyboard (visualViewport), and scroll the box being typed in to a third of the way down that space.
+    var fitKb = function () {
+      var vv = window.visualViewport, sh = $(R, ".sheet"); if (!vv || !sh) return;
+      var kb = Math.round(window.innerHeight - vv.height - vv.offsetTop);
+      if (kb > 80) {
+        sh.style.bottom = kb + "px"; sh.style.maxHeight = (vv.height - 8) + "px";
+        if (sh.classList.contains("tall")) sh.style.height = (vv.height - 8) + "px";
+        var a = R.activeElement;
+        if (a && /^(INPUT|TEXTAREA)$/.test(a.tagName)) {
+          var off = a.getBoundingClientRect().top - sh.getBoundingClientRect().top;
+          sh.scrollTop += off - sh.clientHeight / 3;
+        }
+      } else { sh.style.bottom = ""; sh.style.maxHeight = ""; sh.style.height = ""; }
+    };
+    if (window.visualViewport) { window.visualViewport.addEventListener("resize", fitKb); window.visualViewport.addEventListener("scroll", fitKb); }
+    R.addEventListener("focusin", function (e) { if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) { setTimeout(fitKb, 50); setTimeout(fitKb, 350); } });
+    R.addEventListener("focusout", function () { setTimeout(fitKb, 350); });
     ["gCal", "gPro"].forEach(function (id) {
       $(R, "#" + id).addEventListener("input", function (e) { var v = Math.max(0, +e.target.value || 0); if (id === "gCal") st.cal = v; else st.pro = v; render(); });
     });
