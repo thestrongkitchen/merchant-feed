@@ -1376,7 +1376,8 @@
     IN.classList.toggle("dayopen", simple && dayOpen);
     sheet.classList.toggle("tall", simple && dayOpen);
     $(R, "#sheetTitle").textContent = simple ? "Your week" : "Build your week";
-    $(R, "#gline").innerHTML = st.quiz ? "<b>" + esc(goalsSummary()) + "</b> · " + fmt(st.cal) + " cal · " + st.pro + 'g protein a day · <button data-a="quiz">Edit</button>' : "";
+    // Luke 11/21: no calorie/protein numbers here; they read as what the meals provide, not the customer's daily goal
+    $(R, "#gline").innerHTML = st.quiz ? "<b>" + esc(goalsSummary().replace("Your plan: ", "")) + '</b> · <button data-a="quiz">Edit answers</button>' : "";
     $(R, "#modebar").hidden = !(st.quiz && st.packs.length);
     $(R, ".modebtn").textContent = simple ? "Add or change food" : "← Back to my week";
     var gc = $(R, "#gCal"), gp = $(R, "#gPro");
@@ -1484,6 +1485,8 @@
         '<div class="gsave">' + (r ? "Free delivery" + (off ? " + " + r.pct + "% off" : "") + " \u00b7 order by " + esc(by) : "Add $" + (nx.min - total).toFixed(2) + " for free delivery") + "</div>";
     }
     $(R, "#lockin").hidden = !(newbie && r && !locked && st.packs.length && (!gbar || askEmail));
+    // Luke 11/21: the button says what happens next. Savings to lock in = the email step comes first.
+    $(R, ".tocart").textContent = newbie && r && !locked && !skipOffer ? "Claim my savings" : "Check out";
     $(R, ".tocart").disabled = !st.packs.length || busy;
     pill.style.display = st.pieces.length ? "block" : "none";
     pill.innerHTML = '<span style="display:block;font-size:11px;font-weight:800;letter-spacing:.1em;color:#d9b46f">MY WEEK</span>' + planned + " day" + (planned === 1 ? "" : "s") + " planned" + (left.length ? " · " + left.length + " to place" : "");
