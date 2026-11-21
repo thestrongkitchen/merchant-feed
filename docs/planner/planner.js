@@ -1295,7 +1295,7 @@
     if (justBuilt && st.quiz) {
       var said = heardYou();
       var why = [GOALS[st.quiz.goal].label.toLowerCase()].concat(st.quiz.avoid.map(function (a) { return a + " free"; }));
-      if (said && quizV2()) {
+      if (said && quizV2() && !(st.quiz.goal === "maintain" && st.quiz.block === "time")) {   // that line already gives the hours
         var ws = weekStats(), mp = st.pieces.filter(function (x) { return x.day >= 0 && ITEMS[x.id].kind === "meal"; });
         var avg = mp.length ? Math.round(mp.reduce(function (t, x) { return t + info(x).sz.cal; }, 0) / mp.length) : 0;
         var qaKeep = qa; qa = st.quiz;
