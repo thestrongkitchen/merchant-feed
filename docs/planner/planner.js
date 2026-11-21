@@ -449,7 +449,9 @@
     // Luke 11/20: they choose how much we handle; the plan card then prices that choice. Priciest first.
     handleIntro: "The more of your week we handle, the faster you get there. Here's the choice I recommend.",
     pace: { all: "Fastest", week: "Steady", some: "A start" },
-    covers: { all: "Every lunch and dinner, all week, plus protein snacks", week: "Lunch and dinner Monday to Friday, plus protein snacks", some: "Lunch or dinner on workdays" },
+    covers: { all: "Every lunch and dinner, all week", week: "Lunch and dinner Monday to Friday", some: "Lunch or dinner on workdays" },
+    // Luke 11/21: snacks are only added where the meals fall short on protein, so only say so when the plan has them
+    snackNote: ", plus protein snacks",
     handleIntroHate: "Since you hate cooking, I'd have us do all of it. But it's your call.",
     // Luke 11/20 wording; priciest first, as on the plan screen
     handle: [["all", "full", "I need to see results as fast as possible", "14 meals + snacks: lunch and dinner, every day"],
@@ -516,7 +518,7 @@
         '<div class="opts">' + Q2.handle.map(function (h) {
           var e = previewPlan(h[1]);
           return '<button class="opt' + (h[0] === rec ? " best" : "") + '" data-q="handle" data-v="' + h[0] + '">' + (h[0] === rec ? "★ " : "") + esc(h[2]) +
-            "<small>We handle: " + esc(lowerFirst(Q2.covers[h[0]])) + '</small><em class="ppace">' + esc(paceLine(e).charAt(0).toUpperCase() + paceLine(e).slice(1)) + "</em></button>";
+            "<small>We handle: " + esc(lowerFirst(Q2.covers[h[0]]) + (e.snacks ? Q2.snackNote : "")) + '</small><em class="ppace">' + esc(paceLine(e).charAt(0).toUpperCase() + paceLine(e).slice(1)) + "</em></button>";
         }).join("") + "</div>";
   }
   function paceLine(e) {
@@ -788,7 +790,7 @@
     else if (at === "handle") body = handleScreen();
     else {
       var mine = handlePlan(qa), list = plansOpen ? PLANS : [mine];
-      body = '<span class="qkick">Last step</span>' + lukeSays(esc((qa.name ? qa.name + ", b" : "B") + Q2.planIntro.slice(1))) + "<h3>" + esc(qa.name ? qa.name + "'s plan" : "Your plan") + "</h3><p>Priced on this week's menu and built to your goal, protein snacks included. Change anything after.</p>" + ASSURE +
+      body = '<span class="qkick">Last step</span>' + lukeSays(esc((qa.name ? qa.name + ", b" : "B") + Q2.planIntro.slice(1))) + "<h3>" + esc(qa.name ? qa.name + "'s plan" : "Your plan") + "</h3><p>Priced on this week's menu and built to your goal" + (previewPlan(mine).snacks ? ", protein snacks included" : "") + ". Change anything after.</p>" + ASSURE +
         '<div class="opts">' + list.map(function (k) {
           var P = PLAN_INFO[k], e = previewPlan(k), rr = offerShown() ? rungFor(e.total) : null, star = k === mine;
           // Luke 11/20: the full price first (the anchor), then what ordering by the deadline takes off it
