@@ -124,10 +124,10 @@
             (known ? "Plan your week in 30 seconds" : "New here? Let us build your first week") + "</div>" +
           '<div style="font-size:1rem;line-height:1.5;margin:0 0 14px">' +
             (known ? "Tell us your goal and we'll build a week of this menu around it. Change anything, then check out."
-                   : "Answer a few quick taps and we'll build a week of our meals around your goal, priced, with your first-order savings counted: <b>free delivery from $75, 10% off from $125, 15% off from $175</b>.") + "</div>" +
+                   : "Answer a few quick questions and we'll build your perfect week of meals, priced, with your first-order savings counted: <b>free delivery from $75, 10% off from $125, 15% off from $175</b>.") + "</div>" +
           '<a href="' + url + '" style="display:block;text-align:center;padding:16px 20px;font-size:1.15rem;font-weight:800;color:#fff;background:#73933c;border-radius:10px;text-decoration:none">Build my week \u2192</a>' +
           '<div style="font-size:.85rem;line-height:1.4;color:#646b58;margin:8px 0 0;text-align:center">' +
-            (known ? "Keeps 7 days · Hot in 3 minutes · No subscription" : "Plus your first month of membership free · No subscription") + "</div>";
+            (known ? "Always fresh · Calorie controlled · Delicious" : "Plus your first month of membership free · No subscription") + "</div>";
       };
       draw(knownVisitor);
       content.insertBefore(card, content.firstChild);
