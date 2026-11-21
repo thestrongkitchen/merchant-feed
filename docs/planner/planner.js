@@ -74,7 +74,11 @@
     if (!k || typeof k.isIdentified !== "function") return Promise.resolve(knownVisitor);
     return Promise.resolve(k.isIdentified()).then(function (v) { knownVisitor = !!v; return knownVisitor; }, function () { return knownVisitor; });
   }
-  function offerShown() { return !!getOffer() || !knownVisitor; }
+  // Luke 11/21 (recap chat): a re-order link (?tskcart without tsko=1) means a current customer. Never show first-order
+  // savings to them, even before Klaviyo/sign-in confirms who they are or if this browser has a stored offer. Remembered on
+  // this device (tskpCustomer) so a refresh doesn't bring the savings back; a prospect link (tsko=1) clears it.
+  var viaReorder = (function () { try { return localStorage.getItem("tskpCustomer") === "1"; } catch (e) { return false; } })();
+  function offerShown() { if (viaReorder) return false; return !!getOffer() || !knownVisitor; }
   var path = location.pathname.replace(/\/+$/, "") || "/";
   // TSKP_PAGE lets the review playground run the planner off the live site
   var onMenu = window.TSKP_PAGE === "menu" || /^\/menus(\/|$)/.test(path);
@@ -314,6 +318,8 @@
     track(wantsOffer ? "link_prospect" : "link_reorder");
     dropParams(["tskcart", "tsko"]);
     if (wantsOffer && !getOffer() && !knownVisitor) setOffer({ email: "", via: "link", at: Date.now() });
+    viaReorder = !wantsOffer; if (viaReorder) knownVisitor = true;
+    try { if (viaReorder) localStorage.setItem("tskpCustomer", "1"); else localStorage.removeItem("tskpCustomer"); } catch (e) { /* fine */ }
     var list = m[2].split("_").map(function (x) { return x.split("-").map(Number); }).filter(function (x) { return x.length === 3 && x[2] > 0 && x[2] < 50; });
     var ok = String(m[1]) === String(DATA.week) && list.length && list.every(function (x) { return ITEMS[x[0]] && ITEMS[x[0]].sizes.some(function (z) { return z.option_id === x[1]; }); });
     if (!ok) {
