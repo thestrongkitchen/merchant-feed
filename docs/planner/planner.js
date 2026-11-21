@@ -454,12 +454,12 @@
     // Luke 11/20 wording; priciest first, as on the plan screen
     handle: [["all", "full", "I need to see results as fast as possible", "14 meals + snacks: lunch and dinner, every day"],
              ["week", "best", "Noticeable results that leave room for my own food", "10 meals + snacks: lunch and dinner, Monday to Friday"],
-             ["some", "lunch", "I'll take my time. Just need my hardest meals covered", "5 meals + snacks: lunch, Monday to Friday"]],
+             ["some", "lunch", "I'll take my time. Just need my hardest meals covered", "5 meals + snacks: lunch or dinner, Monday to Friday"]],
     handleRec: {},
     planWhy: {
       full: "Lunch and dinner every day creates structure that makes success so much easier.",
       best: "Lunch and dinner, Monday to Friday, takes care of the meals that are hardest to eat healthy when you're busy.",
-      lunch: "Lunch, Monday to Friday, covers the meal that usually falls apart on a workday, and leaves you one main meal a day to cook."
+      lunch: "One meal a day, Monday to Friday, covers whichever meal is toughest for you, lunch or dinner, and leaves you one main meal a day to cook."
     },
     // what to expect, by goal (Luke 11/20 on mic; the Health line is Claude's draft for him to edit)
     expect: {
@@ -881,7 +881,7 @@
   var ASSURE = '<div class="assure"><span>✓ Always fresh</span><span>✓ Calorie controlled</span><span>✓ Delicious</span></div>';
   var PLANS = ["full", "best", "lunch"];   // Luke 11/19: priciest on top, so it gets more affordable as they read down
   var PLAN_INFO = {
-    lunch: { name: "Lunch plan", what: "Lunch Mon–Fri", days: "wk", code: "l" },
+    lunch: { name: "One a day", what: "Lunch or dinner Mon–Fri", days: "wk", code: "l" },
     best: { name: "Recommended", what: "Lunch + dinner Mon–Fri", days: "wk", code: "b" },
     full: { name: "Full week", what: "Lunch + dinner, all 7 days", days: "all", code: "f" }
   };
