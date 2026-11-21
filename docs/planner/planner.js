@@ -350,6 +350,8 @@
       planner_heard: heardYou().replace(/<[^>]+>/g, ""),
       planner_goal: st.quiz && GOALS[st.quiz.goal] ? GOALS[st.quiz.goal].label : "", planner_pain: (st.quiz && st.quiz.block) || "",
       planner_goal_line: (st.quiz && Q2.emailGoal[st.quiz.goal]) || "", planner_pain_line: (st.quiz && Q2.emailPain[st.quiz.block]) || "",
+      // Luke 11/21: the Wednesday this week's menu closes (YYYY-MM-DD); email 3 shows a "menu changed" version after it
+      planner_week_ends: (function () { var d = new Date(); d.setDate(d.getDate() + (3 - d.getDay() + 7) % 7); var z = function (n) { return (n < 10 ? "0" : "") + n; }; return d.getFullYear() + "-" + z(d.getMonth() + 1) + "-" + z(d.getDate()); })(),
       planner_week_line: w.nM + " meals" + (w.snackPacks ? " + " + w.snackPacks + " snacks" : "") + " · about " + w.hours + " hours of cooking back",
       planner_total: total.toFixed(2),
       planner_paid: r && r.pct ? (total * (1 - r.pct / 100)).toFixed(2) : "",
