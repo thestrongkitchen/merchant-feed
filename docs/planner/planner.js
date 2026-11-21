@@ -992,6 +992,27 @@
     });
     return meals;
   }
+  // Luke 11/21: one tap to add a protein snack to every planned day that has none (oatmeal and bites, taking turns)
+  var snacksAdded = 0, builtNote = function () {};
+  function snackDays() {
+    var meals = {}, snacks = {};
+    st.pieces.forEach(function (p) { if (p.day < 0) return; if (ITEMS[p.id].kind === "meal") meals[p.day] = 1; else if (ITEMS[p.id].kind === "snack") snacks[p.day] = 1; });
+    return Object.keys(meals).map(Number).filter(function (d) { return !snacks[d]; }).sort();
+  }
+  function snackPick() {
+    var q = st.quiz || qa || { avoid: [] }, keep = qa; qa = q;
+    var list = DATA.items.filter(function (m) { return m.kind === "snack" && fits(m) && /protein (oatmeal|bite)/i.test(m.name); });
+    qa = keep; return list;
+  }
+  function addSnacks() {
+    var list = snackPick(), days = snackDays(); if (!list.length || !days.length) return;
+    days.forEach(function (d, i) { var m = list[i % list.length]; takePiece(m.id, m.sizes[0].option_id, d); });
+    snacksAdded = days.length; track("snacks_added"); render(); builtNote();
+  }
+  function snackBtn() {
+    if (snacksAdded) return '<p class="rwhy">Added a protein snack to ' + snacksAdded + " day" + (snacksAdded > 1 ? "s" : "") + ". Remove any you don't want on its day.</p>";
+    return snackDays().length && snackPick().length ? '<button class="radd" data-a="addsnacks">+ Add a protein snack to each day</button>' : "";
+  }
   function buildWeek() {
     track("week_built");
     var meals = planCore(), days = quizDays();
@@ -1000,10 +1021,15 @@
     endQuiz(); selected = null; render();
     var spare = st.pieces.filter(function (p) { return p.day < 0; }).length;
     var avoid = qa.avoid.map(function (a) { return a === "gluten" ? "gluten free" : "dairy free"; }).join(" + ");
-    $(R, "#built").innerHTML = meals.length
-      ? "<b>Built for you.</b> Tap a day to see it. Swap anything, or drag it to another day." +
-        (spare ? " Your order also has " + spare + " extra serving" + (spare > 1 ? "s" : "") + " to eat whenever you like." : "")
-      : "<b>Nothing on this week's menu fits all of those.</b> Try fewer restrictions, or pick by hand below.";
+    snacksAdded = 0;
+    builtNote = function () {
+      $(R, "#built").innerHTML = meals.length
+        ? "<b>Built for you.</b> Tap a day to see it. Swap anything, or drag it to another day." +
+          (spare ? " Your order also has " + spare + " extra serving" + (spare > 1 ? "s" : "") + " to eat whenever you like." : "") +
+          (snackBtn() ? '<div style="margin-top:8px">' + snackBtn() + "</div>" : "")
+        : "<b>Nothing on this week's menu fits all of those.</b> Try fewer restrictions, or pick by hand below.";
+    };
+    builtNote();
     // land on the filled calendar, with the "built for you" note right above it
     var b = $(R, "#built"), calBlock = $(R, ".calwrap").parentNode;
     calBlock.parentNode.insertBefore(b, calBlock);
@@ -1279,7 +1305,7 @@
       if (said && quizV2() && st.quiz.name) said = esc(st.quiz.name) + ", y" + said.slice(1);
       html += (said ? (quizV2() ? lukeSays(said) : '<p class="rheard">' + said + "</p>") : "") + ASSURE +
         '<p class="rwhy">Built for you: <b>' + esc(why.join(", ")) + "</b>. Tap a day to see it. Nothing is charged until you check out" +
-        (DATA.deadline ? ", and you can change it until " + esc(DATA.deadline) + " at midnight." : ".") + "</p>";
+        (DATA.deadline ? ", and you can change it until " + esc(DATA.deadline) + " at midnight." : ".") + "</p>" + snackBtn();
     }
     if (!groups.length) html += '<p class="rempty">Nothing planned for ' + D.long + ". Add something below, or leave it for your own cooking.</p>";
     groups.forEach(function (g) {
@@ -1465,6 +1491,7 @@
       if (a.dataset.a === "pickalt") swapPiece(a.dataset.uid, +a.dataset.id, +a.dataset.opt);
       if (a.dataset.a === "rday") { st.view = +a.dataset.day; swapFor = null; addOpen = false; justBuilt = false; render(); }
       if (a.dataset.a === "addopen") { addOpen = !addOpen; swapFor = null; render(); }
+      if (a.dataset.a === "addsnacks") addSnacks();
       if (a.dataset.a === "addtab") { addTab = +a.dataset.i; render(); }
       if (a.dataset.a === "addto") { var np = takePiece(+a.dataset.id, +a.dataset.opt, st.view); addOpen = false; render(); popAt(st.view, np); }
     });
