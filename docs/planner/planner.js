@@ -423,43 +423,43 @@
     // one photo per screen (all the van portrait until Luke sends more): add files to docs/img and name them here,
     // e.g. goal: "luke-wave.jpg", block: "luke-listening.jpg", expect: "luke-kitchen.jpg", plan: "luke-bag.jpg"
     photos: {},
-    welcome: "Hey, I'm Luke. I own The Strong Kitchen. Answer a few quick questions and I'll build a week of our meals around you.",
+    welcome: "Hey, I'm Luke. I own The Strong Kitchen. Answer a few quick questions so I can build your perfect week of meals.",
     goalNote: { lean: "Eat better, feel better, move better", build: "More protein and balanced calories for training and recovery", maintain: "Delicious, convenient food without the hassle" },
     // Luke 11/20: the question names their goal (Time saved wording is Claude's)
     blockQ: { lean: "What gets in the way of eating healthy?", build: "What gets in the way of eating enough protein?", maintain: "What gets in the way of eating well on busy days?" },
-    block: [["time", "I don't have the time", "Long days, always something to do"], ["what", "I don't know what to eat", "Nutrition info is confusing"], ["bored", "I get bored", "Eating the same few meals gets old fast"]],
+    block: [["time", "I don't have the time", "Long days, always something to do. Too tired to prep for the week."], ["what", "I don't know what to eat", "Nutrition info is confusing, feeling a bit overwhelmed."], ["bored", "I get bored", "Eating the same few meals gets old fast."]],
     affirm: {
-      lean: "Health doesn't have to be complicated. It mostly comes down to balanced calories, enough protein and fairly consistent mealtimes. Add good sleep and exercise and it's even more powerful.",
-      build: "Most fitness goals come down to how many calories you eat and how much protein you get, paired with consistent exercise and strength training.",
-      maintain: "When you're busy and there's always something to do, it's easy to put yourself last. Good nutrition falls behind, because you don't have the time or the energy left to cook."
+      lean: "Health doesn't have to be complicated. It mostly comes down to balanced calories, enough protein and improved food quality. We make that easy for you.",
+      build: "Most fitness goals come down to how many calories you eat and how much protein you get, paired with consistent exercise and strength training. We've built our meals to make this easy.",
+      maintain: "When you're busy and there's always something to do, it's easy to put yourself last. Good nutrition falls behind, because you don't have the time or the energy left to cook. We'll make that easy for you."
     },
     goodIntro: {
       hate: "You hate cooking, so a good week is one where you don't do any of the hard parts.",
-      time: "You're short on time, so a good week is one where food never slows you down.",
-      what: "You're not sure what to eat, so a good week is one where it's all figured out for you.",
+      time: "You're short on time, so a good week is eating healthy, enjoying your meals and not having to cook any of it.",
+      what: "You're not sure what to eat, so a good week is one where we give you the variety and nutrition you need.",
       bored: "Eating well falls apart when it gets boring. A good week is one with something new to look forward to."
     },
     good: {
       hate: [["shop", "No grocery shopping"], ["prep", "No prepping"], ["cook", "No cooking"], ["portion", "No portioning"], ["clean", "No cleanup"]],
-      time: [["stop", "Never stopping to figure out lunch or dinner"], ["rush", "No rushed grocery trips"], ["uber", "No Uber Eats"], ["fast", "No money wasted on calorie-loaded fast food"], ["eve", "Evenings back for what you'd rather do"]],
+      time: [["stop", "Never stopping to figure out lunch or dinner"], ["rush", "No rushed grocery trips"], ["uber", "No Uber Eats"], ["fast", "No money wasted on calorie-loaded fast food"], ["eve", "More free time without the guilt"]],
       bored: [["new", "A new menu every week"], ["cuisines", "Flavors from different cuisines"], ["enjoy", "Looking forward to my meals"], ["repeat", "Not eating the same thing every day"], ["diet", "Healthy food that doesn't taste like diet food"]],
       what: [["portion", "No worrying about portion control"], ["protein", "Always getting enough protein"], ["enjoy", "Looking forward to my meals"], ["variety", "A good mix of proteins, vegetables and starches"], ["label", "Calories and protein listed on every meal"]]
     },
     planIntro: "Based on what you told me, this is the plan I'd start you on.",
     // Luke 11/20: they choose how much we handle; the plan card then prices that choice. Priciest first.
-    handleIntro: "The more of your week we handle, the faster you get there. I'd start most people in the middle, but it's your call.",
+    handleIntro: "The more of your week we handle, the faster you get there. Here's the choice I recommend.",
     pace: { all: "Fastest", week: "Steady", some: "A start" },
-    covers: { all: "Every lunch and dinner, all week", week: "Lunch and dinner Monday to Friday. Weekends are yours", some: "Lunch on workdays" },
+    covers: { all: "Every lunch and dinner, all week, plus protein snacks", week: "Lunch and dinner Monday to Friday, plus protein snacks", some: "Lunch or dinner on workdays" },
     handleIntroHate: "Since you hate cooking, I'd have us do all of it. But it's your call.",
     // Luke 11/20 wording; priciest first, as on the plan screen
     handle: [["all", "full", "I need to see results as fast as possible", "14 meals + snacks: lunch and dinner, every day"],
-             ["week", "best", "As fast as possible, without overhauling my life", "10 meals + snacks: lunch and dinner, Monday to Friday"],
-             ["some", "lunch", "I'll take my time. I'm not in a rush", "5 meals + snacks: lunch, Monday to Friday"]],
+             ["week", "best", "Noticeable results that leave room for my own food", "10 meals + snacks: lunch and dinner, Monday to Friday"],
+             ["some", "lunch", "I'll take my time. Just need my hardest meals covered", "5 meals + snacks: lunch, Monday to Friday"]],
     handleRec: {},
     planWhy: {
-      full: "Lunch and dinner every day means you never have to think about food.",
-      best: "Lunch and dinner, Monday to Friday, covers the days that are hardest to get right and leaves your weekends free.",
-      lunch: "Lunch, Monday to Friday, covers the meal that usually falls apart on a workday, and your evenings stay yours to cook."
+      full: "Lunch and dinner every day creates structure that makes success so much easier.",
+      best: "Lunch and dinner, Monday to Friday, takes care of the meals that are hardest to eat healthy when you're busy.",
+      lunch: "Lunch, Monday to Friday, covers the meal that usually falls apart on a workday, and leaves you one main meal a day to cook."
     },
     // what to expect, by goal (Luke 11/20 on mic; the Health line is Claude's draft for him to edit)
     expect: {
@@ -472,7 +472,11 @@
     emailLine: "I'll hold this week for you. When you're ready to check out, it only takes a minute to set up your account.",
     emailSub: "You'll also get up to 15% off plus free delivery on your first order, and your week stays saved so you can check out anytime.",
     emailAsk: "I'll put together a plan for you.",
-    recapGoal: { lean: "to eat better and feel better", build: "more protein and balanced calories for your training", maintain: "good food without the hassle" },
+    recapGoal: { lean: "to feel better and improve your health", build: "your calories and protein on target", maintain: "good food without the hassle" },
+    // Luke 11/21: sum up their biggest pain point; never read their ticked choices back word for word
+    recapPain: { time: "long days leave no time or energy to cook", what: "figuring out what to eat is the hard part", bored: "the same few meals get old fast" },
+    recapFix: { time: "I'll put together a plan that takes cooking off your plate.", what: "I'll put together a plan that takes the guesswork out.", bored: "I'll put together a plan with something new to look forward to every week." },
+    whyPain: { time: "That's {n} meals off your plate.", what: "That's {n} meals already balanced and portioned for you.", bored: "That's {n} meals from a menu that changes every week." },
     recapBlock: { time: "time is the problem", what: "knowing what to eat is the hard part", bored: "you get bored eating the same things" },
     targetSub: { lean: "Skip this if your goal isn't about the scale.", build: "Not every fitness goal is about the scale. Skip this if yours isn't." },
     // timeline (Claude's draft; the pace numbers are placeholders for Luke)
@@ -482,16 +486,16 @@
     promiseIntro: "Here's what I can promise you:",
     promise: {
       lean: ["Enough protein in every meal", "Controlled calories, already portioned", "Fiber, plus a mix of vegetables, starches and proteins", "A wide variety of flavors, week to week"],
-      build: ["Enough protein for full muscle recovery", "Balanced calories, so you can build muscle without gaining fat, or lean out", "Every meal counted, so you know your numbers"],
-      maintain: ["About {hrs} hours back each week: no shopping, prepping, cooking, packing or cleanup", "Lunch and dinner decided before the week starts"]
+      build: ["Optimal protein for full muscle recovery", "Balanced calories, so you can build muscle and stay lean", "Improved recovery and energy"],
+      maintain: ["About {hrs} hours back each week: no shopping, prepping, cooking, packing or cleanup", "Feeling successful because you solved your time problem"]
     },
-    tlWeek1: { lean: "Balanced meals in the fridge and nothing to figure out.", build: "Protein in every meal. Most people feel better right away.", maintain: "No cooking and no deciding what's for dinner." },
+    tlWeek1: { lean: "Dietitian-approved meals stocked in your fridge.", build: "Protein in every meal. Most people feel better right away.", maintain: "No cooking and more free time." },
     tlDay30: "Weigh in again and see how it's going.",
     deadline: "Order by {day} and you get:",
     goalWhy: {
-      lean: "You want to eat better, feel better and move better. That comes from balanced meals, eaten consistently.",
-      build: "You want your calories and protein on target. That's easiest when both big meals of the day are already planned.",
-      maintain: "You want good food without the hassle."
+      lean: "You want to feel better and improve your health. The good news is it just takes a few small changes, like more protein and controlled calories.",
+      build: "You want your calories and protein on target. Most people struggle with protein, and we build our meals to solve that, so recovery is never an issue.",
+      maintain: "You want good food without the hassle. This saves you the grocery trips, cooking, prepping and cleaning."
     }
   };
   (function () {
@@ -719,9 +723,8 @@
   window.addEventListener("pagehide", v2Flush);
   document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") v2Flush(); });
   function v2Recap() {
-    var picks = goodLabels(qa).map(lowerFirst);
-    return "Got it. You want " + (Q2.recapGoal[qa.goal] || "to eat better") + ", " + (Q2.recapBlock[qa.block] || "it's hard to keep up") +
-      (picks.length ? ", and a good week means " + joinList(picks) : "") + ". " + Q2.emailAsk;
+    return "Got it. You want " + (Q2.recapGoal[qa.goal] || "to eat better") + ", but " + (Q2.recapPain[qa.block] || "it's hard to keep up") + ". " +
+      (Q2.recapFix[qa.block] || Q2.emailAsk);
   }
   function v2Weeks() {
     var w = +qa.weight, t = +qa.target;
@@ -875,7 +878,7 @@
     return (qa.avoid.indexOf("gluten") < 0 || m.badges.indexOf("Gluten Free") >= 0) && (qa.avoid.indexOf("dairy") < 0 || m.badges.indexOf("Dairy Free") >= 0);
   }
   // meals a day from us on day d (0 = Monday): the recommended plan is 2 on weekdays, 1 on the weekend
-  var ASSURE = '<div class="assure"><span>✓ Keeps 7 days</span><span>✓ Hot in 3 minutes</span><span>✓ No subscription</span></div>';
+  var ASSURE = '<div class="assure"><span>✓ Always fresh</span><span>✓ Calorie controlled</span><span>✓ Delicious</span></div>';
   var PLANS = ["full", "best", "lunch"];   // Luke 11/19: priciest on top, so it gets more affordable as they read down
   var PLAN_INFO = {
     lunch: { name: "Lunch plan", what: "Lunch Mon–Fri", days: "wk", code: "l" },
@@ -924,19 +927,18 @@
   }
   function v2Hours(meals) { return Math.round(meals * Q2.MIN_PER_MEAL / 60); }
   function calSwap(e) {
-    if (qa.goal === "maintain") return " That's about " + e.hours + " hours of shopping, prepping, cooking and cleanup back each week.";
+    if (qa.goal === "maintain") return " All told, about " + e.hours + " hours back each week.";
     if (qa.goal === "maintain" || !e.mealCal || e.mealCal >= Q2.REST_CAL) return "";
     var saved = Math.round(e.meals * (Q2.REST_CAL - e.mealCal) / 100) * 100;
     return " If these " + e.meals + " meals replace takeout, that's about " + fmt(saved) + " fewer calories a week, around " +
       (Math.round(saved / Q2.FAT_CAL * 2) / 2) + " lb of fat's worth.";
   }
   function whyRecV2(e, k) {
-    var picks = goodLabels(qa).map(lowerFirst);
     var lunch = previewPlan("lunch"), r = offerShown() ? rungFor(e.total) : null, rl = offerShown() ? rungFor(lunch.total) : null;
     var save = r && r.pct && (!rl || rl.pct < r.pct) ? " It also unlocks " + r.pct + "% off your first order." : "";
     return '<span class="pwhyrec"><b>Why I recommend it:</b> ' + esc(Q2.goalWhy[qa.goal] || "") +
       " " + esc(Q2.planWhy[k || "best"]) +
-      (picks.length ? " You told me a good week means " + esc(joinList(picks)) + ". This plan does that for " + e.meals + " meals." : "") +
+      (Q2.whyPain[qa.block] ? " " + esc(Q2.whyPain[qa.block].replace("{n}", e.meals)) : "") +
       (qa.handle === "all" ? " " + esc(Q2.expectBlock.hate) : "") +
       calSwap(e) + "</span>";
   }
@@ -1241,8 +1243,6 @@
       bored: "You said the meals get boring. This week has <b>" + dishes + " different dishes</b>, and the menu changes every week.",
       protein: "You said protein is hard to hit. This week gives you about <b>" + proDay + "g a day from us</b>, already counted."
     }[q.block] || "";
-    var picks = goodLabels(q);
-    if (picks.length) return first + " You wanted " + esc(joinList(picks.map(lowerFirst))) + ".";
     var second = q.want === q.block || (q.want === "easy" && q.block === "what") ? "" : {
       health: " Every meal is real food, portioned and counted, so eating well isn't a guess.",
       recovery: " About " + proDay + "g of protein a day from us, so you recover between workouts.",
