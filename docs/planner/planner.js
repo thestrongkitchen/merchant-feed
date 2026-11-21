@@ -471,7 +471,7 @@
     handleIntroHate: "Since you hate cooking, I'd have us do all of it. But it's your call.",
     // Luke 11/20 wording; priciest first, as on the plan screen
     handle: [["all", "full", "I need to see results as fast as possible", "14 meals + snacks: lunch and dinner, every day"],
-             ["week", "best", "Noticeable results that leave room for my own food", "10 meals + snacks: lunch and dinner, Monday to Friday"],
+             ["week", "best", "Real results without giving up my weekends", "10 meals + snacks: lunch and dinner, Monday to Friday"],
              ["some", "lunch", "I'll take my time. Just need my hardest meals covered", "5 meals + snacks: lunch or dinner, Monday to Friday"]],
     handleRec: {},
     planWhy: {
