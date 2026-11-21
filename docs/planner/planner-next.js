@@ -536,9 +536,12 @@
         }).join("") + "</div></div>" +
         '<div class="pcard"><span class="pk">' + (sel === rec ? "\u2605 " : "") + esc(lab) + "</span><b>" + esc(h[2]) + "</b>" +
         "<small>We handle: " + esc(lowerFirst(Q2.covers[sel]) + (e.snacks ? Q2.snackNote : "")) + "</small>" +
-        "<em>" + esc(paceLine(e).charAt(0).toUpperCase() + paceLine(e).slice(1)) + "</em></div>" +
+        // Luke 11/21: protein a day from us is the one number people read easily (more is better); calories confuse
+        (qa.goal === "maintain" ? "<em>About " + e.hours + " hours back a week</em>" : "") +
+        "<em>About " + proPerDay(e, h[1]) + "g of protein a day from us</em></div>" +
         '<button class="qnext" data-q="handle" data-v="' + sel + '">Next</button>';
   }
+  function proPerDay(e, k) { return Math.round(e.proWeek / (PLAN_INFO[k].days === "all" ? 7 : 5) / 5) * 5; }
   function paceLine(e) {
     if (qa.goal === "build") return "about " + fmt(Math.round(e.proWeek / 10) * 10) + "g of protein a week from us";
     if (qa.goal === "maintain") return "about " + e.hours + " hours back a week";
@@ -1312,7 +1315,7 @@
     var planned = DAYS.filter(function (_, i) { return dayTotals(i).on.length; }).length;
     var html = '<div class="rhead"><span>Your week is ready</span><h3>' + esc(q.name ? q.name + "'s week" : "Your week") + "</h3>" +
       "<p>" + w.nM + " meal" + (w.nM === 1 ? "" : "s") + (w.snackPacks ? " + " + w.snackPacks + " snack" + (w.snackPacks > 1 ? "s" : "") : "") +
-      (planned ? " across " + planned + " day" + (planned > 1 ? "s" : "") : "") + ". Tap a day to see or swap.</p></div>";
+      (planned ? " across " + planned + " day" + (planned > 1 ? "s" : "") : "") + (w.proDay ? ", about " + Math.round(w.proDay / 5) * 5 + "g of protein a day from us" : "") + ". Tap a day to see or swap.</p></div>";
     html += '<div class="wk">' + DAYS.map(function (D, i) {
       var on = dayTotals(i).on, seen = {}, items = [];
       on.forEach(function (p) { var k = p.id + "|" + p.opt; if (!seen[k]) { seen[k] = 1; items.push(p); } });
