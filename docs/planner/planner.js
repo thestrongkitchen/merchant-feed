@@ -612,7 +612,7 @@
     if (v2 && qstep === 0) body = '<span class="qkick">30 seconds</span><h3>What are you working toward?</h3><p>We\'ll build a week of our meals around it.</p>' +
       opts("goal", Object.keys(GOALS).map(function (k) { return [k, GOALS[k].label, Q2.goalNote[k]]; }));
     else if (v2 && qstep === 1) body = lukeSays(esc(Q2.affirm[qa.goal] || "")) + "<h3>What gets in the way the most?</h3>" + opts("block", Q2.block);
-    else if (v2 && qstep === 2) body = lukeSays(esc(Q2.goodIntro[qa.block] || "")) + "<h3>What would a good week look like?</h3><p>Pick any that matter to you.</p>" +
+    else if (v2 && qstep === 2) body = lukeSays(esc(Q2.goodIntro[qa.block] || "")) + "<h3>What would you like to solve?</h3><p>Pick any that matter to you.</p>" +
       opts("good", Q2.good[qa.block] || [], true) +
       '<button class="qnext" data-q="next"' + (qa.good.length ? "" : " disabled") + ">Next</button>";
     else if (v2 && qstep === 3 && !qa.handle && !qa.handleDone) body = handleScreen();
@@ -622,7 +622,7 @@
       // Luke 11/19: three obstacles. Old answers (out / bored / protein) still read back for saved plans.
       opts("block", [["hate", "I hate cooking", "Shopping, cooking, dishes: none of it"], ["time", "I don't have the time", "Long days, and cooking eats the evening"],
         ["what", "I don't know what to eat", "Every night it's the same question"]]);
-    else if (qstep === 2) body = "<h3>What would a good week look like?</h3>" +
+    else if (qstep === 2) body = "<h3>What would you like to solve?</h3>" +
       // Luke 11/19: three answers. Old ones (time / protein / progress) still read back for saved plans.
       opts("want", [["easy", "Never wondering what to eat", "It's already in the fridge"], ["health", "Improved health", "Real food, portioned right"],
         ["recovery", "Better workout recovery", "Protein in every meal"]]);
@@ -787,7 +787,7 @@
     if (at === "goal") body = lukeSays(esc(Q2.welcome)) + "<h3>What are you working toward?</h3>" +
       opts("goal", Object.keys(GOALS).map(function (k) { return [k, GOALS[k].label, Q2.goalNote[k]]; }));
     else if (at === "block") body = lukeSays(esc(Q2.affirm[qa.goal] || "")) + "<h3>" + esc(Q2.blockQ[qa.goal] || "What gets in the way the most?") + "</h3>" + opts("block", Q2.block);
-    else if (at === "good") body = lukeSays(esc(Q2.goodIntro[qa.block] || "")) + "<h3>What would a good week look like?</h3><p>Pick any that matter to you.</p>" +
+    else if (at === "good") body = lukeSays(esc(Q2.goodIntro[qa.block] || "")) + "<h3>What would you like to solve?</h3><p>Pick any that matter to you.</p>" +
       opts("good", Q2.good[qa.block] || [], true) + '<button class="qnext" data-q="next"' + ((qa.good || []).length ? "" : " disabled") + ">Next</button>";
     else if (at === "name") body = '<span class="qkick">Your plan</span>' + lukeSays(v2Recap()) +
       "<h3>What's your first name?</h3>" +
