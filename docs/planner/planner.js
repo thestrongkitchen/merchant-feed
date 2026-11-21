@@ -1314,7 +1314,7 @@
         : "Tap to add food";
       return '<button class="wrow' + (items.length ? "" : " empty") + '" data-a="rday" data-day="' + i + '">' +
         '<span class="wd"><b>' + D.short + "</b><small>" + D.mon + " " + D.n + "</small></span>" +
-        '<span class="wth">' + items.slice(0, 3).map(function (p) { return photoHtml(ITEMS[p.id], "wthumb"); }).join("") + "</span>" +
+        '<span class="wth">' + items.slice(0, 2).map(function (p) { return photoHtml(ITEMS[p.id], "wthumb"); }).join("") + "</span>" +
         '<span class="wtx">' + (first ? "<b>" + esc(ITEMS[first.id].short) + "</b>" : "<b>Your day</b>") + "<small>" + sub + "</small></span>" +
         '<span class="wchev" aria-hidden="true">\u203a</span></button>';
     }).join("") + "</div>";
