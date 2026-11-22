@@ -287,6 +287,31 @@
     window.TSKP_API = { paper: paper, close: close, goalsCode: goalsCode, cartLink: cartLink, emailProps: emailProps };
     if (!fromCartLink()) fromLink();
     if (/[?&]tskopen=1/.test(location.search)) { dropParams(["tskopen"]); open(); }
+    else autoOpen();
+  }
+  // Luke 11/22: open the quiz on its own for NEW visitors on the menu page, once per device, same trigger as the old code
+  // popup (8 s on the page or a third of it scrolled). Never for signed-in accounts, re-order links, browsers Klaviyo knows,
+  // anyone who already locked in or used the planner. AUTO_OPEN = false switches it off.
+  var AUTO_OPEN = true, AUTO_KEY = "tskpAutoSeen";
+  function autoOpen() {
+    if (!AUTO_OPEN || !onMenu || viaReorder || signedIn() || getOffer() || st.quiz || st.packs.length) return;
+    try { if (localStorage.getItem(AUTO_KEY)) return; } catch (e) { return; }   // can't remember it = don't risk showing it every visit
+    var fired = false;
+    function go() {
+      if (fired) return; fired = true; window.removeEventListener("scroll", onScroll);
+      visitorKind().then(function (kind) {
+        if (kind !== "new" || !sheet || !sheet.hidden || getOffer()) return;   // only a visitor Klaviyo confirms it doesn't know
+        try { localStorage.setItem(AUTO_KEY, String(Date.now())); } catch (e) { return; }
+        track("auto_open"); open();
+      }, function () {});
+    }
+    function onScroll() {
+      var h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) - window.innerHeight;
+      if (h > 0 && (window.pageYOffset || document.documentElement.scrollTop) / h >= 1 / 3) go();
+    }
+    setTimeout(go, Math.max(500, 8000 - (window.performance && performance.now ? performance.now() : 0)));   // 8 s from page load, not from planner load
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
   }
 
   // ------------------------------------------------------------------ saved goals as a short code, for the Thursday "your week is built" link
