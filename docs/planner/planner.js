@@ -951,6 +951,7 @@
       '<div class="qrow"><input id="qT" type="number" inputmode="numeric" placeholder="e.g. ' + Math.round(+qa.weight * (qa.goal === "build" ? 1.03 : 0.92)) + '" value="' + esc(qa.target || "") + '"><span>lbs</span></div>' +
       '<p class="qerr" id="qErr" hidden>Add a weight, or skip this one.</p>' +
       '<button class="qnext" data-q="v2t">Next</button><button class="qlink" data-q="v2tskip">Skip this one</button>';
+    else if (at === "timeline" && pack()) body = promiseScreen();
     else if (at === "timeline") body = '<span class="qkick">What to expect</span>' + lukeSays(esc(Q2.promiseIntro) + '<ul class="prom">' +
         (Q2.promise[qa.goal] || []).map(function (x) { return "<li>" + esc(x.replace("{hrs}", previewPlan("best").hours)) + "</li>"; }).join("") + "</ul>") + v2Timeline() +
       '<button class="qnext" data-q="next">See my options</button>';
@@ -1001,6 +1002,30 @@
     ".pcol li::before{content:'✓ ';color:#73933c;font-weight:800}" +
     ".pcol .go{margin-top:6px;background:#73933c;color:#fff;font-weight:800;border-radius:9px;padding:7px 4px;font-size:12px}.pcol.best .go{background:#2e3a18}" +
     "@media(min-width:600px){.pcol{font-size:13px;padding:16px 12px}.pcol .nm{font-size:18px}.pcol .pr{font-size:24px}.pcol ul{font-size:12px}}</style>";
+  // Luke 11/25: the promise was "very nebulous". Now: what they'll feel, each backed by a number from their own answers and the
+  // Weekday package, plus the guarantee Luke approved 11/25 (replacement, not refund; no contract, no subscription).
+  function promiseScreen() {
+    var e = previewPlan("best"), d = PLAN_INFO.best.days, nd = Array.isArray(d) ? d.length : d === "all" ? 7 : 5;
+    var pro = Math.round(e.proWeek / nd / 5) * 5;
+    var cal = e.mealCal && e.mealCal < Q2.REST_CAL ? Math.round(e.meals * (Q2.REST_CAL - e.mealCal) / 100) * 100 : 0;
+    var L = {
+      lean: ["<b>More protein than you're eating now:</b> about " + pro + "g a day from us",
+             cal ? "<b>Fewer calories without counting:</b> about " + fmt(cal) + " fewer a week than takeout" : "<b>Fewer calories without counting:</b> every meal is already portioned",
+             "<b>More energy,</b> because every meal is already portioned"],
+      build: ["<b>More protein than you're eating now:</b> about " + pro + "g a day from us",
+              "<b>Better recovery</b> after every workout",
+              "<b>More energy to train,</b> with calories matched to your size"],
+      maintain: ["<b>About " + e.hours + " hours back this week:</b> no shopping, cooking or dishes",
+                 "<b>More energy</b> at the end of the day",
+                 "<b>Fewer takeout nights,</b>" + (cal ? " and about " + fmt(cal) + " fewer calories a week with them" : " and fewer calories with them")]
+    }[qa.goal] || [];
+    return '<span class="qkick">What to expect</span>' + lukeSays(esc("Here's my promise to you:") + '<ul class="prom">' + L.map(function (x) { return "<li>" + x + "</li>"; }).join("") + "</ul>") +
+      '<p class="qnote">Numbers are for the Weekday package, built to your goal.</p>' +
+      '<div style="margin:14px 0;padding:14px 16px;border:2px solid #d9b46f;background:#fbf5e8;border-radius:14px">' +
+      '<b style="display:block;font-size:16px;margin-bottom:4px">My guarantee</b>' +
+      "<span>If you don&rsquo;t love a meal, tell me and I&rsquo;ll replace it free on your next order. No contract, no subscription.</span></div>" +
+      v2Timeline() + '<button class="qnext" data-q="next">See my options</button>';
+  }
   function packScreen() {
     var first = offerShown();
     return '<span class="qkick">Last step</span>' + lukeSays(esc((qa.name ? qa.name + ", h" : "H") + "ere are your three options, priced on this week's menu and built to your goal. Weekday is the one I'd start you on.")) +
@@ -1445,7 +1470,7 @@
     btn.innerHTML = '<svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="vertical-align:-2px;margin-right:6px"><rect x="2" y="3" width="12" height="11" rx="2"/><path d="M2 7h12M5 1v4M11 1v4"/></svg>Build Your Week';
     btn.style.cssText = "display:inline-flex;align-items:center;flex-direction:row;background:#d9b46f;color:#2b230f;border-color:#d9b46f;font-weight:800;cursor:pointer";
     btn.addEventListener("click", open);
-    if (nav) nav.appendChild(btn);
+    if (nav && !pack()) nav.appendChild(btn);   // Luke 11/25: the packages version opens as a popup, no button in the Meals/Sides/Snacks row
     // "My week" pill: only once something is planned, so returning visitors can pick up where they left off
     pill = el("button", "tskp-pill");
     pill.type = "button";
