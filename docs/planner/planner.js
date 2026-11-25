@@ -80,9 +80,9 @@
     keys: ["lunch", "best", "full"],   // level order (matches rungs + levels)
     order: ["full", "best", "lunch"],   // priciest on top (Luke 11/19), so it reads more affordable going down
     info: {
-      lunch: { name: "Starter", what: "Lunch, Monday to Friday", days: "wk", line: "A first taste of the week." },
-      best: { name: "Weekday", what: "Lunch and dinner, Monday to Thursday, plus 2 snacks", days: [0, 1, 2, 3], line: "Covers the busiest stretch of the week. It's the one I'd start you on." },
-      full: { name: "Full Week", what: "Lunch and dinner, Monday to Saturday, plus 3 snacks", days: [0, 1, 2, 3, 4, 5], line: "For weeks with no cooking at all." }
+      lunch: { name: "Starter", what: "Lunch, Monday to Friday", short: "Lunch, Mon–Fri", days: "wk", line: "A first taste of the week." },
+      best: { name: "Weekday", what: "Lunch and dinner, Monday to Thursday, plus 2 snacks", short: "Lunch + dinner, Mon–Thu", days: [0, 1, 2, 3], line: "Covers the busiest stretch of the week. It's the one I'd start you on." },
+      full: { name: "Full Week", what: "Lunch and dinner, Monday to Saturday, plus 3 snacks", short: "Lunch + dinner, Mon–Sat", days: [0, 1, 2, 3, 4, 5], line: "For weeks with no cooking at all." }
     },
     snacks: { lunch: 0, best: 2, full: 3 },
     levels: [{ n: 5, name: "Starter", label: "free delivery" }, { n: 8, name: "Weekday", label: "free delivery + 15% off" }, { n: 12, name: "Full Week", label: "free delivery + 20% off" }],
@@ -989,17 +989,37 @@
     }
     q.innerHTML = head + back + body;
   }
+  // Luke 11/25: the three packages side by side, like a pricing table: Starter | Weekday (raised, recommended) | Full Week
+  var PACK_CSS = "<style>.pkrow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;align-items:end;margin:14px 0 6px}" +
+    ".pcol{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:12px 8px;border:2px solid #e0e0da;border-radius:14px;background:#fff;text-align:center;font:500 12px/1.3 'Plus Jakarta Sans',Arial,sans-serif;color:#1d2314;min-width:0}" +
+    ".pcol:focus-visible{outline:3px solid #73933c;outline-offset:2px}" +
+    ".pcol.best{border-color:#d9b46f;background:#fbf5e8;padding-top:10px;padding-bottom:16px;box-shadow:0 6px 18px rgba(46,58,24,.15)}" +
+    ".pcol .rec{align-self:center;background:#2e3a18;color:#d9b46f;font-weight:800;font-size:10px;letter-spacing:.04em;text-transform:uppercase;padding:3px 7px;border-radius:6px;margin-bottom:2px}" +
+    ".pcol .nm{font-weight:800;font-size:15px}.pcol .ct{font-weight:700}.pcol .dy{color:#5a604c;font-size:11px}" +
+    ".pcol .old{color:#8a8f7c;text-decoration:line-through;font-size:11px;margin-top:4px}.pcol .pr{font-weight:800;font-size:19px;color:#2e3a18}" +
+    ".pcol ul{list-style:none;margin:4px 0 0;padding:6px 0 0;border-top:1px solid #e0e0da;text-align:left;font-size:11px;line-height:1.5}" +
+    ".pcol li::before{content:'✓ ';color:#73933c;font-weight:800}" +
+    ".pcol .go{margin-top:6px;background:#73933c;color:#fff;font-weight:800;border-radius:9px;padding:7px 4px;font-size:12px}.pcol.best .go{background:#2e3a18}" +
+    "@media(min-width:600px){.pcol{font-size:13px;padding:16px 12px}.pcol .nm{font-size:18px}.pcol .pr{font-size:24px}.pcol ul{font-size:12px}}</style>";
   function packScreen() {
+    var first = offerShown();
     return '<span class="qkick">Last step</span>' + lukeSays(esc((qa.name ? qa.name + ", h" : "H") + "ere are your three options, priced on this week's menu and built to your goal. Weekday is the one I'd start you on.")) +
-      "<h3>Pick your package</h3><p>Swap any meal after.</p>" + ASSURE +
-      '<div class="opts">' + PACK.order.map(function (k) {
-        var P = PLAN_INFO[k], e = previewPlan(k), rr = offerShown() ? rungFor(e.total) : null, star = k === "best";
-        return '<button class="opt plan' + (star ? " best" : "") + '" data-q="plan" data-v="' + k + '">' +
-          '<span class="ptop"><span>' + (star ? "★ " : "") + esc(P.name) + '</span><span class="pprice">$' + e.total.toFixed(2) + "</span></span>" +
-          "<small><b>" + e.meals + " meals" + (e.snacks ? " + " + e.snacks + " snack" + (e.snacks > 1 ? "s" : "") : "") + "</b> · " + esc(P.what.replace(/, plus \d snacks$/, "")) + "</small>" +
-          '<span class="pwhyrec">' + (star ? "<b>Recommended.</b> " : "") + esc(P.line) + "</span>" +
-          savingsStack(e.total, rr) + (star ? '<span class="pcta">Choose Weekday →</span>' : "") + "</button>";
-      }).join("") + "</div>" + reviewCard();
+      "<h3>Pick your package</h3>" + PACK_CSS +
+      '<div class="pkrow">' + PACK.keys.map(function (k) {
+        var P = PLAN_INFO[k], e = previewPlan(k), rr = first ? rungFor(e.total) : null, star = k === "best";
+        var off = rr && rr.pct ? Math.round(e.total * rr.pct) / 100 : 0;
+        return '<button class="pcol' + (star ? " best" : "") + '" data-q="plan" data-v="' + k + '">' +
+          (star ? '<span class="rec">Recommended</span>' : "") +
+          '<span class="nm">' + esc(P.name) + "</span>" +
+          '<span class="ct">' + e.meals + " meals" + (e.snacks ? " + " + e.snacks + " snacks" : "") + "</span>" +
+          '<span class="dy">' + esc(PACK.info[k].short) + "</span>" +
+          (off ? '<span class="old">$' + e.total.toFixed(2) + "</span>" : "") +
+          '<span class="pr">$' + (e.total - off).toFixed(2) + "</span>" +
+          (rr ? "<ul><li>Free delivery</li>" + (rr.pct ? "<li>" + rr.pct + "% off</li>" : "") + "<li>Free gift</li></ul>" : "") +
+          '<span class="go">Choose</span></button>';
+      }).join("") + "</div>" +
+      (first ? '<p class="qnote">' + esc(v2Deadline().replace(/ and you get:$/, "")) + " for these first-order savings. Swap any meal after.</p>" : '<p class="qnote">Swap any meal after.</p>') +
+      reviewCard();
   }
   function howScreen() {
     var P = PLAN_INFO[V2.codeFor], e = previewPlan(V2.codeFor);
