@@ -67,6 +67,7 @@
       { min: 120, pct: 15, code: "NOCOOKING", label: "Free delivery + 15% off" },
       { min: 180, pct: 20, code: "", label: "Free delivery + 20% off" }
     ],
+    keys: ["lunch", "best", "full"],   // level order (matches rungs + levels)
     order: ["full", "best", "lunch"],   // priciest on top (Luke 11/19), so it reads more affordable going down
     info: {
       lunch: { name: "Starter", what: "Lunch, Monday to Friday", days: "wk", line: "A first taste of the week." },
@@ -75,9 +76,10 @@
     },
     snacks: { lunch: 0, best: 2, full: 3 },
     levels: [{ n: 5, name: "Starter", label: "free delivery" }, { n: 8, name: "Weekday", label: "free delivery + 15% off" }, { n: 12, name: "Full Week", label: "free delivery + 20% off" }],
-    // Luke 11/25: snacks / sauce / extra meal / LRBC treats. Wording is Claude's draft for Luke to check.
-    gifts: [["snacks", "Protein snacks", "For between meals"], ["sauce", "Strong Sauce", "A full bottle of our house sauce"],
-            ["meal", "An extra meal", "One more meal, on us"], ["treats", "Little Rabbit treats", "Gluten-free baked treats from our bakery"]]
+    // Luke 11/25 (2nd pass): Firecracker, Bites or Protein Oatmeal - no free meal, no Little Rabbit for now. Photos = the site's own.
+    gifts: [["sauce", "Firecracker Sauce", "A full bottle of our house sauce", "https://thestrongkitchen.com/uploads/media/products/558/featured-image/291/firecracker-sauce1.jpg"],
+            ["bites", "Protein Bites", "Double chocolate", "https://thestrongkitchen.com/uploads/media/products/22/featured-image/811/22---Double-Chocolate-Protein-Bites---corrected.jpg"],
+            ["oatmeal", "Protein Oatmeal", "For a quick breakfast", "https://thestrongkitchen.com/uploads/media/products/271/featured-image/807/271---Cinnamon-Raisin-Protein-Oatmeal---corrected.jpg"]]
   };
   (function () {
     var m = /[?&]tskpack=([01])/.exec(location.search);
@@ -202,8 +204,26 @@
     return fetch("/cart/count", { credentials: "same-origin", headers: { Accept: "application/json" } })
       .then(function (r) { return r.json(); }).then(function (c) { return parseFloat(c && c.subtotal) || 0; });
   }
+  // Packages (Luke 11/25): the level needs its meals AND snacks AND the code's dollar minimum. The site's codes can only
+  // check dollars, so this is what decides which code the planner puts on (someone typing a code by hand isn't stopped).
+  function cartPack() {
+    if (!ITEMS) ITEMS = {};   // the cart/checkout pages stop before the menu code sets this up
+    var kinds = Object.keys(ITEMS).length ? Promise.resolve() : loadData().then(function (d) { d.items.forEach(function (m) { ITEMS[m.id] = m; }); });
+    return kinds.then(function () { return fetch("/cart/count", { credentials: "same-origin", headers: { Accept: "application/json" } }); })
+      .then(function (r) { return r.json(); }).then(function (c) {
+        var o = { sub: parseFloat(c && c.subtotal) || 0, meals: 0, snacks: 0, i: -1 };
+        ((c && c.items) || []).forEach(function (x) { var m = ITEMS[x.product_id]; if (!m) return; if (m.kind === "meal") o.meals += +x.qty || 0; else if (m.kind === "snack") o.snacks += +x.qty || 0; });
+        PACK.levels.forEach(function (l, j) { if (o.meals >= l.n && o.snacks >= (PACK.snacks[PACK.keys[j]] || 0) && o.sub >= PACK.rungs[j].min - 0.005) o.i = j; });
+        return o;
+      });
+  }
+  function packNeed(o, j) {   // "2 meals and 1 snack"
+    var l = PACK.levels[j], nm = Math.max(0, l.n - o.meals), ns = Math.max(0, (PACK.snacks[PACK.keys[j]] || 0) - o.snacks);
+    return [nm ? nm + " meal" + (nm > 1 ? "s" : "") : "", ns ? ns + " snack" + (ns > 1 ? "s" : "") : ""].filter(Boolean).join(" and ");
+  }
   // a line above "Proceed to Checkout": what they've earned, what the next rung needs, and that it carries through sign-up
   function cartLine() {
+    if (pack()) return packCartLine();
     cartSubtotal().then(function (sub) {
       var go = [].filter.call(document.querySelectorAll("a,button"), function (b) { return /proceed to checkout/i.test(b.textContent); })[0];
       if (!go) return;
@@ -222,6 +242,25 @@
         (signedIn() ? "" : "<br>" + sm + "Next you'll make your account. Your cart and savings come with you.</span>");
     }).catch(function () {});
   }
+  function packCartLine() {
+    cartPack().then(function (o) {
+      var go = [].filter.call(document.querySelectorAll("a,button"), function (b) { return /proceed to checkout/i.test(b.textContent); })[0];
+      if (!go) return;
+      var d = document.getElementById("tskp-offer");
+      if (!d) {
+        d = document.createElement("div"); d.id = "tskp-offer";
+        d.style.cssText = "margin:0 0 12px;padding:10px 12px;border:2px solid #d9b46f;background:#fbf5e8;border-radius:10px;font:600 14px/1.45 'Plus Jakarta Sans',Arial,sans-serif;color:#1d2314;text-align:left";
+        go.parentNode.insertBefore(d, go);
+      }
+      var sm = "<span style='font-weight:500;color:#4d5340'>", r = o.i >= 0 ? PACK.rungs[o.i] : null, nx = PACK.levels[o.i + 1];
+      d.innerHTML = (r
+        ? "<b>✓ " + esc(PACK.levels[o.i].name) + ": " + esc(r.label) + "</b> on your first order" + (r.code ? ", code <b>" + esc(r.code) + "</b>" : "") + (r.pct ? " (saves $" + (o.sub * r.pct / 100).toFixed(2) + ")" : "") + (r.code ? ". We'll apply it at checkout." : ". (Preview: this code isn't made yet, so checkout won't apply it.)")
+        : "<b>Add " + packNeed(o, 0) + "</b> for " + PACK.levels[0].name + ": free delivery on your first order.") +
+        (r && nx ? "<br>" + sm + "Add " + packNeed(o, o.i + 1) + " for " + nx.name + ": " + nx.label + ".</span>" : "") +
+        "<br>" + sm + "Plus your free gift, picked in the planner." + "</span>" +
+        (signedIn() ? "" : "<br>" + sm + "Next you'll make your account. Your cart and savings come with you.</span>");
+    }).catch(function (e) { console.warn("[TSK planner] cart line:", e); });
+  }
   // On checkout: type the right code into "Have a code?" and press Apply, once per visit, before they fill anything in.
   // If they take it off, it stays off.
   function applyAtCheckout() {
@@ -233,8 +272,8 @@
     if (m && parseFloat(m[1].replace(/,/g, "")) > 0) return;   // a code is already on the order
     var pastOrders = fetch("/account/orders", { credentials: "same-origin" }).then(function (r) { return r.text(); })
       .then(function (t) { return /Order\s*#\s*\d{3,}/i.test(t); }, function () { return true; });   // can't tell = don't apply
-    Promise.all([cartSubtotal(), pastOrders]).then(function (a) {
-      var sub = a[0], r = rungFor(sub);
+    Promise.all([pack() ? cartPack() : cartSubtotal(), pastOrders]).then(function (a) {
+      var sub = pack() ? a[0].sub : a[0], r = pack() ? (a[0].i >= 0 ? OFFER.rungs[a[0].i] : null) : rungFor(sub);
       if (a[1]) { note("Preview: this account has past orders, so no first-order code goes on.", 8000); return; }
       if (!r || !r.code) return;
       if (!OFFER.CODES_READY) { note("Preview: checkout would apply " + r.code + " now ($" + sub.toFixed(2) + " order). Codes aren't switched on yet, so nothing was typed.", 10000); return; }
@@ -962,7 +1001,11 @@
   }
   function giftPick() {
     return '<h3 style="margin-top:18px">Pick your free gift</h3><p>It comes in your bag with your first order.</p><div class="opts">' +
-      PACK.gifts.map(function (g) { return '<button class="opt" data-q="gift" data-v="' + g[0] + '" aria-pressed="' + (V2.gift === g[0]) + '">' + esc(g[1]) + "<small>" + esc(g[2]) + "</small></button>"; }).join("") + "</div>";
+      PACK.gifts.map(function (g) {
+        return '<button class="opt" data-q="gift" data-v="' + g[0] + '" aria-pressed="' + (V2.gift === g[0]) + '" style="display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:14px;text-align:left">' +
+          '<img src="' + g[3] + '" alt="" width="56" height="56" loading="lazy" style="width:56px;height:56px;object-fit:cover;border-radius:10px;flex:none;pointer-events:none">' +
+          '<span style="pointer-events:none;display:flex;flex-direction:column;align-items:flex-start;gap:2px">' + esc(g[1]) + '<small style="display:block;margin:0">' + esc(g[2]) + "</small></span></button>";
+      }).join("") + "</div>";
   }
   function reviewCard() {
     var m = Q2.reviewFor[qa.block]; if (!m) return "";
@@ -1098,18 +1141,29 @@
     }
     ownRefresh();
   }
+  // Luke 11/25: "what I needed to add to hit the goal plan was a little murky" - so the bar counts UP toward their package
+  // (meals 6 of 8, snacks 1 of 2, with fill bars) and says exactly what to add: "Add 2 meals and 1 snack to complete your Weekday".
   function ownRefresh() {
     fetch("/cart/count", { credentials: "same-origin", headers: { Accept: "application/json" } }).then(function (r) { return r.json(); }).then(function (c) {
       var meals = 0, snacks = 0;
       ((c && c.items) || []).forEach(function (i) { var m = ITEMS[i.product_id]; if (!m) return; if (m.kind === "meal") meals += +i.qty || 0; else if (m.kind === "snack") snacks += +i.qty || 0; });
-      var got = null, nx = null, P = PLAN_INFO[st.own], want = PACK.snacks[st.own] || 0, first = offerShown();
-      PACK.levels.forEach(function (l) { if (meals >= l.n) got = l; else if (!nx) nx = l; });
-      var line2 = !first ? "" : nx ? "<b style='color:#d9b46f'>" + (nx.n - meals) + " more meal" + (nx.n - meals > 1 ? "s" : "") + "</b> for " + nx.name + ": " + nx.label
-        : "Top level reached";
-      ownEl.innerHTML = "<div style='flex:1'><div>" + meals + " meal" + (meals === 1 ? "" : "s") + (snacks ? " · " + snacks + " snack" + (snacks > 1 ? "s" : "") : "") +
-        (first && got ? " · <span style='color:#d9b46f'>✓ " + got.name + ": " + got.label + "</span>" : "") + "</div>" +
-        "<div style='font-weight:500;font-size:13px;opacity:.9'>" + line2 + (want > snacks ? (line2 ? " · " : "") + (want - snacks) + " more snack" + (want - snacks > 1 ? "s" : "") + " to match your " + esc(P.name) : "") + "</div></div>" +
-        "<a href='/cart' style='background:#d9b46f;color:#2b230f;padding:8px 12px;border-radius:10px;text-decoration:none;font-weight:800;white-space:nowrap'>Cart →</a>";
+      var first = offerShown(), lv = PACK.levels, keys = ["lunch", "best", "full"], ti = Math.max(0, keys.indexOf(st.own));
+      while (ti < lv.length - 1 && meals >= lv[ti + 1].n) ti++;   // went past their package: count toward the bigger one
+      var T = lv[ti], key = keys[ti], wantS = PACK.snacks[key] || 0, needM = Math.max(0, T.n - meals), needS = Math.max(0, wantS - snacks);
+      var plural = function (n, w) { return n + " " + w + (n === 1 ? "" : "s"); };
+      var bar = function (have, want) { var pc = Math.min(100, Math.round(100 * have / want)); return "<span style='display:block;height:6px;border-radius:3px;background:rgba(255,255,255,.2);margin-top:3px'><span style='display:block;height:6px;border-radius:3px;width:" + pc + "%;background:" + (have >= want ? "#d9b46f" : "#a9c07a") + "'></span></span>"; };
+      var cell = function (label, have, want) { return "<span style='flex:1'><span style='font-size:13px'>" + label + " <b>" + Math.min(have, 99) + " of " + want + "</b>" + (have >= want ? " ✓" : "") + "</span>" + bar(have, want) + "</span>"; };
+      var head = "<b>Your " + esc(T.name) + "</b>";
+      // Luke 11/25: a package's savings need its meals AND its snacks (15% = 8 meals + 2 snacks)
+      var todo = needM || needS
+        ? "Add <b style='color:#d9b46f'>" + [needM ? plural(needM, "meal") : "", needS ? plural(needS, "snack") : ""].filter(Boolean).join(" and ") + "</b> to complete it" + (first ? ": " + T.label : "")
+        : "<b style='color:#d9b46f'>✓ " + esc(T.name) + " complete</b>" + (first ? ": " + T.label : "");
+      var nx = lv[ti + 1];
+      if (!needM && !needS && nx && first) todo += " · " + (nx.n - meals) + " more meal" + (nx.n - meals === 1 ? "" : "s") + " for " + nx.name;
+      ownEl.innerHTML = "<div style='flex:1;min-width:0'><div style='margin-bottom:4px'>" + head + "</div>" +
+        "<div style='display:flex;gap:12px'>" + cell("Meals", meals, T.n) + (wantS ? cell("Snacks", snacks, wantS) : "") + "</div>" +
+        "<div style='font-weight:500;font-size:13px;margin-top:5px'>" + todo + "</div></div>" +
+        "<a href='/cart' style='background:#d9b46f;color:#2b230f;padding:8px 12px;border-radius:10px;text-decoration:none;font-weight:800;white-space:nowrap;align-self:center'>Cart →</a>";
     }).catch(function () {});
   }
   function codeClick(b) {
@@ -1978,7 +2032,8 @@
   // call the popup uses), then tell the onsite Klaviyo script who this browser is. The lock-in holds on this device either way.
   function lockIn(email, first) {
     if (!first && st.quiz && st.quiz.name) first = st.quiz.name;
-    setOffer({ email: email, at: Date.now() });
+    var prevO = getOffer() || {};   // keep the package + gift they picked (Luke 11/25)
+    setOffer({ email: email, at: Date.now(), gift: prevO.gift, pack: prevO.pack });
     if (!OFFER.KLAVIYO_LOCKIN) return;
     var props;
     try { props = emailProps(); } catch (e) { props = { planner_code: goalsCode() }; }
