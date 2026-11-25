@@ -545,7 +545,7 @@
     goalNote: { lean: "Eat better, feel better, move better", build: "More protein and balanced calories for training and recovery", maintain: "Delicious, convenient food without the hassle" },
     // Luke 11/20: the question names their goal (Time saved wording is Claude's)
     blockQ: { lean: "What gets in the way of eating healthy?", build: "What gets in the way of eating enough protein?", maintain: "What gets in the way of eating well on busy days?" },
-    block: [["time", "I don't have the time", "Long days, always something to do. Too tired to prep for the week."], ["what", "I don't know what to eat", "Nutrition info is confusing, feeling a bit overwhelmed."], ["bored", "I get bored", "Eating the same few meals gets old fast."]],
+    block: [["time", "I'm busy", "Long days, always something to do. Too tired to prep for the week."], ["what", "I don't know what to eat", "Nutrition info is confusing, feeling a bit overwhelmed."], ["bored", "I get bored", "Eating the same few meals gets old fast."]],
     affirm: {
       lean: "Health doesn't have to be complicated. It mostly comes down to balanced calories, enough protein and improved food quality. We make that easy for you.",
       build: "Most fitness goals come down to how many calories you eat and how much protein you get, paired with consistent exercise and strength training. We've built our meals to make this easy.",
@@ -756,7 +756,7 @@
       opts("goal", Object.keys(GOALS).map(function (k) { return [k, GOALS[k].label, GOALS[k].note]; }));
     else if (qstep === 1) body = "<h3>What gets in the way most?</h3><p>Pick the biggest one.</p>" +
       // Luke 11/19: three obstacles. Old answers (out / bored / protein) still read back for saved plans.
-      opts("block", [["hate", "I hate cooking", "Shopping, cooking, dishes: none of it"], ["time", "I don't have the time", "Long days, and cooking eats the evening"],
+      opts("block", [["hate", "I hate cooking", "Shopping, cooking, dishes: none of it"], ["time", "I'm busy", "Long days, and cooking eats the evening"],
         ["what", "I don't know what to eat", "Every night it's the same question"]]);
     else if (qstep === 2) body = "<h3>What would you like to solve?</h3>" +
       // Luke 11/19: three answers. Old ones (time / protein / progress) still read back for saved plans.
