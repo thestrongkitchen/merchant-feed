@@ -14,6 +14,16 @@
   "use strict";
   if (window.__tskPlanner) return;
   window.__tskPlanner = true;
+  // Luke 11/25: "start over" for testing. ?tskreset=1 forgets everything the planner saved on this device (quiz, week,
+  // code, gift, "already seen", re-order customer flag) and Klaviyo's browser id, so the visit looks brand new.
+  // Preview switches (tskpack / tskguide / tsksignup) stay as they are. The cart and sign-in are left alone.
+  (function () {
+    if (!/[?&]tskreset=1/.test(location.search)) return;
+    try { ["tskPlanner", "tskPlannerOffer", "tskpAutoSeen", "tskpCustomer"].forEach(function (k) { localStorage.removeItem(k); }); } catch (e) { /* fine */ }
+    try { sessionStorage.removeItem("tskpCouponTried"); } catch (e) { /* fine */ }
+    ["", "; domain=.thestrongkitchen.com", "; domain=thestrongkitchen.com"].forEach(function (d) { document.cookie = "__kla_id=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/" + d; });
+    try { history.replaceState(null, "", location.href.replace(/([?&])tskreset=1&?/, "$1").replace(/[?&]$/, "")); } catch (e) { /* fine */ }
+  })();
 
   var BASE_URL = (document.currentScript && document.currentScript.src) ? document.currentScript.src.replace(/[^/]*$/, "") : "https://thestrongkitchen.github.io/merchant-feed/planner/";
   var DATA_URL = window.TSKP_DATA_URL || BASE_URL + "../products.json";
