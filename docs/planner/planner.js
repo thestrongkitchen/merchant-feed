@@ -53,6 +53,38 @@
     try { var o = JSON.parse(localStorage.getItem(OFFER_KEY)); return o && (o.email || o.via) && Date.now() - o.at < OFFER.DAYS_VALID * 864e5 ? o : null; } catch (e) { return null; }
   }
   function setOffer(o) { try { localStorage.setItem(OFFER_KEY, JSON.stringify(o)); } catch (e) { /* private mode: no lock-in */ } }
+  // ------------------------------------------------------------------ PACKAGES (Luke 11/25). Sell the meal number, not the price:
+  // Starter 5 meals = free delivery, Weekday 8 meals + 2 snacks = + 15%, Full Week 12 meals + 3 snacks = + 20%. Every first order
+  // picks a free gift (it replaces the Firecracker). After the package: "Build it for me" (we fill the week) or "Build my own"
+  // (their real menu with a bar that counts meals). The quiz drops the good-week and pace questions. Preview only:
+  // ?tskpack=1 turns it on in one browser, ?tskpack=0 off; PACK.ON = true = everyone.
+  // Rung minimums sit just under the cheapest 5 / 8 / 12 meals ($75.75 / $121.20 / $181.80). Luke sets them in the admin:
+  // MYWEEK $75 free delivery; NOCOOKING 15% with its minimum moved $175 -> $120; a NEW 20% code at $180 (code "" until it exists).
+  var PACK = {
+    ON: false,
+    rungs: [
+      { min: 75, pct: 0, code: "MYWEEK", label: "Free delivery" },
+      { min: 120, pct: 15, code: "NOCOOKING", label: "Free delivery + 15% off" },
+      { min: 180, pct: 20, code: "", label: "Free delivery + 20% off" }
+    ],
+    order: ["full", "best", "lunch"],   // priciest on top (Luke 11/19), so it reads more affordable going down
+    info: {
+      lunch: { name: "Starter", what: "Lunch, Monday to Friday", days: "wk", line: "A first taste of the week." },
+      best: { name: "Weekday", what: "Lunch and dinner, Monday to Thursday, plus 2 snacks", days: [0, 1, 2, 3], line: "Covers the busiest stretch of the week. It's the one I'd start you on." },
+      full: { name: "Full Week", what: "Lunch and dinner, Monday to Saturday, plus 3 snacks", days: [0, 1, 2, 3, 4, 5], line: "For weeks with no cooking at all." }
+    },
+    snacks: { lunch: 0, best: 2, full: 3 },
+    levels: [{ n: 5, name: "Starter", label: "free delivery" }, { n: 8, name: "Weekday", label: "free delivery + 15% off" }, { n: 12, name: "Full Week", label: "free delivery + 20% off" }],
+    // Luke 11/25: snacks / sauce / extra meal / LRBC treats. Wording is Claude's draft for Luke to check.
+    gifts: [["snacks", "Protein snacks", "For between meals"], ["sauce", "Strong Sauce", "A full bottle of our house sauce"],
+            ["meal", "An extra meal", "One more meal, on us"], ["treats", "Little Rabbit treats", "Gluten-free baked treats from our bakery"]]
+  };
+  (function () {
+    var m = /[?&]tskpack=([01])/.exec(location.search);
+    if (m) try { if (m[1] === "1") localStorage.setItem("tskpPack", "1"); else localStorage.removeItem("tskpPack"); } catch (e) { /* fine */ }
+  })();
+  function pack() { if (PACK.ON) return true; try { return localStorage.getItem("tskpPack") === "1"; } catch (e) { return false; } }
+  if (pack()) OFFER.rungs = PACK.rungs;
   // signed in on the menu = an existing customer: they keep the membership line and get no first-order ladder
   function signedIn() { return !!document.querySelector('form[action$="/logout"]'); }
   // Same test the first-order popup uses (Luke 11/18: "popup didn't show to current customers"): a browser Klaviyo already
@@ -183,7 +215,7 @@
       }
       var r = rungFor(sub), nx = nextRung(sub), sm = "<span style='font-weight:500;color:#4d5340'>";
       d.innerHTML = (r
-        ? "<b>✓ " + esc(r.label) + "</b> on your first order" + (OFFER.CODES_READY ? ", code <b>" + esc(r.code) + "</b>" : "") + (r.pct ? " (saves $" + (sub * r.pct / 100).toFixed(2) + ")" : "") + ". We'll apply it at checkout."
+        ? "<b>✓ " + esc(r.label) + "</b> on your first order" + (OFFER.CODES_READY && r.code ? ", code <b>" + esc(r.code) + "</b>" : "") + (r.pct ? " (saves $" + (sub * r.pct / 100).toFixed(2) + ")" : "") + ". We'll apply it at checkout."
         : "<b>$" + (nx.min - sub).toFixed(2) + " more</b> gets you free delivery on your first order.") +
         (r && nx ? "<br>" + sm + "Add $" + (nx.min - sub).toFixed(2) + " more for " + moreFor(nx) + ".</span>" : "") +
         "<br>" + sm + "Plus: your first month of Basic membership is free, another 5% off (about $" + (sub * 0.05).toFixed(2) + "). Add it at checkout.</span>" +
@@ -204,7 +236,7 @@
     Promise.all([cartSubtotal(), pastOrders]).then(function (a) {
       var sub = a[0], r = rungFor(sub);
       if (a[1]) { note("Preview: this account has past orders, so no first-order code goes on.", 8000); return; }
-      if (!r) return;
+      if (!r || !r.code) return;
       if (!OFFER.CODES_READY) { note("Preview: checkout would apply " + r.code + " now ($" + sub.toFixed(2) + " order). Codes aren't switched on yet, so nothing was typed.", 10000); return; }
       try { sessionStorage.setItem("tskpCouponTried", r.code); } catch (e) { return; }   // can't remember the try = don't risk a loop
       inp.value = r.code;
@@ -288,6 +320,7 @@
     if (!fromCartLink()) fromLink();
     if (/[?&]tskopen=1/.test(location.search)) { dropParams(["tskopen"]); open(); }
     else autoOpen();
+    ownBar();
   }
   // Luke 11/22: open the quiz on its own for NEW visitors on the menu page, once per device, same trigger as the old code
   // popup (8 s on the page or a third of it scrolled). Never for signed-in accounts, re-order links, browsers Klaviyo knows,
@@ -387,7 +420,8 @@
       planner_total: total.toFixed(2),
       planner_paid: r && r.pct ? (total * (1 - r.pct / 100)).toFixed(2) : "",
       planner_rung: r ? r.label.toLowerCase() : "", planner_offer_code: r ? r.code : "",   // Luke 11/22: the code the planner showed them
-      planner_items: items, planner_more: Math.max(0, order.length - 6)
+      planner_items: items, planner_more: Math.max(0, order.length - 6),
+      planner_gift: (getOffer() || {}).gift || "", planner_pack: (getOffer() || {}).pack && PLAN_INFO[(getOffer() || {}).pack] ? PLAN_INFO[(getOffer() || {}).pack].name : ""
     };
   }
   function fromLink() {
@@ -794,6 +828,7 @@
   function v2Steps() {
     var s = ["goal", "block", "good", "avoid", "name", "weight"];   // Luke 11/20: questions, then just their first name
     // (the target-weight screen is off: Luke 11/20, we don't promise a weight)
+    if (pack()) return ["goal", "block", "avoid", "name", "weight", "timeline", "plan"];   // Luke 11/25: good-week cut; packages replace the pace screen
     return s.concat(["timeline", "handle", "plan"]);
   }
   function v2Go(dir) {
@@ -827,7 +862,7 @@
   }
   function drawQuizV2() {
     if (V2.at !== lastStep) { lastStep = V2.at; track("step_" + V2.at); }
-    var q = $(R, "#quiz"), s = v2Steps(), i = V2.at === "code" || V2.at === "pick" ? s.length - 1 : Math.max(0, s.indexOf(V2.at));
+    var q = $(R, "#quiz"), s = v2Steps(), i = V2.at === "code" || V2.at === "pick" || V2.at === "how" ? s.length - 1 : Math.max(0, s.indexOf(V2.at));
     var head = '<div class="qdots">' + s.map(function (_, j) { return '<i class="' + (j <= i ? "on" : "") + '"></i>'; }).join("") + "</div>";
     var back = i && !(V2.at === "code" && V2.revealed) ? '<button class="qback" data-q="back">← Back</button>' : "";
     function opts(key, list, multi) {
@@ -876,7 +911,8 @@
         ? '<span class="qkick">You&rsquo;re in</span><h3>Here&rsquo;s your code.</h3>' +
           '<div class="qcode"><b>' + esc(V2.revealed) + '</b><button data-q="copycode">Copy</button></div>' +
           "<p><b>" + esc(cr ? cr.label : "Free delivery") + "</b> on your first order. It goes on by itself at checkout. We&rsquo;re also emailing it to you with your week, so you can order anytime.</p>" +
-          '<button class="qnext" data-q="seeweek">See my week →</button>'
+          (pack() ? giftPick() : "") +
+          '<button class="qnext" data-q="seeweek"' + (pack() && !V2.gift ? " disabled" : "") + ">" + (V2.own ? "Go pick my meals →" : "See my week →") + "</button>"
         : '<span class="qkick">Your week is ready</span><h3>Here&rsquo;s your code.</h3>' +
           "<p>Enter your email and your code shows right here. We&rsquo;ll email it to you too.</p>" +
           '<label class="sul"><input id="qEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" value="' + esc(V2.pending || "") + '"></label>' +
@@ -886,6 +922,8 @@
     }
     else if (at === "pick") body = pickScreen();
     else if (at === "handle") body = handleScreen();
+    else if (at === "how") body = howScreen();
+    else if (pack()) body = packScreen();
     else {
       var mine = handlePlan(qa), list = plansOpen ? PLANS : [mine];
       body = '<span class="qkick">Last step</span>' + lukeSays(esc((qa.name ? qa.name + ", b" : "B") + Q2.planIntro.slice(1))) + "<h3>" + esc(qa.name ? qa.name + "'s plan" : "Your plan") + "</h3><p>Priced on this week's menu and built to your goal" + (previewPlan(mine).snacks ? ", protein snacks included" : "") + ". Change anything after.</p>" + ASSURE +
@@ -902,6 +940,30 @@
     }
     q.innerHTML = head + back + body;
   }
+  function packScreen() {
+    return '<span class="qkick">Last step</span>' + lukeSays(esc((qa.name ? qa.name + ", h" : "H") + "ere are your three options, priced on this week's menu and built to your goal. Weekday is the one I'd start you on.")) +
+      "<h3>Pick your package</h3><p>Swap any meal after.</p>" + ASSURE +
+      '<div class="opts">' + PACK.order.map(function (k) {
+        var P = PLAN_INFO[k], e = previewPlan(k), rr = offerShown() ? rungFor(e.total) : null, star = k === "best";
+        return '<button class="opt plan' + (star ? " best" : "") + '" data-q="plan" data-v="' + k + '">' +
+          '<span class="ptop"><span>' + (star ? "★ " : "") + esc(P.name) + '</span><span class="pprice">$' + e.total.toFixed(2) + "</span></span>" +
+          "<small><b>" + e.meals + " meals" + (e.snacks ? " + " + e.snacks + " snack" + (e.snacks > 1 ? "s" : "") : "") + "</b> · " + esc(P.what.replace(/, plus \d snacks$/, "")) + "</small>" +
+          '<span class="pwhyrec">' + (star ? "<b>Recommended.</b> " : "") + esc(P.line) + "</span>" +
+          savingsStack(e.total, rr) + (star ? '<span class="pcta">Choose Weekday →</span>' : "") + "</button>";
+      }).join("") + "</div>" + reviewCard();
+  }
+  function howScreen() {
+    var P = PLAN_INFO[V2.codeFor], e = previewPlan(V2.codeFor);
+    return '<span class="qkick">' + esc(P.name) + " · " + e.meals + " meals" + (e.snacks ? " + " + e.snacks + " snacks" : "") + "</span>" +
+      lukeSays(esc("Want me to fill in your week, or would you rather pick every meal yourself? The savings are the same either way.")) +
+      "<h3>How do you want to build it?</h3>" +
+      '<div class="opts"><button class="opt" data-q="hmine">Build it for me<small>I&rsquo;ll fill it with meals that fit your goal. Swap anything after.</small></button>' +
+      '<button class="opt" data-q="hown">Build my own<small>Pick from the full menu. A bar at the bottom shows what you&rsquo;ve unlocked.</small></button></div>';
+  }
+  function giftPick() {
+    return '<h3 style="margin-top:18px">Pick your free gift</h3><p>It comes in your bag with your first order.</p><div class="opts">' +
+      PACK.gifts.map(function (g) { return '<button class="opt" data-q="gift" data-v="' + g[0] + '" aria-pressed="' + (V2.gift === g[0]) + '">' + esc(g[1]) + "<small>" + esc(g[2]) + "</small></button>"; }).join("") + "</div>";
+  }
   function reviewCard() {
     var m = Q2.reviewFor[qa.block]; if (!m) return "";
     var r = Q2.reviews[m[qa.goal] || m.dflt]; if (!r) return "";
@@ -913,6 +975,7 @@
     return '<span class="pstack"><span class="pdead">' + esc(v2Deadline()) + "</span>" +
       '<span class="prow"><span>✓ Free delivery</span><span>Free</span></span>' +
       (off ? '<span class="prow"><span>✓ ' + rr.pct + "% off your first order</span><span>−$" + off.toFixed(2) + "</span></span>" : "") +
+      (pack() ? '<span class="prow"><span>✓ A free gift you pick</span><span>Free</span></span>' : "") +
       '<span class="prow ptot"><span>Your first order</span><span>$' + (total - off).toFixed(2) + "</span></span></span>";
   }
   // the bottom bar's one-line version (a phone has no room for the box there)
@@ -930,7 +993,8 @@
     var a = b.dataset.q;
     if (a === "back") {
       readQuizInputs();
-      if (V2.at === "code") { qa.picks = null; V2.at = guided() ? "pick" : "plan"; return drawQuizV2(); }
+      if (V2.at === "code") { qa.picks = null; V2.at = pack() ? "how" : guided() ? "pick" : "plan"; return drawQuizV2(); }
+      if (V2.at === "how") { V2.at = "plan"; return drawQuizV2(); }
       if (V2.at === "pick") { qa.picks = null; V2.at = "plan"; return drawQuizV2(); }
       return v2Go(-1);
     }
@@ -968,6 +1032,7 @@
     if (a === "moreplans") { plansOpen = true; track("plans_more"); return drawQuizV2(); }
     if (a === "plan") {
       track("plan_" + b.dataset.v); qa.perDay = b.dataset.v; qa.days = PLAN_INFO[b.dataset.v].days;
+      if (pack()) { V2.codeFor = b.dataset.v; V2.at = "how"; drawQuizV2(); var qh = $(R, "#quiz"); if (qh) qh.scrollIntoView({ block: "start" }); return; }
       if (guided()) {   // Luke 11/23: they pick the meals; the plan only sets how many
         qa.picks = null;
         if (V2.picksFor !== b.dataset.v) V2.picks = {};
@@ -990,7 +1055,13 @@
     }
     if (a === "v2code") return codeClick(b);
     if (a === "copycode") return copyClick(b);
-    if (a === "seeweek") { buildWeek(); v2Flush(); return; }
+    if (a === "hmine" || a === "hown") { V2.own = a === "hown"; track(V2.own ? "build_own" : "build_mine"); return afterPlan(V2.codeFor); }
+    if (a === "gift") {
+      V2.gift = b.dataset.v; track("gift_" + V2.gift);
+      var go = getOffer(); if (go) { go.gift = V2.gift; go.pack = V2.codeFor; setOffer(go); }
+      return drawQuizV2();
+    }
+    if (a === "seeweek") { if (V2.own) goOwn(); else buildWeek(); v2Flush(); return; }
   }
   function afterPlan(k) {
     {
@@ -1004,8 +1075,42 @@
           var fe = $(R, "#qEmail"); if (fe) fe.focus({ preventScroll: true }); return;
         }
       }
-      buildWeek(); v2Flush(); return;
+      if (V2.own) goOwn(); else buildWeek();
+      v2Flush(); return;
     }
+  }
+  // Luke 11/25 "Build my own": close the planner on their real menu; a bar at the bottom counts the meals in the cart
+  function goOwn() {
+    track("own_menu");
+    st.quiz = qa; st.own = V2.codeFor; save();
+    endQuiz(); try { close(); } catch (e) { /* fine */ }
+    ownBar();
+  }
+  var ownEl = null, ownT = null;
+  function ownBar() {
+    if (!pack() || !onMenu || !st || !st.own || !PLAN_INFO[st.own]) return;
+    if (!ownEl) {
+      ownEl = document.createElement("div"); ownEl.id = "tskp-own";
+      ownEl.style.cssText = "position:fixed;left:8px;right:8px;bottom:8px;z-index:2147483000;max-width:560px;margin:0 auto;padding:10px 14px;border-radius:14px;background:#2e3a18;color:#fff;font:600 14px/1.4 'Plus Jakarta Sans',Arial,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.3);display:flex;gap:10px;align-items:center";
+      document.body.appendChild(ownEl);
+      document.addEventListener("click", function () { clearTimeout(ownT); ownT = setTimeout(ownRefresh, 1200); setTimeout(ownRefresh, 3500); }, true);
+      setInterval(ownRefresh, 20000);
+    }
+    ownRefresh();
+  }
+  function ownRefresh() {
+    fetch("/cart/count", { credentials: "same-origin", headers: { Accept: "application/json" } }).then(function (r) { return r.json(); }).then(function (c) {
+      var meals = 0, snacks = 0;
+      ((c && c.items) || []).forEach(function (i) { var m = ITEMS[i.product_id]; if (!m) return; if (m.kind === "meal") meals += +i.qty || 0; else if (m.kind === "snack") snacks += +i.qty || 0; });
+      var got = null, nx = null, P = PLAN_INFO[st.own], want = PACK.snacks[st.own] || 0, first = offerShown();
+      PACK.levels.forEach(function (l) { if (meals >= l.n) got = l; else if (!nx) nx = l; });
+      var line2 = !first ? "" : nx ? "<b style='color:#d9b46f'>" + (nx.n - meals) + " more meal" + (nx.n - meals > 1 ? "s" : "") + "</b> for " + nx.name + ": " + nx.label
+        : "Top level reached";
+      ownEl.innerHTML = "<div style='flex:1'><div>" + meals + " meal" + (meals === 1 ? "" : "s") + (snacks ? " · " + snacks + " snack" + (snacks > 1 ? "s" : "") : "") +
+        (first && got ? " · <span style='color:#d9b46f'>✓ " + got.name + ": " + got.label + "</span>" : "") + "</div>" +
+        "<div style='font-weight:500;font-size:13px;opacity:.9'>" + line2 + (want > snacks ? (line2 ? " · " : "") + (want - snacks) + " more snack" + (want - snacks > 1 ? "s" : "") + " to match your " + esc(P.name) : "") + "</div></div>" +
+        "<a href='/cart' style='background:#d9b46f;color:#2b230f;padding:8px 12px;border-radius:10px;text-decoration:none;font-weight:800;white-space:nowrap'>Cart →</a>";
+    }).catch(function () {});
   }
   function codeClick(b) {
     {
@@ -1013,7 +1118,9 @@
       if (!validEmail(ce)) { $(R, "#qErr").hidden = false; $(R, "#qEmail").focus(); return; }
       var rc = rungFor(previewPlan(V2.codeFor).total);
       track("email"); setOffer({ email: ce, at: Date.now() }); V2.pending = ce;   // sent to Klaviyo once the week exists (v2Flush)
-      V2.revealed = rc ? rc.code : OFFER.rungs[0].code; track("code_shown"); return drawQuizV2();
+      V2.revealed = rc ? (rc.code || "(20% code not made yet)") : OFFER.rungs[0].code; track("code_shown");
+      var go2 = getOffer(); if (go2) { go2.pack = V2.codeFor; setOffer(go2); }
+      return drawQuizV2();
     }
   }
   function copyClick(b) {
@@ -1081,6 +1188,7 @@
     best: { name: "Recommended", what: "Lunch + dinner Mon–Fri", days: "wk", code: "b" },
     full: { name: "Full week", what: "Lunch + dinner, all 7 days", days: "all", code: "f" }
   };
+  if (pack()) Object.keys(PACK.info).forEach(function (k) { var x = PACK.info[k]; PLAN_INFO[k].name = x.name; PLAN_INFO[k].what = x.what; PLAN_INFO[k].days = x.days; PLAN_INFO[k].line = x.line; });
   function perDayFor(q, d) {
     if (q.perDay === "lunch") return d < 5 ? 1 : 0;
     if (q.perDay === "best") return d < 5 ? 2 : 0;
@@ -1158,6 +1266,11 @@
       return meals;
     }
     if (meals.length) days.forEach(function (d) { for (var j = 0; j < perDayFor(qa, d); j++) { var m = meals[k++ % meals.length]; takePiece(m.id, size(m).option_id, d); } });
+    if (pack() && PACK.snacks[qa.perDay] != null) {   // Luke 11/25: the package sets the snacks (2 Weekday, 3 Full Week), no upsizing
+      var sl = DATA.items.filter(function (m) { return m.kind === "snack" && fits(m) && /protein (oatmeal|bite)/i.test(m.name); }), ns = meals.length ? PACK.snacks[qa.perDay] : 0;
+      for (var si = 0; si < ns && sl.length; si++) { var sm = sl[si % sl.length]; takePiece(sm.id, sm.sizes[0].option_id, days[Math.floor(si * days.length / ns)]); }
+      return meals;
+    }
     // Top up protein toward our share of the day (one meal of three = a third) with protein oatmeal and protein bites.
     // Luke 11/18: drive meals and snacks, not sides.
     var share = function (d) { return Math.min(1, perDayFor(qa, d) / 3); };
@@ -2127,6 +2240,8 @@
 
   // ------------------------------------------------------------------ order confirmation page: the plan download
   function successPage() {
+    // Luke 11/25 packages: once they order, the "Build my own" bar on the menu goes away
+    try { var s0 = JSON.parse(localStorage.getItem(STORE)); if (s0 && s0.own) { delete s0.own; localStorage.setItem(STORE, JSON.stringify(s0)); } } catch (e) { /* fine */ }
     if (!st.pushed || !st.pieces || !st.pieces.some(function (p) { return p.day >= 0; })) return;
     if (st.pushedAt && Date.now() - st.pushedAt > 3 * 864e5) return;   // only right after the planned checkout
     if (!st.orderTracked) { st.orderTracked = true; save(); track("order"); }
