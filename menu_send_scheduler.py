@@ -44,6 +44,13 @@ EXCLUDE_ALWAYS = ["U9cFGd",                   # first order in the last 6 days (
                   "X9grHS"]                   # not engaged 30 days
 FIRST_MONTH = "Y6NRej"                        # 1-4 orders, ordered in last 35 days: skip Thursday only
 
+# Holiday moves: the run on the key date schedules its email for the value date instead (same time of day).
+# The run still happens on the usual day, so the feed check and the Google/GitHub triggers are unchanged.
+# 2026-11-26 is Thanksgiving: Luke moved that Thursday menu email to Friday 11/27 noon.
+SEND_DATE_MOVES = {
+    datetime(2026, 11, 26).date(): datetime(2026, 11, 27).date(),
+}
+
 SENDS = {
     "wed": {"name": "Weekly Menu Send - Wednesday", "hour": 9, "minute": 0, "cutoff_hour": 14,
             "excluded": EXCLUDE_ALWAYS},
@@ -141,13 +148,16 @@ def main():
         return
     cfg = SENDS[day]
     today = now.date() if "--day" not in sys.argv else now.date() + timedelta(days=({"wed": 2, "thu": 3}[day] - now.weekday()) % 7)
-    when = datetime(today.year, today.month, today.day, cfg["hour"], cfg["minute"], tzinfo=ET)
-    cutoff = datetime(today.year, today.month, today.day, cfg["cutoff_hour"], 0, tzinfo=ET)
+    send_day = SEND_DATE_MOVES.get(today, today)
+    if send_day != today:
+        print("Holiday move: this email goes out %s instead of %s." % (send_day.strftime("%a %m/%d"), today.strftime("%a %m/%d")))
+    when = datetime(send_day.year, send_day.month, send_day.day, cfg["hour"], cfg["minute"], tzinfo=ET)
+    cutoff = datetime(send_day.year, send_day.month, send_day.day, cfg["cutoff_hour"], 0, tzinfo=ET)
     print("%s | %s send %s ET | %s" % (now.strftime("%a %m/%d %H:%M"), cfg["name"], when.strftime("%a %m/%d %H:%M"),
                                        "LIVE" if go else "DRY RUN"))
 
     found = campaigns_named(cfg["name"])
-    todays = [c for c in found if send_dt(c) and send_dt(c).date() == today
+    todays = [c for c in found if send_dt(c) and send_dt(c).date() == send_day
               and c["attributes"]["status"] not in ("Draft", "Cancelled")]
     for c in todays:
         a = c["attributes"]
@@ -178,7 +188,7 @@ def main():
     if not sent:
         sys.exit("No previously sent '%s' campaign to copy. Needs a human." % cfg["name"])
     src = sent[0]
-    new_name = "%s (Merchant Feed) %s auto" % (cfg["name"], f"{today.month}/{today.day}")
+    new_name = "%s (Merchant Feed) %s auto" % (cfg["name"], f"{send_day.month}/{send_day.day}")
     print("Copying last week's '%s' (sent %s) as '%s'" % (src["attributes"]["name"], send_dt(src).strftime("%m/%d"), new_name))
     # A run that failed after cloning leaves a draft with today's name (4 of them on 10/15). Reuse it
     # instead of cloning again, so a retry never piles up orphan drafts.
