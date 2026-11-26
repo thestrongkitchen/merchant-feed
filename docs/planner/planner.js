@@ -263,10 +263,20 @@
         go.parentNode.insertBefore(d, go);
       }
       var sm = "<span style='font-weight:500;color:#4d5340'>", r = o.i >= 0 ? PACK.rungs[o.i] : null, nx = PACK.levels[o.i + 1];
+      if (!signedIn() && !go.__tskpReg) {
+        go.__tskpReg = true;
+        go.addEventListener("click", function (ev) {   // Luke 11/26: new customers make an account, they don't log in
+          ev.preventDefault(); ev.stopPropagation(); track("cart_to_register");
+          fetch("/checkout", { credentials: "same-origin", redirect: "manual" }).catch(function () {}).then(function () { location.href = "/register"; });
+        }, true);
+      }
       d.innerHTML = (r
         ? "<b>✓ " + esc(PACK.levels[o.i].name) + ": " + esc(r.label) + "</b> on your first order" + (r.code ? ", code <b>" + esc(r.code) + "</b>" : "") + (r.pct ? " (saves $" + (o.sub * r.pct / 100).toFixed(2) + ")" : "") + (r.code ? ". We'll apply it at checkout." : ". (Preview: this code isn't made yet, so checkout won't apply it.)")
         : "<b>Add " + packNeed(o, 0) + "</b> for " + PACK.levels[0].name + ": free delivery on your first order.") +
-        (r && nx ? "<br>" + sm + "Add " + packNeed(o, o.i + 1) + " for " + nx.name + ": " + nx.label + ".</span>" : "") +
+        (function () {   // their own package, if they haven't reached it yet (never a bigger one: Luke 11/26)
+          var mine = PACK.keys.indexOf((getOffer() || {}).pack);
+          return mine > o.i ? "<br><b>Add " + packNeed(o, mine) + "</b> to unlock your " + esc(PACK.levels[mine].name) + ": " + esc(PACK.levels[mine].label) + "." : "";
+        })() +
         "<br>" + sm + "Plus your free gift, picked in the planner." + "</span>" +
         (signedIn() ? "" : "<br>" + sm + "Next you'll make your account. Your cart and savings come with you.</span>");
     }).catch(function (e) { console.warn("[TSK planner] cart line:", e); });
@@ -1180,42 +1190,81 @@
     endQuiz(); try { close(); } catch (e) { /* fine */ }
     ownBar();
   }
-  var ownEl = null, ownT = null;
+  var ownEl = null, ownT = null, ownDone = null, ownBusy = false, ownAgain = false;
+  // Luke 11/26: the bar updates the moment the site's own add/remove call finishes (not on a timer), so it feels instant
+  function ownHooks() {
+    var hit = function (u) { return /\/cart(\/|$|\?)/.test(String(u || "")) && !/\/cart\/(count|status)/.test(String(u || "")); };
+    var f = window.fetch;
+    if (f && !f.__tskp) {
+      window.fetch = function (u, o) {
+        var pr = f.apply(this, arguments);
+        try { var url = u && u.url ? u.url : u; if (hit(url) && ((o && o.method) || (u && u.method) || "GET").toUpperCase() !== "GET") pr.then(function () { ownRefresh(); }, function () {}); } catch (e) { /* fine */ }
+        return pr;
+      };
+      window.fetch.__tskp = 1;
+    }
+    var X = window.XMLHttpRequest && XMLHttpRequest.prototype;
+    if (X && !X.__tskp) {
+      var op = X.open, sd = X.send;
+      X.open = function (m, u) { this.__tskpCart = hit(u) && String(m || "").toUpperCase() !== "GET"; return op.apply(this, arguments); };
+      X.send = function () { if (this.__tskpCart) this.addEventListener("loadend", function () { ownRefresh(); }); return sd.apply(this, arguments); };
+      X.__tskp = 1;
+    }
+  }
   function ownBar() {
     if (!pack() || !onMenu || !st || !st.own || !PLAN_INFO[st.own]) return;
     if (!ownEl) {
+      if (!document.getElementById("tskp-own-css")) {
+        var cs = document.createElement("style"); cs.id = "tskp-own-css";
+        cs.textContent = "@keyframes tskpPop{0%{transform:scale(1)}40%{transform:scale(1.04)}100%{transform:scale(1)}}" +
+          "@keyframes tskpRing{0%{box-shadow:0 0 0 0 rgba(217,180,111,.95)}70%{box-shadow:0 0 0 14px rgba(217,180,111,0)}100%{box-shadow:0 0 0 0 rgba(217,180,111,0)}}" +
+          "#tskp-own{transition:background .25s,border-color .25s}#tskp-own.done{border:2px solid #d9b46f;box-shadow:0 0 0 3px rgba(217,180,111,.35),0 8px 28px rgba(0,0,0,.35)}" +
+          "#tskp-own.pop{animation:tskpPop .5s ease}#tskp-own.done .tskp-go{animation:tskpRing 1.6s ease-out infinite}" +
+          ".tskp-cart-ring{border-radius:12px;animation:tskpRing 1.6s ease-out infinite}";
+        document.head.appendChild(cs);
+      }
       ownEl = document.createElement("div"); ownEl.id = "tskp-own";
-      ownEl.style.cssText = "position:fixed;left:8px;right:8px;bottom:8px;z-index:2147483000;max-width:560px;margin:0 auto;padding:10px 14px;border-radius:14px;background:#2e3a18;color:#fff;font:600 14px/1.4 'Plus Jakarta Sans',Arial,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.3);display:flex;gap:10px;align-items:center";
+      ownEl.style.cssText = "position:fixed;left:8px;right:8px;bottom:8px;z-index:2147483000;max-width:560px;margin:0 auto;padding:10px 14px;border-radius:14px;background:#2e3a18;color:#fff;font:600 14px/1.4 'Plus Jakarta Sans',Arial,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.3);display:flex;gap:10px;align-items:center;border:2px solid transparent";
       document.body.appendChild(ownEl);
-      document.addEventListener("click", function () { clearTimeout(ownT); ownT = setTimeout(ownRefresh, 1200); setTimeout(ownRefresh, 3500); }, true);
+      ownHooks();
+      // backup for any add that doesn't go through fetch/XHR
+      document.addEventListener("click", function () { clearTimeout(ownT); ownT = setTimeout(ownRefresh, 700); }, true);
       setInterval(ownRefresh, 20000);
     }
     ownRefresh();
   }
-  // Luke 11/25: "what I needed to add to hit the goal plan was a little murky" - so the bar counts UP toward their package
-  // (meals 6 of 8, snacks 1 of 2, with fill bars) and says exactly what to add: "Add 2 meals and 1 snack to complete your Weekday".
+  // the site's header cart icon gets the same gold ring once the package is complete
+  function ownCartRing(on) {
+    [].forEach.call(document.querySelectorAll('header a[href$="/cart"], nav a[href$="/cart"], a[href$="/cart"][class*="cart"]'), function (a) {
+      if (ownEl && ownEl.contains(a)) return;
+      a.classList.toggle("tskp-cart-ring", !!on);
+    });
+  }
+  // Luke 11/25: the bar counts UP toward THEIR package (meals 6 of 8, snacks 1 of 2) and says exactly what to add.
+  // Luke 11/26: never points at a bigger package (it fights "Recommended"); finishing the package is the reward moment.
   function ownRefresh() {
-    fetch("/cart/count", { credentials: "same-origin", headers: { Accept: "application/json" } }).then(function (r) { return r.json(); }).then(function (c) {
+    if (ownBusy) { ownAgain = true; return; }
+    ownBusy = true;
+    fetch("/cart/count", { credentials: "same-origin", cache: "no-store", headers: { Accept: "application/json" } }).then(function (r) { return r.json(); }).then(function (c) {
       var meals = 0, snacks = 0;
       ((c && c.items) || []).forEach(function (i) { var m = ITEMS[i.product_id]; if (!m) return; if (m.kind === "meal") meals += +i.qty || 0; else if (m.kind === "snack") snacks += +i.qty || 0; });
-      var first = offerShown(), lv = PACK.levels, keys = ["lunch", "best", "full"], ti = Math.max(0, keys.indexOf(st.own));
-      while (ti < lv.length - 1 && meals >= lv[ti + 1].n) ti++;   // went past their package: count toward the bigger one
-      var T = lv[ti], key = keys[ti], wantS = PACK.snacks[key] || 0, needM = Math.max(0, T.n - meals), needS = Math.max(0, wantS - snacks);
+      var first = offerShown(), ti = Math.max(0, PACK.keys.indexOf(st.own)), T = PACK.levels[ti];
+      var wantS = PACK.snacks[st.own] || 0, needM = Math.max(0, T.n - meals), needS = Math.max(0, wantS - snacks), done = !needM && !needS;
       var plural = function (n, w) { return n + " " + w + (n === 1 ? "" : "s"); };
-      var bar = function (have, want) { var pc = Math.min(100, Math.round(100 * have / want)); return "<span style='display:block;height:6px;border-radius:3px;background:rgba(255,255,255,.2);margin-top:3px'><span style='display:block;height:6px;border-radius:3px;width:" + pc + "%;background:" + (have >= want ? "#d9b46f" : "#a9c07a") + "'></span></span>"; };
+      var bar = function (have, want) { var pc = Math.min(100, Math.round(100 * have / want)); return "<span style='display:block;height:6px;border-radius:3px;background:rgba(255,255,255,.2);margin-top:3px'><span style='display:block;height:6px;border-radius:3px;width:" + pc + "%;background:" + (have >= want ? "#d9b46f" : "#a9c07a") + ";transition:width .3s'></span></span>"; };
       var cell = function (label, have, want) { return "<span style='flex:1'><span style='font-size:13px'>" + label + " <b>" + Math.min(have, 99) + " of " + want + "</b>" + (have >= want ? " ✓" : "") + "</span>" + bar(have, want) + "</span>"; };
-      var head = "<b>Your " + esc(T.name) + "</b>";
-      // Luke 11/25: a package's savings need its meals AND its snacks (15% = 8 meals + 2 snacks)
-      var todo = needM || needS
-        ? "Add <b style='color:#d9b46f'>" + [needM ? plural(needM, "meal") : "", needS ? plural(needS, "snack") : ""].filter(Boolean).join(" and ") + "</b> to complete it" + (first ? ": " + T.label : "")
-        : "<b style='color:#d9b46f'>✓ " + esc(T.name) + " complete</b>" + (first ? ": " + T.label : "");
-      var nx = lv[ti + 1];
-      if (!needM && !needS && nx && first) todo += " · " + (nx.n - meals) + " more meal" + (nx.n - meals === 1 ? "" : "s") + " for " + nx.name;
+      var head = done ? "<b style='color:#d9b46f;font-size:16px'>✓ " + esc(T.name) + " unlocked</b>" : "<b>Your " + esc(T.name) + "</b>";
+      var todo = done
+        ? (first ? T.label.charAt(0).toUpperCase() + T.label.slice(1) + " + your free gift. " : "") + "Head to your cart."
+        : "Add <b style='color:#d9b46f'>" + [needM ? plural(needM, "meal") : "", needS ? plural(needS, "snack") : ""].filter(Boolean).join(" and ") + "</b> to unlock it" + (first ? ": " + T.label : "");
       ownEl.innerHTML = "<div style='flex:1;min-width:0'><div style='margin-bottom:4px'>" + head + "</div>" +
         "<div style='display:flex;gap:12px'>" + cell("Meals", meals, T.n) + (wantS ? cell("Snacks", snacks, wantS) : "") + "</div>" +
         "<div style='font-weight:500;font-size:13px;margin-top:5px'>" + todo + "</div></div>" +
-        "<a href='/cart' style='background:#d9b46f;color:#2b230f;padding:8px 12px;border-radius:10px;text-decoration:none;font-weight:800;white-space:nowrap;align-self:center'>Cart →</a>";
-    }).catch(function () {});
+        "<a class='tskp-go' href='/cart' style='background:#d9b46f;color:#2b230f;padding:" + (done ? "10px 14px" : "8px 12px") + ";border-radius:10px;text-decoration:none;font-weight:800;white-space:nowrap;align-self:center'>" + (done ? "Go to cart →" : "Cart →") + "</a>";
+      ownEl.classList.toggle("done", done);
+      if (done && ownDone === false) { ownEl.classList.remove("pop"); void ownEl.offsetWidth; ownEl.classList.add("pop"); track("own_unlocked"); }
+      ownDone = done; ownCartRing(done);
+    }).catch(function () {}).then(function () { ownBusy = false; if (ownAgain) { ownAgain = false; ownRefresh(); } });
   }
   function codeClick(b) {
     {
