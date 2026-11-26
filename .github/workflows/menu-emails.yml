@@ -27,7 +27,7 @@ jobs:
           git add docs/products.tsv docs/products.xml docs/products.json docs/feed_report.md
           if git diff --cached --quiet; then echo "feed unchanged"; else
             git commit -m "feed: $(date -u +%F) (menu email run)"
-            for i in 1 2 3; do git pull --rebase -q && git push && break; sleep 10; done
+            for i in 1 2 3; do git pull --rebase --autostash -q && git push && break; sleep 10; done
           fi
       - name: Schedule today's menu email (test mode unless MENU_EMAILS_LIVE is true)
         env:
