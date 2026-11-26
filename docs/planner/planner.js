@@ -1019,12 +1019,15 @@
                  "<b>More energy</b> at the end of the day",
                  "<b>Fewer takeout nights,</b>" + (cal ? " and about " + fmt(cal) + " fewer calories a week with them" : " and fewer calories with them")]
     }[qa.goal] || [];
-    return '<span class="qkick">What to expect</span>' + lukeSays(esc("Here's my promise to you:") + '<ul class="prom">' + L.map(function (x) { return "<li>" + x + "</li>"; }).join("") + "</ul>") +
-      '<p class="qnote">Numbers are for the Weekday package, built to your goal.</p>' +
-      '<div style="margin:14px 0;padding:14px 16px;border:2px solid #d9b46f;background:#fbf5e8;border-radius:14px">' +
+    // Luke 11/26: guarantee first ("if they don't like a meal we have them covered"), then what to expect, with checks.
+    // No timeline (the Tufts / Day 30 rows) on this screen.
+    return '<span class="qkick">What to expect</span>' +
+      '<div style="margin:6px 0 14px;padding:14px 16px;border:2px solid #d9b46f;background:#fbf5e8;border-radius:14px">' +
       '<b style="display:block;font-size:16px;margin-bottom:4px">My guarantee</b>' +
       "<span>If you don&rsquo;t love a meal, tell me and I&rsquo;ll replace it free on your next order. No contract, no subscription.</span></div>" +
-      v2Timeline() + '<button class="qnext" data-q="next">See my options</button>';
+      lukeSays(esc("Here's what to expect:") + '<ul class="prom">' + L.map(function (x) { return "<li>" + x + "</li>"; }).join("") + "</ul>") +
+      '<p class="qnote">Numbers are for the Weekday package, built to your goal.</p>' +
+      '<button class="qnext" data-q="next">See my options</button>';
   }
   function packScreen() {
     var first = offerShown();
