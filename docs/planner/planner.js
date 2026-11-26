@@ -1179,6 +1179,15 @@
           var fe = $(R, "#qEmail"); if (fe) fe.focus({ preventScroll: true }); return;
         }
       }
+      // Luke 11/26 ("skipped the free gift pick"): a new customer who is already locked in (account with no orders, or an
+      // email typed on an earlier visit) never sees the email screen, so show the code + gift pick on its own
+      var og = getOffer();
+      if (pack() && offerShown() && og && !og.gift && !V2.gift) {
+        var rg = rungFor(previewPlan(k).total);
+        V2.codeFor = k; V2.revealed = rg ? (rg.code || "(20% code not made yet)") : OFFER.rungs[0].code;
+        og.pack = k; setOffer(og); track("code_shown");
+        V2.at = "code"; drawQuizV2(); return;
+      }
       if (V2.own) goOwn(); else buildWeek();
       v2Flush(); return;
     }
