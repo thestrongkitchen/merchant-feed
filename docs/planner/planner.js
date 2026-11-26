@@ -377,7 +377,7 @@
     save();
     window.TSKP_API = { paper: paper, close: close, goalsCode: goalsCode, cartLink: cartLink, emailProps: emailProps };
     if (!fromCartLink()) fromLink();
-    if (/[?&]tskopen=1/.test(location.search)) { dropParams(["tskopen"]); open(); }
+    if (/[?&]tskopen=1/.test(location.search)) { dropParams(["tskopen"]); if (!EARLY.closed) open(); }
     else autoOpen();
     ownBar();
   }
@@ -2087,6 +2087,10 @@
     checkKnown().then(function () { if (R && st.packs) render(); });
     lastFocus = document.activeElement; sheet.hidden = false; $(R, ".scrim").hidden = false; document.documentElement.style.overflow = "hidden";
     if (!st.quiz && !st.packs.length) showQuiz();   // first visit starts with the quiz
+    if (EARLY.goal && qa && $(R, "#quiz") && !$(R, "#quiz").hidden) {   // they answered question 1 while the menu loaded
+      qa.goal = EARLY.goal; EARLY.goal = null;
+      if (quizV2()) v2Go(1); else { qstep = 1; drawQuiz(); }
+    }
     $(R, ".x").focus({ preventScroll: true });
   }
   function close() { sheet.hidden = true; $(R, ".scrim").hidden = true; document.documentElement.style.overflow = ""; selected = null; render(); if (lastFocus && lastFocus.focus) lastFocus.focus(); }
@@ -2478,20 +2482,44 @@
     return wrap;
   }
 
+  // Luke 11/26 ("load speed... crucial"): links that open the quiz used to show "Loading this week's menu" until the menu
+  // data arrived. Now the first question (no menu data needed) shows right away; a tap is kept and the real quiz picks up
+  // at question 2 once the data is in.
+  var EARLY = { goal: null, closed: false };
   function loadingPanel(on) {
     var d = document.getElementById("tskp-loading");
     if (!on) { if (d) d.parentNode.removeChild(d); return; }
     if (d || !document.body) return;
+    addFont();
+    var dots = quizV2() ? v2Steps().length : 6, i;
+    var dh = ""; for (i = 0; i < dots; i++) dh += '<i style="flex:1;height:5px;border-radius:3px;background:' + (i ? "#e9ebe0" : "#d9b46f") + '"></i>';
+    var opt = "display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;width:100%;border:2px solid #e2e3d8;background:#fff;border-radius:12px;padding:14px 16px;cursor:pointer;font:700 16px 'Plus Jakarta Sans',Arial,sans-serif;color:#1d2314";
+    var opts = Object.keys(GOALS).map(function (k) {
+      return '<button type="button" data-g="' + k + '" style="' + opt + '">' + esc(GOALS[k].label) + '<small style="font-size:13px;font-weight:500;color:#646b58">' + esc(quizV2() ? Q2.goalNote[k] : GOALS[k].note) + "</small></button>";
+    }).join("");
     d = document.createElement("div"); d.id = "tskp-loading";
-    d.setAttribute("role", "status");
-    d.style.cssText = "position:fixed;inset:0;z-index:2147483001;background:rgba(29,35,20,.55);display:flex;align-items:flex-end;justify-content:center;font-family:'Plus Jakarta Sans',Arial,sans-serif";
-    d.innerHTML = '<div style="width:100%;max-width:560px;background:#f6f6f1;border-radius:18px 18px 0 0;padding:28px 22px 40px;box-shadow:0 -8px 30px rgba(0,0,0,.25)">' +
-      '<div style="font-weight:800;font-size:22px;color:#2e3a18;margin-bottom:6px">Building your week…</div>' +
-      '<div style="font-size:14px;color:#646b58;margin-bottom:16px">Loading this week\'s menu.</div>' +
-      '<div style="height:6px;border-radius:3px;background:#e9ebe0;overflow:hidden"><div id="tskp-ld-bar" style="height:100%;width:30%;background:#73933c;border-radius:3px;transition:width 2.5s ease-out"></div></div></div>';
+    d.style.cssText = "position:fixed;inset:0;z-index:2147483001;background:rgba(29,35,20,.55);display:flex;align-items:flex-end;justify-content:center;font-family:'Plus Jakarta Sans',Arial,sans-serif;color:#1d2314";
+    d.innerHTML = '<div style="width:100%;max-height:92dvh;overflow-y:auto;background:#fff;border-radius:18px 18px 0 0;padding:18px 16px 28px;box-shadow:0 -10px 30px rgba(0,0,0,.25);box-sizing:border-box">' +
+      '<div style="max-width:980px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px"><b style="font-size:22px;font-weight:800">Build your week</b>' +
+      '<button type="button" data-x="1" style="background:none;border:1px solid #e2e3d8;color:#1d2314;border-radius:8px;padding:4px 10px;cursor:pointer;font:inherit;font-size:16px">Close</button></div>' +
+      '<div style="max-width:560px;margin:24px auto 0;display:flex;flex-direction:column;gap:14px">' +
+      '<div style="display:flex;gap:6px">' + dh + "</div>" +
+      (quizV2() ? '<div style="display:flex;gap:10px;align-items:flex-start;background:#fbf5e8;border:1px solid #ecdcb4;border-radius:14px;padding:10px 12px">' +
+        '<img src="' + Q2.PHOTO + '" alt="Luke" width="44" height="44" style="width:44px;height:44px;border-radius:50%;object-fit:cover;object-position:50% 35%;flex:none;border:2px solid #d9b46f">' +
+        '<div><b style="display:block;font-size:12px;color:#646b58;margin-bottom:2px">Luke, owner &amp; chef</b><p style="margin:0;font-size:14.5px;line-height:1.45">' + esc(Q2.welcome) + "</p></div></div>" : "") +
+      '<h3 style="margin:0;font-size:24px;font-weight:800;line-height:1.2">What are you working toward?</h3>' +
+      '<div id="tskp-ld-opts" style="display:flex;flex-direction:column;gap:10px">' + opts + "</div>" +
+      '<div id="tskp-ld-wait" style="font-size:14px;color:#646b58;min-height:20px"></div></div></div>';
+    d.addEventListener("click", function (e) {
+      if (e.target.closest && e.target.closest("button[data-x]")) { EARLY.closed = true; EARLY.goal = null; return loadingPanel(false); }
+      var b = e.target.closest && e.target.closest("button[data-g]");
+      if (!b) return;
+      EARLY.goal = b.getAttribute("data-g");
+      [].forEach.call(d.querySelectorAll("button[data-g]"), function (x) { x.style.borderColor = x === b ? "#d9b46f" : "#e2e3d8"; x.style.background = x === b ? "#fbf5e8" : "#fff"; });
+      var w = d.querySelector("#tskp-ld-wait"); if (w) w.textContent = "One sec, loading this week's menu…";
+    });
     document.body.appendChild(d);
-    setTimeout(function () { var b = document.getElementById("tskp-ld-bar"); if (b) b.style.width = "85%"; }, 30);
-    setTimeout(function () { loadingPanel(false); }, 12000);   // never leave it up if something fails
+    setTimeout(function () { loadingPanel(false); }, 20000);   // never leave it up if something fails
   }
   if (onMenu && /[?&]tskopen=1/.test(location.search)) {
     if (document.body) loadingPanel(true); else document.addEventListener("DOMContentLoaded", function () { loadingPanel(true); });
