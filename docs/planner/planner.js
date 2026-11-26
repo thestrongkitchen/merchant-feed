@@ -385,6 +385,11 @@
   // popup (8 s on the page or a third of it scrolled). Never for signed-in accounts, re-order links, browsers Klaviyo knows,
   // anyone who already locked in or used the planner. AUTO_OPEN = false switches it off.
   var AUTO_OPEN = true, AUTO_KEY = "tskpAutoSeen";
+  // Luke 11/26 ("there's a chance it becomes annoying"): how many auto-opened popups get closed, or the page left,
+  // without a single tap inside. GA4 events skf_planner_auto_close_untouched / auto_leave_untouched vs auto_open.
+  var AUTO = { on: false, touched: false, done: false };
+  function autoEnd(how) { if (!AUTO.on || AUTO.done) return; AUTO.done = true; if (!AUTO.touched) track(how + "_untouched"); }
+  window.addEventListener("pagehide", function () { if (AUTO.on && sheet && !sheet.hidden) autoEnd("auto_leave"); });
   function autoOpen() {
     if (!AUTO_OPEN || !onMenu || viaReorder || signedIn() || getOffer() || st.quiz || st.packs.length) return;
     try { if (localStorage.getItem(AUTO_KEY)) return; } catch (e) { return; }   // can't remember it = don't risk showing it every visit
@@ -394,7 +399,7 @@
       visitorKind().then(function (kind) {
         if (kind !== "new" || !sheet || !sheet.hidden || getOffer()) return;   // only a visitor Klaviyo confirms it doesn't know
         try { localStorage.setItem(AUTO_KEY, String(Date.now())); } catch (e) { return; }
-        track("auto_open"); open();
+        track("auto_open"); AUTO.on = true; open();
       }, function () {});
     }
     function onScroll() {
@@ -1095,6 +1100,7 @@
   }
   function quizClickV2(b) {
     var a = b.dataset.q;
+    AUTO.touched = true;
     if (a === "back") {
       readQuizInputs();
       if (V2.at === "code") { qa.picks = null; V2.at = pack() ? "how" : guided() ? "pick" : "plan"; return drawQuizV2(); }
@@ -2102,7 +2108,7 @@
     }
     $(R, ".x").focus({ preventScroll: true });
   }
-  function close() { sheet.hidden = true; $(R, ".scrim").hidden = true; document.documentElement.style.overflow = ""; selected = null; render(); if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+  function close() { autoEnd("auto_close"); sheet.hidden = true; $(R, ".scrim").hidden = true; document.documentElement.style.overflow = ""; selected = null; render(); if (lastFocus && lastFocus.focus) lastFocus.focus(); }
 
   // ------------------------------------------------------------------ check out: put the plan in the real cart, then go to /checkout
   function csrf() { var m = document.querySelector('meta[name="csrf-token"]'); return m ? m.content : ""; }
